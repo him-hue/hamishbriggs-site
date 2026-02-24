@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Products – Hamish Briggs</title>
+  <meta name="description" content="Tools for the next era of creativity." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600&family=Inter:wght@300;400;500&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+
+  <div class="bg-wrap">
+    <img class="bg-img" src="images/hero.jpg" alt="" />
+    <div class="bg-darken"></div>
+    <div class="bg-vignette"></div>
+  </div>
+  <div class="bg-grain" aria-hidden="true"></div>
+
+  <header class="top-bar">
+    <div class="top-bar-inner">
+      <a href="index.html" class="logo">Hamish Briggs</a>
+      <nav class="top-nav">
+        <a href="https://index.hamishbriggs.com">Index</a>
+        <a href="https://storymap.hamishbriggs.com">StoryMap</a>
+      </nav>
+    </div>
+  </header>
+
+  <div class="page">
+    <div class="container">
+      <div class="page-header">
+        <h1>Products</h1>
+      </div>
+
+      <div class="products-grid">
+        <!-- Product list (left) -->
+        <div class="product-list">
+          <div class="product-group">
+            <a href="https://index.hamishbriggs.com" class="product-btn" data-slug="index" data-status="under_development" data-blurb="Project drive optimization.">Index</a>
+            <a href="https://storymap.hamishbriggs.com" class="product-btn" data-slug="storymap" data-status="under_development" data-blurb="Narrative architecture.">StoryMap</a>
+            <a href="https://productionmap.hamishbriggs.com" class="product-btn planned" data-slug="productionmap" data-status="planned" data-blurb="Production planning.">ProductionMap</a>
+            <a href="https://marketingmap.hamishbriggs.com" class="product-btn planned" data-slug="marketingmap" data-status="planned" data-blurb="Marketing strategy mapping.">MarketingMap</a>
+            <a href="https://domaindatamine.hamishbriggs.com" class="product-btn planned" data-slug="domaindatamine" data-status="planned" data-blurb="Domain research and synthesis.">DomainDataMine</a>
+          </div>
+          <div class="product-group">
+            <a href="https://yggdrasil.hamishbriggs.com" class="product-btn planned" data-slug="yggdrasil" data-status="planned" data-blurb="A growing suite of storyteller tools.">Yggdrasil</a>
+          </div>
+          <div class="product-group">
+            <a href="https://marionette.hamishbriggs.com" class="product-btn planned" data-slug="marionette" data-status="planned" data-blurb="Character and motion ideation.">Marionette</a>
+          </div>
+          <div class="product-group">
+            <a href="https://auteur-ai.hamishbriggs.com" class="product-btn planned" data-slug="auteur-ai" data-status="planned" data-blurb="Creative orchestration.">Auteur AI</a>
+          </div>
+        </div>
+
+        <!-- Detail panel (right) -->
+        <div class="glass product-detail" id="product-detail">
+          <div class="default-title">Products</div>
+          <p class="default-sub">Hover a name to reveal its status and description. Click to visit.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="menu-wrap">
+    <div style="position:relative;">
+      <button class="menu-trigger" aria-expanded="false" aria-label="Open menu">
+        <span class="menu-bars"><span></span><span></span><span></span></span>
+        <span class="menu-label">Menu</span>
+      </button>
+      <div class="menu-popup">
+        <a href="about.html">About</a>
+        <a href="products.html">Products</a>
+        <a href="contact.html">Contact</a>
+        <div class="menu-tip"><span style="opacity:0.7">Tip:</span> &#8984;/Ctrl K</div>
+      </div>
+    </div>
+  </div>
+
+  <script src="shared.js"></script>
+  <script>
+    document.addEventListener("DOMContentLoaded", () => {
+      const detail = document.getElementById("product-detail");
+      const buttons = document.querySelectorAll(".product-btn");
+      const defaultHTML = detail.innerHTML;
+
+      buttons.forEach((btn) => {
+        btn.addEventListener("mouseenter", () => {
+          const status = btn.dataset.status === "under_development" ? "Under development" : "Planned";
+          const note = btn.dataset.status === "under_development"
+            ? "A dedicated product site will live on its subdomain when it's ready."
+            : "This product is planned. Details will appear here as it comes into focus.";
+
+          detail.innerHTML = `
+            <div class="status">${status}</div>
+            <div class="name">${btn.textContent}</div>
+            <div class="blurb">${btn.dataset.blurb}</div>
+            <div class="note">${note}</div>
+          `;
+        });
+
+        btn.addEventListener("mouseleave", () => {
+          detail.innerHTML = defaultHTML;
+        });
+      });
+    });
+  </script>
+</body>
+</html>
