@@ -29,7 +29,7 @@ button { font: inherit; color: inherit; border: none; background: none; cursor: 
   position: fixed;
   inset: -140px -60px;          /* extra bleed so we can shift without edges */
   z-index: 0;
-  transition: transform var(--duration) var(--ease);
+  transition: transform 1.8s cubic-bezier(0.16, 1, 0.3, 1);  /* slow cinematic drift */
   will-change: transform;
   transform-origin: 55% 50%;    /* slightly right of center — you in frame */
 }
