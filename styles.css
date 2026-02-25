@@ -401,6 +401,28 @@ button { font: inherit; color: inherit; border: none; background: none; cursor: 
   color: rgba(255,255,255,0.40);
 }
 
+.product-active {
+  color: #fff !important;
+}
+
+.product-visit-btn {
+  display: inline-block;
+  margin-top: 1.25rem;
+  border-radius: 9999px;
+  border: 1px solid rgba(255,255,255,0.12);
+  background: rgba(255,255,255,0.04);
+  padding: 0.4rem 1rem;
+  font-size: 0.75rem;
+  letter-spacing: 0.06em;
+  color: rgba(255,255,255,0.78);
+  transition: background 0.2s, color 0.2s, border-color 0.2s;
+}
+.product-visit-btn:hover {
+  background: rgba(255,255,255,0.10);
+  border-color: rgba(255,255,255,0.20);
+  color: #fff;
+}
+
 /* ── About ───────────────────────────────────────── */
 .about-body {
   display: flex;
@@ -451,4 +473,7 @@ button { font: inherit; color: inherit; border: none; background: none; cursor: 
 @media (max-width: 640px) {
   .page-dots { right: 0.75rem; }
   .section-content { padding-bottom: 3.5rem; }
+  .bg-img { object-position: 65% 50%; }  /* push image right on mobile */
+  .bg-layer { transform-origin: 65% 50%; }
+  .bg-vignette { background: radial-gradient(ellipse at 65% 50%, rgba(0,0,0,0) 30%, rgba(0,0,0,0.65) 100%); }
 }

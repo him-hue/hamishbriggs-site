@@ -175,29 +175,91 @@
     });
   });
 
-  /* ── Product hover interaction ─────────────────── */
+  /* ── Product interaction (hover to preview, click to pin) ── */
   const detailDefault = detail ? detail.innerHTML : "";
+  let pinnedBtn = null;   // currently pinned product, or null
+
+  /* Build the detail HTML for a given product button */
+  function buildDetail(btn) {
+    const status = btn.dataset.status === "dev" ? "Under development" : "Planned";
+    const note = btn.dataset.status === "dev"
+      ? ""
+      : "This product is planned. Details will appear as it comes into focus.";
+    const name = btn.textContent;
+    const href = btn.getAttribute("href");
+
+    // Show a visit button for products that have a live link
+    const showVisit = (name === "StoryMap");
+    const visitBtn = showVisit
+      ? `<a href="${href}" class="product-visit-btn">Visit ${name}</a>`
+      : "";
+
+    return `
+      <div class="detail-active">
+        <div class="detail-status">${status}</div>
+        <div class="detail-name">${name}</div>
+        <div class="detail-blurb">${btn.dataset.blurb}</div>
+        ${note ? `<div class="detail-note">${note}</div>` : ""}
+        ${visitBtn}
+      </div>
+    `;
+  }
+
+  /* Show detail for a button */
+  function showDetail(btn) {
+    detail.innerHTML = buildDetail(btn);
+  }
+
+  /* Reset to default */
+  function resetDetail() {
+    detail.innerHTML = detailDefault;
+  }
+
+  /* Highlight the active product name */
+  function setActiveBtn(btn) {
+    productBtns.forEach((b) => b.classList.remove("product-active"));
+    if (btn) btn.classList.add("product-active");
+  }
 
   productBtns.forEach((btn) => {
-    btn.addEventListener("mouseenter", () => {
-      const status = btn.dataset.status === "dev" ? "Under development" : "Planned";
-      const note = btn.dataset.status === "dev"
-        ? "Visit the subdomain to explore this product."
-        : "This product is planned. Details will appear as it comes into focus.";
+    /* Prevent default link navigation — click is now pin/unpin */
+    btn.addEventListener("click", (e) => {
+      e.preventDefault();
 
-      detail.innerHTML = `
-        <div class="detail-active">
-          <div class="detail-status">${status}</div>
-          <div class="detail-name">${btn.textContent}</div>
-          <div class="detail-blurb">${btn.dataset.blurb}</div>
-          <div class="detail-note">${note}</div>
-        </div>
-      `;
+      if (pinnedBtn === btn) {
+        // Unpin — revert to default
+        pinnedBtn = null;
+        setActiveBtn(null);
+        resetDetail();
+      } else {
+        // Pin this product
+        pinnedBtn = btn;
+        setActiveBtn(btn);
+        showDetail(btn);
+      }
+    });
+
+    /* Hover preview (desktop only, doesn't override a pin) */
+    btn.addEventListener("mouseenter", () => {
+      if (!pinnedBtn) {
+        showDetail(btn);
+      }
     });
 
     btn.addEventListener("mouseleave", () => {
-      detail.innerHTML = detailDefault;
+      if (!pinnedBtn) {
+        resetDetail();
+      }
     });
+  });
+
+  /* Click outside product list or detail → unpin */
+  document.addEventListener("click", (e) => {
+    if (!pinnedBtn) return;
+    if (e.target.closest(".product-list-flat") || e.target.closest("#product-detail")) return;
+    pinnedBtn = null;
+    setActiveBtn(null);
+    resetDetail();
   });
 
   /* ── Init ───────────────────────────────────────── */
