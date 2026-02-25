@@ -12,55 +12,133 @@
 </head>
 <body>
 
-  <!-- Background -->
-  <div class="bg-wrap">
+  <!-- ── Background layer (fixed, moves along camera path) ── -->
+  <div class="bg-layer" id="bg-layer">
     <img class="bg-img" src="images/hero.jpg" alt="" />
     <div class="bg-darken"></div>
     <div class="bg-vignette"></div>
   </div>
   <div class="bg-grain" aria-hidden="true"></div>
 
-  <!-- Top Bar -->
-  <header class="top-bar">
-    <div class="top-bar-inner">
-      <a href="index.html" class="logo">Hamish Briggs</a>
-      <nav class="top-nav">
-        <a href="https://index.hamishbriggs.com">Index</a>
-        <a href="https://storymap.hamishbriggs.com">StoryMap</a>
+  <!-- ── Header bar (persistent) ── -->
+  <header class="header" id="header">
+    <div class="header-inner">
+      <div class="header-left">
+        <a href="#home" class="logo" data-nav="0">Hamish Briggs</a>
+        <nav class="header-sections">
+          <a href="#products" class="section-link" data-nav="1">Products</a>
+          <span class="section-divider">|</span>
+          <a href="#about" class="section-link" data-nav="2">About</a>
+          <span class="section-divider">|</span>
+          <a href="#contact" class="section-link" data-nav="3">Contact</a>
+        </nav>
+      </div>
+      <nav class="header-nav">
+        <a href="https://storymap.hamishbriggs.com" class="nav-pill">StoryMap</a>
       </nav>
     </div>
   </header>
 
-  <!-- Page -->
-  <div class="page">
-    <section class="manifesto">
-      <div class="manifesto-content">
-        <h1>I build stories &mdash;<br />and the vessels that carry them.</h1>
-        <p class="sub">
-          As creative industries enter an era of upheaval, I'm building tools that help human
-          imagination and machine capacity work in harmony &mdash; not in tension.
-        </p>
-        <p class="roles">Actor &bull; Writer &bull; Director &bull; Comic creator</p>
+  <!-- ── Page indicators (right edge dots) ── -->
+  <div class="page-dots" id="page-dots">
+    <button class="dot active" data-nav="0" aria-label="Home"></button>
+    <button class="dot" data-nav="1" aria-label="Products"></button>
+    <button class="dot" data-nav="2" aria-label="About"></button>
+    <button class="dot" data-nav="3" aria-label="Contact"></button>
+  </div>
+
+  <!-- ── Sections viewport ── -->
+  <div class="sections-viewport" id="viewport">
+
+    <!-- Section 0: Home -->
+    <section class="section active" data-index="0" id="section-home">
+      <div class="section-content section-full home-layout">
+        <div class="two-col">
+          <div class="col-primary">
+            <p class="home-line">Human creativity is <strong>infinite</strong>.</p>
+            <p class="home-line">Human capacity is <strong>limited</strong>.</p>
+          </div>
+          <div class="col-secondary">
+            <p class="home-mirror">AI creativity is <strong>limited</strong>.</p>
+            <p class="home-mirror">AI capacity is <strong>infinite</strong>.</p>
+          </div>
+        </div>
+        <div class="home-tagline">
+          <p class="tagline-setup">My goal is to reconcile the two.</p>
+          <p class="tagline-thesis">Human creativity empowered by AI capacity.</p>
+        </div>
       </div>
     </section>
-  </div>
 
-  <!-- Floating Menu -->
-  <div class="menu-wrap">
-    <div style="position:relative;">
-      <button class="menu-trigger" aria-expanded="false" aria-label="Open menu">
-        <span class="menu-bars"><span></span><span></span><span></span></span>
-        <span class="menu-label">Menu</span>
-      </button>
-      <div class="menu-popup">
-        <a href="about.html">About</a>
-        <a href="products.html">Products</a>
-        <a href="contact.html">Contact</a>
-        <div class="menu-tip"><span style="opacity:0.7">Tip:</span> &#8984;/Ctrl K</div>
+    <!-- Section 1: Products -->
+    <section class="section" data-index="1" id="section-products">
+      <div class="section-content section-full">
+        <div class="two-col">
+          <div class="col-primary">
+            <div class="product-list-flat">
+              <a href="https://index.hamishbriggs.com" class="product-btn" data-status="dev" data-blurb="Project drive optimization — an intelligent layer over your creative file system.">Index</a>
+              <a href="https://storymap.hamishbriggs.com" class="product-btn" data-status="dev" data-blurb="Narrative architecture — map, structure, and evolve stories across any medium.">StoryMap</a>
+              <a href="https://productionmap.hamishbriggs.com" class="product-btn planned" data-status="planned" data-blurb="Production planning — from script to screen with clarity.">ProductionMap</a>
+              <a href="https://marketingmap.hamishbriggs.com" class="product-btn planned" data-status="planned" data-blurb="Marketing strategy mapping — align creative intent with audience reach.">MarketingMap</a>
+              <a href="https://domaindatamine.hamishbriggs.com" class="product-btn planned" data-status="planned" data-blurb="Domain research and synthesis — deep knowledge extraction for storytellers.">DomainDataMine</a>
+              <a href="https://yggdrasil.hamishbriggs.com" class="product-btn planned" data-status="planned" data-blurb="A growing suite of storyteller tools — the trunk from which everything branches.">Yggdrasil</a>
+              <a href="https://marionette.hamishbriggs.com" class="product-btn planned" data-status="planned" data-blurb="Character and motion ideation — bringing figures to life before the camera rolls.">Marionette</a>
+              <a href="https://auteur-ai.hamishbriggs.com" class="product-btn planned" data-status="planned" data-blurb="Creative orchestration — an AI collaborator that respects the director's vision.">Auteur AI</a>
+            </div>
+          </div>
+          <div class="col-secondary" id="product-detail">
+            <div class="detail-default">
+              <p class="secondary-text">Tools for the next era of storytelling.</p>
+              <p class="secondary-text" style="margin-top: 0.25rem;">Hover a name to explore.</p>
+            </div>
+          </div>
+        </div>
       </div>
-    </div>
+    </section>
+
+    <!-- Section 2: About -->
+    <section class="section" data-index="2" id="section-about">
+      <div class="section-content section-full">
+        <div class="two-col">
+          <div class="col-primary">
+            <div class="about-body">
+              <p>I'm an actor, writer, director, and a comic book creator.</p>
+              <p class="about-punchline">A storyteller.</p>
+              <p>As creative industries enter an era of upheaval, I'm building products that harness the disruption. Because there is a way for human imagination and machine capacity to work <strong>in harmony, not in tension</strong>.</p>
+            </div>
+          </div>
+          <div class="col-secondary">
+            <p class="secondary-text">Human creativity is infinite.</p>
+            <p class="secondary-text">It's time workflows <em>caught up</em>.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Section 3: Contact -->
+    <section class="section" data-index="3" id="section-contact">
+      <div class="section-content section-full">
+        <div class="two-col">
+          <div class="col-primary">
+            <div class="contact-field">
+              <div class="contact-label">Instagram</div>
+              <a href="https://instagram.com/hamishbriggs" class="contact-value">@hamishbriggs</a>
+            </div>
+            <div class="contact-field">
+              <div class="contact-label">Email</div>
+              <a href="mailto:contact@hamishbriggs.com" class="contact-value">contact@hamishbriggs.com</a>
+            </div>
+          </div>
+          <div class="col-secondary">
+            <p class="secondary-text">Storytelling is <strong>human</strong>.</p>
+            <p class="secondary-text"><em>Let's keep it that way.</em></p>
+          </div>
+        </div>
+      </div>
+    </section>
+
   </div>
 
-  <script src="shared.js"></script>
+  <script src="site.js"></script>
 </body>
 </html>
