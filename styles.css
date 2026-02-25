@@ -473,7 +473,7 @@ button { font: inherit; color: inherit; border: none; background: none; cursor: 
 @media (max-width: 640px) {
   .page-dots { right: 0.75rem; }
   .section-content { padding-bottom: 3.5rem; }
-  .bg-img { object-position: 38% 50%; }  /* shift you rightward on mobile */
-  .bg-layer { transform-origin: 38% 50%; }
-  .bg-vignette { background: radial-gradient(ellipse at 38% 50%, rgba(0,0,0,0) 30%, rgba(0,0,0,0.65) 100%); }
+  .bg-img { object-position: 40% 50%; }  /* shift you rightward on mobile */
+  .bg-layer { transform-origin: 40% 50%; }
+  .bg-vignette { background: radial-gradient(ellipse at 40% 50%, rgba(0,0,0,0) 30%, rgba(0,0,0,0.65) 100%); }
 }
