@@ -57,6 +57,14 @@ button { font: inherit; color: inherit; border: none; background: none; cursor: 
   opacity: 1;
 }
 
+/* Normalize apparent figure size across frames (close-up → wide shot).
+   Frame 0 = closest (baseline), frame 3 = widest (scale up most).
+   The DOM order is frame-0, frame-1, frame-2, frame-3. */
+.bg-frame:nth-child(1) { transform: scale(1.0);  }  /* closest — baseline */
+.bg-frame:nth-child(2) { transform: scale(1.10); }
+.bg-frame:nth-child(3) { transform: scale(1.20); }
+.bg-frame:nth-child(4) { transform: scale(1.30); }  /* widest — zoom in to match */
+
 .bg-darken {
   position: absolute; inset: 0;
   background: rgba(0,0,0,0.40);
@@ -488,7 +496,20 @@ button { font: inherit; color: inherit; border: none; background: none; cursor: 
 @media (max-width: 640px) {
   .page-dots { right: 0.75rem; }
   .section-content { padding-bottom: 3.5rem; }
-  .bg-video { display: none; }             /* hide video on mobile */
-  .bg-frames { display: block; position: absolute; inset: 0; }  /* show frames instead */
-  .bg-vignette { background: radial-gradient(ellipse at 40% 50%, rgba(0,0,0,0) 30%, rgba(0,0,0,0.65) 100%); }
+  .bg-video { display: none; }
+  .bg-frames {
+    display: block;
+    position: absolute;
+    inset: 0;
+    overflow: hidden;  /* clip scaled-up frames */
+  }
+  /* Harder vignette on mobile to mask any edge artifacts from scaled frames */
+  .bg-vignette {
+    background:
+      radial-gradient(ellipse at 40% 50%, rgba(0,0,0,0) 25%, rgba(0,0,0,0.70) 100%),
+      linear-gradient(to top, rgba(0,0,0,0.5) 0%, transparent 15%),
+      linear-gradient(to bottom, rgba(0,0,0,0.5) 0%, transparent 15%),
+      linear-gradient(to left, rgba(0,0,0,0.5) 0%, transparent 10%),
+      linear-gradient(to right, rgba(0,0,0,0.5) 0%, transparent 10%);
+  }
 }
