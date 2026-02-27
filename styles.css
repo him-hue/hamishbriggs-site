@@ -48,7 +48,7 @@ button { font: inherit; color: inherit; border: none; background: none; cursor: 
   width: 100%;
   height: 100%;
   object-fit: cover;
-  object-position: 40% 50%;
+  object-position: 40% 35%;  /* shifted up — midsection toward top third */
   opacity: 0;
   transition: opacity 1s ease;
 }
@@ -57,14 +57,16 @@ button { font: inherit; color: inherit; border: none; background: none; cursor: 
   opacity: 1;
 }
 
-/* Normalize apparent figure size across frames (close-up → wide shot).
-   Frame 0 = closest (baseline), frame 3 = widest (scale up most).
-   The DOM order is frame-0, frame-1, frame-2, frame-3.
-   Mobile-only: also shift horizontally to keep figure centered. */
-.bg-frame:nth-child(1) { transform: scale(1.06) translateX(-5px); }  /* closest */
-.bg-frame:nth-child(2) { transform: scale(1.14) translateX(-3px); }
-.bg-frame:nth-child(3) { transform: scale(1.22); }
-.bg-frame:nth-child(4) { transform: scale(1.30) translateX(2px); }   /* widest */
+/* Normalize figure size + position across orbit frames.
+   Frame 0 = closest (figure biggest), frame 3 = widest (figure smallest).
+   Reference: frame-2 at scale(1.22) = best size per user feedback.
+   Raw figure heights: f0≈35%, f1≈29%, f2≈24%, f3≈19% of frame.
+   Scale to compensate + translateX to align horizontal position.
+   translateY to fine-tune vertical centering per frame. */
+.bg-frame:nth-child(1) { transform: scale(0.92) translate(18px, 12px); }   /* closest — zoom out */
+.bg-frame:nth-child(2) { transform: scale(1.05) translate(10px, 5px); }
+.bg-frame:nth-child(3) { transform: scale(1.22) translate(2px, 0px); }     /* reference */
+.bg-frame:nth-child(4) { transform: scale(1.44) translate(0px, -4px); }    /* widest — zoom in */
 
 .bg-darken {
   position: absolute; inset: 0;
@@ -504,13 +506,13 @@ button { font: inherit; color: inherit; border: none; background: none; cursor: 
     inset: 0;
     overflow: hidden;  /* clip scaled-up frames */
   }
-  /* Harder vignette on mobile to mask any edge artifacts from scaled frames */
+  /* Strong vignette on mobile — hides edges from scaled frames + floor light */
   .bg-vignette {
     background:
-      radial-gradient(ellipse at 40% 50%, rgba(0,0,0,0) 25%, rgba(0,0,0,0.70) 100%),
-      linear-gradient(to top, rgba(0,0,0,0.5) 0%, transparent 15%),
-      linear-gradient(to bottom, rgba(0,0,0,0.5) 0%, transparent 15%),
-      linear-gradient(to left, rgba(0,0,0,0.5) 0%, transparent 10%),
-      linear-gradient(to right, rgba(0,0,0,0.5) 0%, transparent 10%);
+      radial-gradient(ellipse at 40% 35%, rgba(0,0,0,0) 20%, rgba(0,0,0,0.75) 100%),
+      linear-gradient(to top, rgba(0,0,0,0.7) 0%, transparent 20%),
+      linear-gradient(to bottom, rgba(0,0,0,0.6) 0%, transparent 18%),
+      linear-gradient(to left, rgba(0,0,0,0.6) 0%, transparent 14%),
+      linear-gradient(to right, rgba(0,0,0,0.6) 0%, transparent 14%);
   }
 }
