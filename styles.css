@@ -6,8 +6,8 @@
   --font-sans: 'Inter', system-ui, -apple-system, sans-serif;
   --font-serif: 'Cormorant Garamond', 'Georgia', serif;
   --header-h: 60px;
-  --ease: cubic-bezier(0.22, 1, 0.36, 1);
-  --duration: 650ms;
+  --ease: cubic-bezier(0.16, 1, 0.3, 1);
+  --duration: 1200ms;
 }
 
 html, body {

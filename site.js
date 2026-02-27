@@ -15,7 +15,7 @@
   const VIDEO_DURATION = 3.25;   // seconds
   const TOTAL_SECTIONS = 4;
   const SCRUB_DURATION = 2000;   // ms — slow, cinematic scrub
-  const DURATION = 650;          // ms — section text transition
+  const DURATION = 1200;         // ms — section text transition
 
   /* ── State ──────────────────────────────────────── */
   let currentSection = 0;
