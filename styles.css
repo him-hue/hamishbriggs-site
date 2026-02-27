@@ -48,7 +48,7 @@ button { font: inherit; color: inherit; border: none; background: none; cursor: 
   width: 100%;
   height: 100%;
   object-fit: cover;
-  object-position: 40% 35%;  /* shifted up — midsection toward top third */
+  object-position: 40% 20%;  /* figure pushed toward top of screen */
   opacity: 0;
   transition: opacity 1s ease;
 }
@@ -57,16 +57,16 @@ button { font: inherit; color: inherit; border: none; background: none; cursor: 
   opacity: 1;
 }
 
-/* Normalize figure size + position across orbit frames.
-   Frame 0 = closest (figure biggest), frame 3 = widest (figure smallest).
-   Reference: frame-2 at scale(1.22) = best size per user feedback.
-   Raw figure heights: f0≈35%, f1≈29%, f2≈24%, f3≈19% of frame.
-   Scale to compensate + translateX to align horizontal position.
-   translateY to fine-tune vertical centering per frame. */
-.bg-frame:nth-child(1) { transform: scale(0.92) translate(18px, 12px); }   /* closest — zoom out */
-.bg-frame:nth-child(2) { transform: scale(1.05) translate(10px, 5px); }
-.bg-frame:nth-child(3) { transform: scale(1.22) translate(2px, 0px); }     /* reference */
-.bg-frame:nth-child(4) { transform: scale(1.44) translate(0px, -4px); }    /* widest — zoom in */
+/* Normalize figure size + position across orbit frames (v2 — taller frames).
+   New frames have extended floor space (~720x655, nearly square).
+   On mobile with object-fit:cover, full height is visible (no vertical crop).
+   Raw figure heights: f0≈45%, f1≈37%, f2≈17%, f3≈15% of image.
+   Raw x-centers: f0=39%, f1=41%, f2=50%, f3=51% of image.
+   Scale + translate to moderate size differences and align x-position. */
+.bg-frame:nth-child(1) { transform: scale(0.72) translate(30px, 20px); }   /* closest — scale down significantly */
+.bg-frame:nth-child(2) { transform: scale(0.82) translate(22px, 10px); }   /* close-medium */
+.bg-frame:nth-child(3) { transform: scale(1.35) translate(-8px, 0px); }    /* medium-wide — scale up */
+.bg-frame:nth-child(4) { transform: scale(1.55) translate(-12px, -5px); }  /* widest — scale up most */
 
 .bg-darken {
   position: absolute; inset: 0;
@@ -509,10 +509,10 @@ button { font: inherit; color: inherit; border: none; background: none; cursor: 
   /* Strong vignette on mobile — hides edges from scaled frames + floor light */
   .bg-vignette {
     background:
-      radial-gradient(ellipse at 40% 35%, rgba(0,0,0,0) 20%, rgba(0,0,0,0.75) 100%),
-      linear-gradient(to top, rgba(0,0,0,0.7) 0%, transparent 20%),
-      linear-gradient(to bottom, rgba(0,0,0,0.6) 0%, transparent 18%),
-      linear-gradient(to left, rgba(0,0,0,0.6) 0%, transparent 14%),
-      linear-gradient(to right, rgba(0,0,0,0.6) 0%, transparent 14%);
+      radial-gradient(ellipse at 45% 30%, rgba(0,0,0,0) 15%, rgba(0,0,0,0.8) 100%),
+      linear-gradient(to top, rgba(0,0,0,0.85) 0%, transparent 25%),
+      linear-gradient(to bottom, rgba(0,0,0,0.7) 0%, transparent 22%),
+      linear-gradient(to left, rgba(0,0,0,0.7) 0%, transparent 18%),
+      linear-gradient(to right, rgba(0,0,0,0.7) 0%, transparent 18%);
   }
 }
