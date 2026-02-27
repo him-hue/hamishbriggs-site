@@ -32,10 +32,14 @@
 
   /* ── DOM refs ───────────────────────────────────── */
   const bgVideo   = document.getElementById("bg-video");
+  const bgFrames  = document.querySelectorAll(".bg-frame");
   const dots      = document.querySelectorAll(".dot");
   const sections  = document.querySelectorAll(".section");
   const detail    = document.getElementById("product-detail");
   const productBtns = document.querySelectorAll(".product-btn");
+
+  /* ── Mobile detection ──────────────────────────── */
+  const isMobile = window.matchMedia("(max-width: 640px)").matches;
 
   /* ── Map camera step → video time ───────────────── */
   function stepToTime(step) {
@@ -65,7 +69,16 @@
   }
 
   function scrubToStep(step) {
-    // Cancel any in-progress scrub
+    if (isMobile) {
+      // Mobile: crossfade to the nearest frame
+      const frameIndex = Math.round((step / (CAMERA_STEPS - 1)) * (bgFrames.length - 1));
+      bgFrames.forEach((f, i) => {
+        f.classList.toggle("active", i === frameIndex);
+      });
+      return;
+    }
+
+    // Desktop: smooth video scrub
     if (scrubRaf) {
       cancelAnimationFrame(scrubRaf);
     }
@@ -290,7 +303,9 @@
   });
 
   /* ── Init ───────────────────────────────────────── */
-  bgVideo.pause();
-  bgVideo.currentTime = 0;
+  if (!isMobile) {
+    bgVideo.pause();
+    bgVideo.currentTime = 0;
+  }
 
 })();

@@ -14,11 +14,27 @@
 
   <!-- ── Background layer (fixed, video scrubs on page transitions) ── -->
   <div class="bg-layer" id="bg-layer">
+    <!-- Desktop: video scrub -->
     <video class="bg-video" id="bg-video"
            src="images/bg-video.mp4"
            poster="images/hero.jpg"
            muted playsinline preload="auto"
            disablepictureinpicture></video>
+    <!-- Mobile: crossfade frames -->
+    <div class="bg-frames" id="bg-frames">
+      <img class="bg-frame active" src="images/frames/frame-0.webp" alt="" loading="eager" />
+      <img class="bg-frame" src="images/frames/frame-1.webp" alt="" loading="lazy" />
+      <img class="bg-frame" src="images/frames/frame-2.webp" alt="" loading="lazy" />
+      <img class="bg-frame" src="images/frames/frame-3.webp" alt="" loading="lazy" />
+      <img class="bg-frame" src="images/frames/frame-4.webp" alt="" loading="lazy" />
+      <img class="bg-frame" src="images/frames/frame-5.webp" alt="" loading="lazy" />
+      <img class="bg-frame" src="images/frames/frame-6.webp" alt="" loading="lazy" />
+      <img class="bg-frame" src="images/frames/frame-7.webp" alt="" loading="lazy" />
+      <img class="bg-frame" src="images/frames/frame-8.webp" alt="" loading="lazy" />
+      <img class="bg-frame" src="images/frames/frame-9.webp" alt="" loading="lazy" />
+      <img class="bg-frame" src="images/frames/frame-10.webp" alt="" loading="lazy" />
+      <img class="bg-frame" src="images/frames/frame-11.webp" alt="" loading="lazy" />
+    </div>
     <div class="bg-darken"></div>
     <div class="bg-vignette"></div>
   </div>

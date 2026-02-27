@@ -39,6 +39,24 @@ button { font: inherit; color: inherit; border: none; background: none; cursor: 
   display: block;
 }
 
+/* Mobile frames — hidden on desktop */
+.bg-frames { display: none; }
+
+.bg-frame {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: 40% 50%;
+  opacity: 0;
+  transition: opacity 1s ease;
+}
+
+.bg-frame.active {
+  opacity: 1;
+}
+
 .bg-darken {
   position: absolute; inset: 0;
   background: rgba(0,0,0,0.40);
@@ -470,6 +488,7 @@ button { font: inherit; color: inherit; border: none; background: none; cursor: 
 @media (max-width: 640px) {
   .page-dots { right: 0.75rem; }
   .section-content { padding-bottom: 3.5rem; }
-  .bg-video { object-position: 40% 50%; }  /* shift you rightward on mobile */
+  .bg-video { display: none; }             /* hide video on mobile */
+  .bg-frames { display: block; position: absolute; inset: 0; }  /* show frames instead */
   .bg-vignette { background: radial-gradient(ellipse at 40% 50%, rgba(0,0,0,0) 30%, rgba(0,0,0,0.65) 100%); }
 }
