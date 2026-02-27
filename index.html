@@ -12,9 +12,13 @@
 </head>
 <body>
 
-  <!-- ── Background layer (fixed, moves along camera path) ── -->
+  <!-- ── Background layer (fixed, video scrubs on page transitions) ── -->
   <div class="bg-layer" id="bg-layer">
-    <img class="bg-img" src="images/hero.jpg" alt="" />
+    <video class="bg-video" id="bg-video"
+           src="images/bg-video.mp4"
+           poster="images/hero.jpg"
+           muted playsinline preload="auto"
+           disablepictureinpicture></video>
     <div class="bg-darken"></div>
     <div class="bg-vignette"></div>
   </div>

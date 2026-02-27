@@ -1,52 +1,79 @@
 /* ═══════════════════════════════════════════════════
    Hamish Briggs — site controller
-   Background camera path + section transitions
+   Background video scrub + section transitions
    ═══════════════════════════════════════════════════ */
 
 (function () {
   "use strict";
 
-  /* ── Camera keyframes ──────────────────────────────
-     12 keyframes along a subtle dolly/pan path.
-     Each step: translateX, translateY (px), scale.
-     The image starts slightly low and right-of-center,
-     and slowly drifts up and gently breathes in scale.
+  /* ── Video scrub config ─────────────────────────────
+     The reversed video is 3.25s / 78 frames @ 24fps.
+     12 camera steps map linearly across the video duration.
+     Each transition smoothly scrubs video.currentTime
+     using requestAnimationFrame for butter-smooth motion.
      ──────────────────────────────────────────────── */
-  const CAMERA = [
-    { y:  0,    s: 1.0    },   // 0  – home default
-    { y: -18,   s: 1.010  },   // 1
-    { y: -34,   s: 1.020  },   // 2
-    { y: -48,   s: 1.016  },   // 3
-    { y: -60,   s: 1.028  },   // 4
-    { y: -72,   s: 1.036  },   // 5
-    { y: -82,   s: 1.030  },   // 6
-    { y: -92,   s: 1.040  },   // 7
-    { y: -100,  s: 1.046  },   // 8
-    { y: -108,  s: 1.042  },   // 9
-    { y: -114,  s: 1.050  },   // 10
-    { y: -120,  s: 1.056  },   // 11 – max
-  ];
+  const VIDEO_DURATION = 3.25;   // seconds
+  const CAMERA_STEPS = 12;
+  const SCRUB_DURATION = 1400;   // ms — how long the video scrub animation takes
 
   const TOTAL_SECTIONS = 4;
-  const DURATION = 650; // ms — matches CSS --duration
+  const DURATION = 650; // ms — matches CSS --duration for section transitions
 
   /* ── State ──────────────────────────────────────── */
   let currentSection = 0;
   let cameraStep = 0;
   let transitioning = false;
 
+  /* Video scrub state */
+  let scrubFrom = 0;
+  let scrubTo = 0;
+  let scrubStart = 0;
+  let scrubRaf = null;
+
   /* ── DOM refs ───────────────────────────────────── */
-  const bgLayer   = document.getElementById("bg-layer");
+  const bgVideo   = document.getElementById("bg-video");
   const dots      = document.querySelectorAll(".dot");
   const sections  = document.querySelectorAll(".section");
   const detail    = document.getElementById("product-detail");
   const productBtns = document.querySelectorAll(".product-btn");
 
-  /* ── Apply camera position ─────────────────────── */
-  function applyCamera(step) {
-    const kf = CAMERA[Math.min(step, CAMERA.length - 1)];
-    bgLayer.style.transform =
-      `translate3d(0, ${kf.y}px, 0) scale(${kf.s})`;
+  /* ── Map camera step → video time ───────────────── */
+  function stepToTime(step) {
+    const clamped = Math.max(0, Math.min(step, CAMERA_STEPS - 1));
+    return (clamped / (CAMERA_STEPS - 1)) * VIDEO_DURATION;
+  }
+
+  /* ── Smooth scrub using requestAnimationFrame ──── */
+  function easOut(t) {
+    // cubic ease-out for smooth deceleration
+    return 1 - Math.pow(1 - t, 3);
+  }
+
+  function animateScrub(timestamp) {
+    if (!scrubStart) scrubStart = timestamp;
+    const elapsed = timestamp - scrubStart;
+    const progress = Math.min(elapsed / SCRUB_DURATION, 1);
+    const eased = easOut(progress);
+
+    bgVideo.currentTime = scrubFrom + (scrubTo - scrubFrom) * eased;
+
+    if (progress < 1) {
+      scrubRaf = requestAnimationFrame(animateScrub);
+    } else {
+      scrubRaf = null;
+    }
+  }
+
+  function scrubToStep(step) {
+    // Cancel any in-progress scrub
+    if (scrubRaf) {
+      cancelAnimationFrame(scrubRaf);
+    }
+
+    scrubFrom = bgVideo.currentTime;
+    scrubTo = stepToTime(step);
+    scrubStart = 0;
+    scrubRaf = requestAnimationFrame(animateScrub);
   }
 
   /* ── Navigate to a section ─────────────────────── */
@@ -80,13 +107,13 @@
     next.style.opacity = "";
     next.style.transform = "";
 
-    // Advance or retreat camera
+    // Advance or retreat camera (scrub video)
     if (direction === "up") {
-      cameraStep = Math.min(cameraStep + 1, CAMERA.length - 1);
+      cameraStep = Math.min(cameraStep + 1, CAMERA_STEPS - 1);
     } else {
       cameraStep = Math.max(cameraStep - 1, 0);
     }
-    applyCamera(cameraStep);
+    scrubToStep(cameraStep);
 
     // Update dots
     dots.forEach((d) => d.classList.remove("active"));
@@ -263,6 +290,7 @@
   });
 
   /* ── Init ───────────────────────────────────────── */
-  applyCamera(0);
+  bgVideo.pause();
+  bgVideo.currentTime = 0;
 
 })();

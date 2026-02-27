@@ -27,14 +27,11 @@ button { font: inherit; color: inherit; border: none; background: none; cursor: 
 /* ── Background layer ────────────────────────────── */
 .bg-layer {
   position: fixed;
-  inset: -140px -60px;          /* extra bleed so we can shift without edges */
+  inset: 0;
   z-index: 0;
-  transition: transform 1.8s cubic-bezier(0.16, 1, 0.3, 1);  /* slow cinematic drift */
-  will-change: transform;
-  transform-origin: 55% 50%;    /* slightly right of center — you in frame */
 }
 
-.bg-img {
+.bg-video {
   width: 100%;
   height: 100%;
   object-fit: cover;
@@ -473,7 +470,6 @@ button { font: inherit; color: inherit; border: none; background: none; cursor: 
 @media (max-width: 640px) {
   .page-dots { right: 0.75rem; }
   .section-content { padding-bottom: 3.5rem; }
-  .bg-img { object-position: 40% 50%; }  /* shift you rightward on mobile */
-  .bg-layer { transform-origin: 40% 50%; }
+  .bg-video { object-position: 40% 50%; }  /* shift you rightward on mobile */
   .bg-vignette { background: radial-gradient(ellipse at 40% 50%, rgba(0,0,0,0) 30%, rgba(0,0,0,0.65) 100%); }
 }
