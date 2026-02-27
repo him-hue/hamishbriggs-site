@@ -8,20 +8,17 @@
 
   /* ── Video scrub config ─────────────────────────────
      The reversed video is 3.25s / 78 frames @ 24fps.
-     12 camera steps map linearly across the video duration.
-     Each transition smoothly scrubs video.currentTime
-     using requestAnimationFrame for butter-smooth motion.
+     Camera steps = section count. Each section maps to
+     an evenly spaced point in the video. Transitions
+     scrub smoothly between them.
      ──────────────────────────────────────────────── */
   const VIDEO_DURATION = 3.25;   // seconds
-  const CAMERA_STEPS = 12;
-  const SCRUB_DURATION = 1400;   // ms — how long the video scrub animation takes
-
   const TOTAL_SECTIONS = 4;
-  const DURATION = 650; // ms — matches CSS --duration for section transitions
+  const SCRUB_DURATION = 2000;   // ms — slow, cinematic scrub
+  const DURATION = 650;          // ms — section text transition
 
   /* ── State ──────────────────────────────────────── */
   let currentSection = 0;
-  let cameraStep = 0;
   let transitioning = false;
 
   /* Video scrub state */
@@ -41,23 +38,23 @@
   /* ── Mobile detection ──────────────────────────── */
   const isMobile = window.matchMedia("(max-width: 640px)").matches;
 
-  /* ── Map camera step → video time ───────────────── */
-  function stepToTime(step) {
-    const clamped = Math.max(0, Math.min(step, CAMERA_STEPS - 1));
-    return (clamped / (CAMERA_STEPS - 1)) * VIDEO_DURATION;
+  /* ── Map section index → video time ──────────────── */
+  function sectionToTime(index) {
+    const clamped = Math.max(0, Math.min(index, TOTAL_SECTIONS - 1));
+    return (clamped / (TOTAL_SECTIONS - 1)) * VIDEO_DURATION;
   }
 
   /* ── Smooth scrub using requestAnimationFrame ──── */
-  function easOut(t) {
-    // cubic ease-out for smooth deceleration
-    return 1 - Math.pow(1 - t, 3);
+  function easeInOut(t) {
+    // sine ease-in-out for buttery smooth acceleration and deceleration
+    return -(Math.cos(Math.PI * t) - 1) / 2;
   }
 
   function animateScrub(timestamp) {
     if (!scrubStart) scrubStart = timestamp;
     const elapsed = timestamp - scrubStart;
     const progress = Math.min(elapsed / SCRUB_DURATION, 1);
-    const eased = easOut(progress);
+    const eased = easeInOut(progress);
 
     bgVideo.currentTime = scrubFrom + (scrubTo - scrubFrom) * eased;
 
@@ -68,12 +65,11 @@
     }
   }
 
-  function scrubToStep(step) {
+  function scrubToSection(sectionIndex) {
     if (isMobile) {
-      // Mobile: crossfade to the nearest frame
-      const frameIndex = Math.round((step / (CAMERA_STEPS - 1)) * (bgFrames.length - 1));
+      // Mobile: crossfade to matching frame
       bgFrames.forEach((f, i) => {
-        f.classList.toggle("active", i === frameIndex);
+        f.classList.toggle("active", i === sectionIndex);
       });
       return;
     }
@@ -84,7 +80,7 @@
     }
 
     scrubFrom = bgVideo.currentTime;
-    scrubTo = stepToTime(step);
+    scrubTo = sectionToTime(sectionIndex);
     scrubStart = 0;
     scrubRaf = requestAnimationFrame(animateScrub);
   }
@@ -120,13 +116,8 @@
     next.style.opacity = "";
     next.style.transform = "";
 
-    // Advance or retreat camera (scrub video)
-    if (direction === "up") {
-      cameraStep = Math.min(cameraStep + 1, CAMERA_STEPS - 1);
-    } else {
-      cameraStep = Math.max(cameraStep - 1, 0);
-    }
-    scrubToStep(cameraStep);
+    // Scrub video to match target section
+    scrubToSection(targetIndex);
 
     // Update dots
     dots.forEach((d) => d.classList.remove("active"));
