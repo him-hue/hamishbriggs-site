@@ -48,7 +48,7 @@ button { font: inherit; color: inherit; border: none; background: none; cursor: 
   width: 100%;
   height: 100%;
   object-fit: cover;
-  object-position: 32% 25%;  /* shift figure right + slightly lower */
+  object-position: 50% 50%;  /* centered — figure size/position baked into images */
   opacity: 0;
   transition: opacity 1s ease;
 }
@@ -57,16 +57,8 @@ button { font: inherit; color: inherit; border: none; background: none; cursor: 
   opacity: 1;
 }
 
-/* Normalize figure size + position across orbit frames (v2 — taller frames).
-   New frames have extended floor space (~720x655, nearly square).
-   On mobile with object-fit:cover, full height is visible (no vertical crop).
-   Raw figure heights: f0≈45%, f1≈37%, f2≈17%, f3≈15% of image.
-   Raw x-centers: f0=39%, f1=41%, f2=50%, f3=51% of image.
-   Scale + translate to moderate size differences and align x-position. */
-.bg-frame:nth-child(1) { transform: scale(0.85) translate(15px, 18px); }   /* closest — scale down */
-.bg-frame:nth-child(2) { transform: scale(0.95) translate(10px, 8px); }    /* close-medium */
-.bg-frame:nth-child(3) { transform: scale(1.55) translate(-5px, 0px); }    /* medium-wide — scale up */
-.bg-frame:nth-child(4) { transform: scale(1.78) translate(-8px, -3px); }   /* widest — scale up most */
+/* No per-frame transforms needed — figure size + position
+   are normalized directly in the image data via Python processing. */
 
 .bg-darken {
   position: absolute; inset: 0;
