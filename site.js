@@ -38,10 +38,10 @@
   /* ── Mobile detection ──────────────────────────── */
   const isMobile = window.matchMedia("(max-width: 640px)").matches;
 
-  /* ── Map section index → video time ──────────────── */
+  /* ── Map section index → video time (reversed: wide shot first) ── */
   function sectionToTime(index) {
     const clamped = Math.max(0, Math.min(index, TOTAL_SECTIONS - 1));
-    return (clamped / (TOTAL_SECTIONS - 1)) * VIDEO_DURATION;
+    return (1 - clamped / (TOTAL_SECTIONS - 1)) * VIDEO_DURATION;
   }
 
   /* ── Smooth scrub using requestAnimationFrame ──── */
@@ -67,9 +67,10 @@
 
   function scrubToSection(sectionIndex) {
     if (isMobile) {
-      // Mobile: crossfade to matching frame
+      // Mobile: crossfade to matching frame (reversed order)
+      const frameIndex = (bgFrames.length - 1) - sectionIndex;
       bgFrames.forEach((f, i) => {
-        f.classList.toggle("active", i === sectionIndex);
+        f.classList.toggle("active", i === frameIndex);
       });
       return;
     }
@@ -296,7 +297,7 @@
   /* ── Init ───────────────────────────────────────── */
   if (!isMobile) {
     bgVideo.pause();
-    bgVideo.currentTime = 0;
+    bgVideo.currentTime = VIDEO_DURATION;  // start on wide shot
   }
 
 })();
