@@ -59,11 +59,12 @@ button { font: inherit; color: inherit; border: none; background: none; cursor: 
 
 /* Normalize apparent figure size across frames (close-up → wide shot).
    Frame 0 = closest (baseline), frame 3 = widest (scale up most).
-   The DOM order is frame-0, frame-1, frame-2, frame-3. */
-.bg-frame:nth-child(1) { transform: scale(1.0);  }  /* closest — baseline */
-.bg-frame:nth-child(2) { transform: scale(1.10); }
-.bg-frame:nth-child(3) { transform: scale(1.20); }
-.bg-frame:nth-child(4) { transform: scale(1.30); }  /* widest — zoom in to match */
+   The DOM order is frame-0, frame-1, frame-2, frame-3.
+   Mobile-only: also shift horizontally to keep figure centered. */
+.bg-frame:nth-child(1) { transform: scale(1.06) translateX(-5px); }  /* closest */
+.bg-frame:nth-child(2) { transform: scale(1.14) translateX(-3px); }
+.bg-frame:nth-child(3) { transform: scale(1.22); }
+.bg-frame:nth-child(4) { transform: scale(1.30) translateX(2px); }   /* widest */
 
 .bg-darken {
   position: absolute; inset: 0;
