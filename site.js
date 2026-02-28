@@ -209,7 +209,6 @@
 
   /* ── Product interaction (hover to preview, click to pin) ── */
   const detailDefault = detail ? detail.innerHTML : "";
-  let pinnedBtn = null;   // currently pinned product, or null
 
   /* Build the detail HTML for a given product button */
   function buildDetail(btn) {
@@ -220,10 +219,11 @@
     const name = btn.textContent;
     const href = btn.getAttribute("href");
 
-    // Show a visit button for products that have a live link
-    const showVisit = (name === "StoryMap");
-    const visitBtn = showVisit
-      ? `<a href="${href}" class="product-visit-btn">Visit ${name}</a>`
+    // Show a visit button for products with a live app
+    const appLinks = { "StoryMap": "https://storymap.hamishbriggs.com" };
+    const appUrl = appLinks[name];
+    const visitBtn = appUrl
+      ? `<a href="${appUrl}" class="product-visit-btn" onclick="event.stopPropagation()">Visit ${name}</a>`
       : "";
 
     return `
@@ -254,44 +254,23 @@
   }
 
   productBtns.forEach((btn) => {
-    /* Prevent default link navigation — click is now pin/unpin */
+    /* Click navigates to subpage */
     btn.addEventListener("click", (e) => {
       e.preventDefault();
-
-      if (pinnedBtn === btn) {
-        // Unpin — revert to default
-        pinnedBtn = null;
-        setActiveBtn(null);
-        resetDetail();
-      } else {
-        // Pin this product
-        pinnedBtn = btn;
-        setActiveBtn(btn);
-        showDetail(btn);
-      }
+      const href = btn.getAttribute("href");
+      if (href) window.location.href = href;
     });
 
-    /* Hover preview (desktop only, doesn't override a pin) */
+    /* Hover preview (desktop only) */
     btn.addEventListener("mouseenter", () => {
-      if (!pinnedBtn) {
-        showDetail(btn);
-      }
+      setActiveBtn(btn);
+      showDetail(btn);
     });
 
     btn.addEventListener("mouseleave", () => {
-      if (!pinnedBtn) {
-        resetDetail();
-      }
+      setActiveBtn(null);
+      resetDetail();
     });
-  });
-
-  /* Click outside product list or detail → unpin */
-  document.addEventListener("click", (e) => {
-    if (!pinnedBtn) return;
-    if (e.target.closest(".product-list-flat") || e.target.closest("#product-detail")) return;
-    pinnedBtn = null;
-    setActiveBtn(null);
-    resetDetail();
   });
 
   /* ── Init ───────────────────────────────────────── */
