@@ -3,8 +3,8 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Yggdrasil — Hamish Briggs</title>
-  <meta name="description" content="The World Tree — a modular Story Operating System for the next era of creativity." />
+  <title>Yggdrasil ·Hamish Briggs</title>
+  <meta name="description" content="The World Tree ·a modular Story Operating System for the next era of creativity." />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600&family=Inter:wght@300;400;500&display=swap" rel="stylesheet" />
@@ -42,18 +42,20 @@
 
       <div class="subpage-status">The vision</div>
       <h1 class="subpage-title">Yggdrasil</h1>
-      <p class="subpage-tagline">The trunk from which everything branches — a modular Story Operating System.</p>
 
-      <div class="subpage-body">
-        <p>Ideas do not fail because they are small. They fail because they grow so big they can no longer sustain their own weight. The relationships fracture, the momentum stalls, the vision drifts. <strong>Yggdrasil — the World Tree — exists to change that.</strong></p>
-
-        <p>World Tree is a Story Operating System built on layers of idea infrastructure. Where existing tools optimize <em>downstream execution</em>, World Tree is designed to harness AI for <em>upstream ideation</em> — the reasoning that makes execution inevitable.</p>
-
-        <p>The system works through three layers: <strong>Capture</strong> — guided intake that structures what the creator provides, so the idea grows tall, not wide. <strong>Clarify</strong> — canonical understanding that synthesizes all project details into a single "project brain" that can represent the project clearly in any context. <strong>Mobilize</strong> — domain action that applies that understanding through industry-specific models to navigate real constraints and provide clear next steps.</p>
-
-        <p>Each product — Index, StoryMap, ProductionMap, MarketingMap, DomainDataMine — is a module of this system. Together, they form a coherent whole: <strong>the idea infrastructure that helps creators maintain coherence and momentum as complexity grows.</strong></p>
-
-        <p>World Tree does not replace the storyteller. It does not generate the story. It gives humans the infrastructure needed to transform complex projects into coherent, actionable reality — without surrendering authorship or control.</p>
+      <div class="subpage-cols">
+        <div class="subpage-col-primary">
+          <p class="subpage-tagline">The trunk from which everything branches: a modular Story Operating System.</p>
+          <div class="subpage-body">
+            <p>World Tree is a Story Operating System built on layers of idea infrastructure. Where existing tools optimize <em>downstream execution</em>, World Tree is designed to harness AI for <em>upstream ideation</em>: the reasoning that makes execution inevitable.</p>
+            <p>The system works through three layers. <strong>Capture:</strong> guided intake that structures what the creator provides, so the idea grows tall, not wide. <strong>Clarify:</strong> canonical understanding that synthesizes all project details into a single "project brain" that can represent the project clearly in any context. <strong>Mobilize:</strong> domain action that applies that understanding through industry-specific models to navigate real constraints and provide clear next steps.</p>
+            <p>World Tree does not replace the storyteller. It does not generate the story. It gives humans the infrastructure needed to transform complex projects into coherent, actionable reality, without surrendering authorship or control.</p>
+          </div>
+        </div>
+        <div class="subpage-col-secondary">
+          <p class="secondary-text">Ideas do not fail because they are small. They fail because they grow so big they can no longer sustain their own weight. The relationships fracture, the momentum stalls, the vision drifts. <strong>Yggdrasil, the World Tree, exists to change that.</strong></p>
+          <p class="secondary-text">Each product (Index, StoryMap, ProductionMap, MarketingMap, DomainDataMine) is a module of this system. Together, they form a coherent whole: <strong>the idea infrastructure that helps creators maintain coherence and momentum as complexity grows.</strong></p>
+        </div>
       </div>
 
       <!-- Design Partner Section -->
@@ -61,7 +63,7 @@
 
       <div class="dp-form-section">
         <h2 class="dp-form-heading">Become a Design Partner</h2>
-        <p class="dp-form-intro">World Tree is being built in collaboration with real creators. Design Partners get early access to tools as they develop, a direct line to shape the product, and the knowledge that their creative workflow is informing the system from the ground up. If you're a storyteller, creator, or professional managing complex idea-driven projects — we'd love to hear from you.</p>
+        <p class="dp-form-intro">World Tree is being built in collaboration with real creators. Design Partners get early access to tools as they develop, a direct line to shape the product, and the knowledge that their creative workflow is informing the system from the ground up. If you're a storyteller, creator, or professional managing complex idea-driven projects, we'd love to hear from you.</p>
 
         <form class="dp-form" id="dp-form">
           <div class="dp-field">
@@ -152,7 +154,7 @@
         existing.push(data);
         localStorage.setItem("dp_submissions", JSON.stringify(existing));
       } catch (err) {
-        // Silently continue — the mailto fallback below handles delivery
+        // Silently continue ·the mailto fallback below handles delivery
       }
 
       // Send via mailto as the primary delivery mechanism
