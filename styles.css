@@ -48,7 +48,7 @@ button { font: inherit; color: inherit; border: none; background: none; cursor: 
   width: 100%;
   height: 100%;
   object-fit: cover;
-  object-position: 50% 18%;  /* shifted up ~32% total */
+  object-position: 50% 0%;  /* top-aligned — feet clear of text */
   opacity: 0;
   transition: opacity 1s ease;
 }
