@@ -49,7 +49,7 @@ button { font: inherit; color: inherit; border: none; background: none; cursor: 
   height: 100%;
   object-fit: cover;
   object-position: 50% 0%;
-  transform: scale(1.5) translate(8%, -6%);  /* zoom 50%, offset right + up */
+  transform: scale(1.72) translate(10%, 4%);  /* zoom 72%, right + down */
   opacity: 0;
   transition: opacity 1s ease;
 }
