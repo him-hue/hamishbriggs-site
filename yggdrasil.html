@@ -3,8 +3,8 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Yggdrasil ·Hamish Briggs</title>
-  <meta name="description" content="The World Tree ·a modular Story Operating System for the next era of creativity." />
+  <title>Yggdrasil · Hamish Briggs</title>
+  <meta name="description" content="The World Tree: a modular Story Operating System for the next era of creativity." />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600&family=Inter:wght@300;400;500&display=swap" rel="stylesheet" />
@@ -12,7 +12,6 @@
 </head>
 <body>
 
-  <!-- Background -->
   <div class="bg-layer">
     <img class="bg-static" src="images/hero.jpg" alt="" />
     <div class="bg-darken"></div>
@@ -20,11 +19,17 @@
   </div>
   <div class="bg-grain" aria-hidden="true"></div>
 
-  <!-- Header -->
   <header class="header">
     <div class="header-inner">
       <div class="header-left">
         <a href="index.html" class="logo">Hamish Briggs</a>
+        <nav class="header-sections">
+          <a href="index.html#products" class="section-link">Products</a>
+          <span class="section-divider">|</span>
+          <a href="index.html#about" class="section-link">About</a>
+          <span class="section-divider">|</span>
+          <a href="index.html#contact" class="section-link">Contact</a>
+        </nav>
       </div>
       <nav class="header-nav">
         <a href="https://storymap.hamishbriggs.com" class="nav-pill">StoryMap</a>
@@ -32,7 +37,6 @@
     </div>
   </header>
 
-  <!-- Content -->
   <main class="subpage">
     <div class="subpage-inner">
       <a href="index.html" class="subpage-back">
@@ -40,156 +44,29 @@
         Back
       </a>
 
+      <p class="subpage-catchphrase">Coherence</p>
       <div class="subpage-status">The vision</div>
       <h1 class="subpage-title">Yggdrasil</h1>
 
       <div class="subpage-cols">
         <div class="subpage-col-primary">
-          <p class="subpage-tagline">The trunk from which everything branches: a modular Story Operating System.</p>
+          <p class="subpage-tagline">More than the sum of its parts: a Story Operating System built on layers of idea infrastructure.</p>
           <div class="subpage-body">
-            <p>World Tree is a Story Operating System built on layers of idea infrastructure. Where existing tools optimize <em>downstream execution</em>, World Tree is designed to harness AI for <em>upstream ideation</em>: the reasoning that makes execution inevitable.</p>
-            <p>The system works through three layers. <strong>Capture:</strong> guided intake that structures what the creator provides, so the idea grows tall, not wide. <strong>Clarify:</strong> canonical understanding that synthesizes all project details into a single "project brain" that can represent the project clearly in any context. <strong>Mobilize:</strong> domain action that applies that understanding through industry-specific models to navigate real constraints and provide clear next steps.</p>
-            <p>World Tree does not replace the storyteller. It does not generate the story. It gives humans the infrastructure needed to transform complex projects into coherent, actionable reality, without surrendering authorship or control.</p>
+            <p>Each World Tree module solves a distinct problem. <strong>Index</strong> organises. <strong>StoryMap</strong> structures. <strong>ProductionMap</strong> plans. <strong>MarketingMap</strong> positions. <strong>DomainDataMine</strong> advises. Individually, they sharpen one dimension of a creative project. Together, they become something else entirely: a unified system where every decision reinforces every other.</p>
+            <p>Yggdrasil is the integration layer that makes that possible. It connects each module so context flows freely between them, giving creators a single, coherent view of their project from idea through execution.</p>
           </div>
         </div>
         <div class="subpage-col-secondary">
-          <p class="secondary-text">Ideas do not fail because they are small. They fail because they grow so big they can no longer sustain their own weight. The relationships fracture, the momentum stalls, the vision drifts. <strong>Yggdrasil, the World Tree, exists to change that.</strong></p>
-          <p class="secondary-text">Each product (Index, StoryMap, ProductionMap, MarketingMap, DomainDataMine) is a module of this system. Together, they form a coherent whole: <strong>the idea infrastructure that helps creators maintain coherence and momentum as complexity grows.</strong></p>
+          <p class="secondary-text">Ideas do not fail because they are small. They fail because they grow so complex that the relationships fracture, the momentum stalls, and the vision drifts. Yggdrasil exists to prevent that. It is the trunk from which everything branches, and the reason the branches hold.</p>
+          <p class="secondary-text"><em>World Tree does not replace the storyteller. It gives humans the infrastructure to transform complex projects into coherent, actionable reality, without surrendering authorship or control.</em></p>
         </div>
       </div>
 
-      <!-- Design Partner Section -->
-      <hr class="subpage-divider" id="design-partner" />
-
-      <div class="dp-form-section">
-        <h2 class="dp-form-heading">Become a Design Partner</h2>
-        <p class="dp-form-intro">World Tree is being built in collaboration with real creators. Design Partners get early access to tools as they develop, a direct line to shape the product, and the knowledge that their creative workflow is informing the system from the ground up. If you're a storyteller, creator, or professional managing complex idea-driven projects, we'd love to hear from you.</p>
-
-        <form class="dp-form" id="dp-form">
-          <div class="dp-field">
-            <label class="dp-label" for="dp-name">Name</label>
-            <input class="dp-input" type="text" id="dp-name" name="name" required placeholder="Your full name" />
-          </div>
-
-          <div class="dp-field">
-            <label class="dp-label" for="dp-email">Email</label>
-            <input class="dp-input" type="email" id="dp-email" name="email" required placeholder="you@example.com" />
-          </div>
-
-          <div class="dp-field">
-            <label class="dp-label" for="dp-role">What do you do?</label>
-            <select class="dp-select" id="dp-role" name="role" required>
-              <option value="" disabled selected>Select your primary role</option>
-              <option value="writer">Writer / Author</option>
-              <option value="screenwriter">Screenwriter</option>
-              <option value="filmmaker">Filmmaker / Director</option>
-              <option value="producer">Producer</option>
-              <option value="game-designer">Game Designer</option>
-              <option value="comic-creator">Comic Book Creator</option>
-              <option value="musician">Musician / Composer</option>
-              <option value="marketer">Marketing Professional</option>
-              <option value="educator">Educator</option>
-              <option value="other">Other Creative Professional</option>
-            </select>
-          </div>
-
-          <div class="dp-field">
-            <label class="dp-label" for="dp-project">Tell us about your project</label>
-            <textarea class="dp-textarea" id="dp-project" name="project" required placeholder="What are you working on? What challenges are you facing with organization, structure, or momentum?"></textarea>
-          </div>
-
-          <div class="dp-field">
-            <label class="dp-label" for="dp-source">How did you hear about this?</label>
-            <select class="dp-select" id="dp-source" name="source">
-              <option value="" disabled selected>Select one</option>
-              <option value="social">Social media</option>
-              <option value="friend">Friend or colleague</option>
-              <option value="search">Search engine</option>
-              <option value="event">Event or conference</option>
-              <option value="other">Other</option>
-            </select>
-          </div>
-
-          <button type="submit" class="dp-submit">Submit Request</button>
-        </form>
-
-        <div class="dp-success" id="dp-success" style="display: none;">
-          <p class="dp-success-title">Thank you.</p>
-          <p class="dp-success-text">Your request has been received. We'll be in touch soon.</p>
-        </div>
-      </div>
-
-      <!-- Opt-out section -->
-      <hr class="subpage-divider" id="opt-out" />
-      <div class="dp-form-section">
-        <p class="dp-form-intro" style="margin-bottom: 0;">Already a Design Partner and want to opt out? Email <a href="mailto:contact@hamishbriggs.com" style="color: rgba(255,255,255,0.70); text-decoration: underline;">contact@hamishbriggs.com</a> with the subject line "Design Partner Opt-Out" and we'll remove you from the program.</p>
+      <div class="subpage-actions-center">
+        <a href="design-partner.html" class="design-partner-btn">Become a Design Partner</a>
       </div>
     </div>
   </main>
-
-  <script>
-  (function () {
-    const form = document.getElementById("dp-form");
-    const success = document.getElementById("dp-success");
-
-    if (!form) return;
-
-    form.addEventListener("submit", function (e) {
-      e.preventDefault();
-
-      const data = {
-        name: form.elements.name.value.trim(),
-        email: form.elements.email.value.trim(),
-        role: form.elements.role.value,
-        project: form.elements.project.value.trim(),
-        source: form.elements.source.value,
-        timestamp: new Date().toISOString(),
-        status: "pending"
-      };
-
-      // Store submissions in localStorage as a fallback
-      // (In production, this would POST to a Cloudflare Worker endpoint)
-      try {
-        const existing = JSON.parse(localStorage.getItem("dp_submissions") || "[]");
-        existing.push(data);
-        localStorage.setItem("dp_submissions", JSON.stringify(existing));
-      } catch (err) {
-        // Silently continue ·the mailto fallback below handles delivery
-      }
-
-      // Send via mailto as the primary delivery mechanism
-      const subject = encodeURIComponent("Design Partner Request: " + data.name);
-      const body = encodeURIComponent(
-        "Name: " + data.name + "\n" +
-        "Email: " + data.email + "\n" +
-        "Role: " + data.role + "\n" +
-        "Project: " + data.project + "\n" +
-        "Source: " + data.source + "\n" +
-        "Submitted: " + data.timestamp
-      );
-
-      // Open mailto in background
-      const mailLink = document.createElement("a");
-      mailLink.href = "mailto:contact@hamishbriggs.com?subject=" + subject + "&body=" + body;
-      mailLink.style.display = "none";
-      document.body.appendChild(mailLink);
-      mailLink.click();
-      document.body.removeChild(mailLink);
-
-      // Show success state
-      form.style.display = "none";
-      success.style.display = "block";
-    });
-
-    // Scroll to design-partner section if hash is present
-    if (window.location.hash === "#design-partner") {
-      setTimeout(function () {
-        const target = document.getElementById("design-partner");
-        if (target) target.scrollIntoView({ behavior: "smooth", block: "start" });
-      }, 300);
-    }
-  })();
-  </script>
 
 </body>
 </html>
