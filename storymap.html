@@ -110,12 +110,25 @@
   (function () {
     var vid = document.getElementById("sm-video");
     if (!vid) return;
-    vid.addEventListener("ended", function () {
+
+    function switchToLoop() {
       vid.src = "images/sm-loop.mp4";
       vid.loop = true;
-      vid.play();
-    }, { once: true });
-    vid.play().catch(function () {});
+      vid.play().catch(function () {});
+    }
+
+    vid.addEventListener("ended", switchToLoop, { once: true });
+
+    /* Try autoplay; if blocked, start on first user interaction */
+    vid.play().catch(function () {
+      function startOnInteraction() {
+        vid.play().catch(function () {});
+        document.removeEventListener("click", startOnInteraction);
+        document.removeEventListener("scroll", startOnInteraction);
+      }
+      document.addEventListener("click", startOnInteraction, { once: true });
+      document.addEventListener("scroll", startOnInteraction, { once: true });
+    });
   })();
   </script>
 
