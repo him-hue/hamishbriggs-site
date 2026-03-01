@@ -9,6 +9,16 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600&family=Inter:wght@300;400;500&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="styles.css" />
+  <link rel="icon" href="favicon.ico" type="image/x-icon" />
+  <link rel="apple-touch-icon" href="apple-touch-icon.png" />
+  <meta property="og:type" content="website" />
+  <meta property="og:title" content="Hamish Briggs" />
+  <meta property="og:description" content="Tools for storytellers to turn creative ambition into practical execution." />
+  <meta property="og:image" content="https://hamishbriggs.com/images/hero.jpg" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="Hamish Briggs" />
+  <meta name="twitter:description" content="Tools for storytellers to turn creative ambition into practical execution." />
+  <meta name="twitter:image" content="https://hamishbriggs.com/images/hero.jpg" />
 </head>
 <body>
 
@@ -18,7 +28,7 @@
     <video class="bg-video" id="bg-video"
            src="images/bg-video.mp4"
            poster="images/hero.jpg"
-           muted playsinline preload="auto"
+           muted playsinline preload="metadata"
            disablepictureinpicture></video>
     <!-- Mobile: crossfade frames (one per section, reversed: wide shot first) -->
     <div class="bg-frames" id="bg-frames">
@@ -89,17 +99,17 @@
         <div class="two-col">
           <div class="col-primary">
             <div class="product-list-flat">
-              <a href="index-app.html" class="product-btn" data-status="dev" data-blurb="Project system optimizer: an intelligent layer over your creative file system."><img src="images/icons-nav/icon-index.png" alt="" class="product-btn-icon" />Index</a>
-              <a href="storymap.html" class="product-btn" data-status="dev" data-blurb="Narrative architecture: map, structure, and evolve stories across any medium."><img src="images/icons-nav/icon-storymap.png" alt="" class="product-btn-icon" />StoryMap</a>
-              <a href="productionmap.html" class="product-btn planned" data-status="planned" data-blurb="Production planning: from script to screen with clarity."><img src="images/icons-nav/icon-productionmap.png" alt="" class="product-btn-icon" />ProductionMap</a>
-              <a href="marketingmap.html" class="product-btn planned" data-status="planned" data-blurb="Market-ready positioning: branding, press kits, and campaign strategy rooted in the creative vision."><img src="images/icons-nav/icon-marketingmap.png" alt="" class="product-btn-icon" />MarketingMap</a>
-              <a href="domaindatamine.html" class="product-btn planned" data-status="planned" data-blurb="Standalone advisory tool: real-world industry intelligence powered by live data."><img src="images/icons-nav/icon-domaindatamine.png" alt="" class="product-btn-icon" />DomainDataMine</a>
-              <a href="yggdrasil.html" class="product-btn planned" data-status="planned" data-blurb="More than the sum of its parts: your World Tree, a modular Story Operating System."><img src="images/icons-nav/icon-yggdrasil.png" alt="" class="product-btn-icon" />Yggdrasil</a>
+              <a href="index-app.html" class="product-btn" data-status="dev" data-blurb="Your creative file system, organized and optimized. Point it at a project folder and everything within is managed."><img src="images/icons-nav/icon-index.png" alt="" class="product-btn-icon" />Index</a>
+              <a href="storymap.html" class="product-btn" data-status="dev" data-blurb="Structural story development. Build narrative architecture beneath your writing so the story stays in focus. Entering closed beta with 30 design partners."><img src="images/icons-nav/icon-storymap.png" alt="" class="product-btn-icon" />StoryMap</a>
+              <a href="productionmap.html" class="product-btn planned" data-status="planned" data-blurb="Production planning. A structured system to map out budgets, logistics, and timelines before you're juggling them on set."><img src="images/icons-nav/icon-productionmap.png" alt="" class="product-btn-icon" />ProductionMap</a>
+              <a href="marketingmap.html" class="product-btn planned" data-status="planned" data-blurb="Your project's public face, built from the story itself. Press kits, brand identity, and campaign planning emerging from the creative work, not bolted on after."><img src="images/icons-nav/icon-marketingmap.png" alt="" class="product-btn-icon" />MarketingMap</a>
+              <a href="domaindatamine.html" class="product-btn planned" data-status="planned" data-blurb="Real-world industry intelligence on demand. Not general knowledge. Sourced, current, and specific."><img src="images/icons-nav/icon-domaindatamine.png" alt="" class="product-btn-icon" />DomainDataMine</a>
+              <a href="yggdrasil.html" class="product-btn planned" data-status="planned" data-blurb="More than the sum of its parts. One universe, one coherent conception, from first idea to first release to the full franchise."><img src="images/icons-nav/icon-yggdrasil.png" alt="" class="product-btn-icon" />Yggdrasil</a>
             </div>
           </div>
           <div class="col-secondary" id="product-detail">
             <div class="detail-default">
-              <p class="secondary-text">Tools for the next era of storytelling.</p>
+              <p class="secondary-text">Tools for storytellers to turn creative ambition into practical execution.</p>
               <p class="secondary-text" style="margin-top: 0.25rem;">Select a name to explore.</p>
             </div>
           </div>
@@ -115,7 +125,8 @@
             <div class="about-body">
               <p>I'm an actor, writer, director, and a comic book creator.</p>
               <p class="about-punchline">A storyteller.</p>
-              <p>As creative industries enter an era of upheaval, I'm building products that harness the disruption. Because there is a way for human imagination and machine capacity to work <strong>in harmony, not in tension</strong>.</p>
+              <p>I know what creative professionals need because I am one. I've spent twenty years navigating the gap between a story that works and a production that falls apart, between creative ambition and the workflows that can't keep up.</p>
+              <p>Now I'm building the tools I wish I'd had all along. Designed by a creator, for creators. Tools where the human makes every creative decision and the system handles the infrastructure around it.</p>
             </div>
           </div>
           <div class="col-secondary">
@@ -153,5 +164,9 @@
 
   <div class="page-blackout" id="page-blackout"></div>
   <script src="site.js"></script>
+
+  <!-- Cloudflare Web Analytics -->
+  <!-- To activate: go to Cloudflare dashboard > Web Analytics, add your site, and replace YOUR_CF_TOKEN -->
+  <script defer src="https://static.cloudflareinsights.com/beacon.min.js" data-cf-beacon='{"token": "YOUR_CF_TOKEN"}'></script>
 </body>
 </html>

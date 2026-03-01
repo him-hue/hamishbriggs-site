@@ -9,6 +9,16 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600&family=Inter:wght@300;400;500&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="styles.css" />
+  <link rel="icon" href="favicon.ico" type="image/x-icon" />
+  <link rel="apple-touch-icon" href="apple-touch-icon.png" />
+  <meta property="og:type" content="website" />
+  <meta property="og:title" content="Become a Design Partner · Hamish Briggs" />
+  <meta property="og:description" content="Join the World Tree Design Partner program. Help shape the future of storytelling tools." />
+  <meta property="og:image" content="https://hamishbriggs.com/images/hero.jpg" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="Become a Design Partner · Hamish Briggs" />
+  <meta name="twitter:description" content="Join the World Tree Design Partner program. Help shape the future of storytelling tools." />
+  <meta name="twitter:image" content="https://hamishbriggs.com/images/hero.jpg" />
 </head>
 <body data-page="design-partner.html">
 
@@ -53,12 +63,15 @@
       <div class="subpage-cols">
         <div class="subpage-col-primary">
           <div class="subpage-body">
-            <p>World Tree is being built in collaboration with real creators. Design Partners get early access to tools as they develop, a direct line to shape the product, and the knowledge that their creative workflow is informing the system from the ground up.</p>
-            <p>If you're a storyteller, creator, or professional managing complex idea-driven projects, we'd love to hear from you.</p>
+            <p>World Tree is being built in collaboration with working creators. Design Partners get early access to each tool as it enters beta, starting with StoryMap.</p>
+            <p><strong>What we're looking for:</strong> Storytellers actively working on a project. Writers, filmmakers, game designers, comic creators. People who know what's broken about their current workflow.</p>
+            <p><strong>What you get:</strong> Beta access to each tool before public release. A direct line to shape the direction of development. Monthly check-ins where your feedback directly informs what gets built next.</p>
+            <p><strong>What we ask:</strong> Use the tools on a real project. Share feedback and bug reports as you go. Join a brief monthly video check-in. That's it.</p>
           </div>
         </div>
         <div class="subpage-col-secondary">
-          <p class="secondary-text">Design Partners help us build the right thing. In return, you get access to tools before anyone else and a voice in the direction they take.</p>
+          <p class="secondary-text">These tools are being built for creators, by a creator. The Design Partner program exists to make sure that's not just a tagline.</p>
+          <p class="secondary-text" style="margin-top: 0.5rem;">30 partners. Limited intake.</p>
         </div>
       </div>
 
@@ -95,7 +108,7 @@
 
           <div class="dp-field">
             <label class="dp-label" for="dp-project">Tell us about your project</label>
-            <textarea class="dp-textarea" id="dp-project" name="project" required placeholder="What are you working on? What challenges are you facing with organization, structure, or momentum?"></textarea>
+            <textarea class="dp-textarea" id="dp-project" name="project" required placeholder="What are you working on right now? What's the hardest part of keeping it organized as it grows?"></textarea>
           </div>
 
           <div class="dp-field">
@@ -128,47 +141,56 @@
 
   <script>
   (function () {
-    const form = document.getElementById("dp-form");
-    const success = document.getElementById("dp-success");
+    /* ── Formspree backend ──
+       To activate: sign up at https://formspree.io (free tier),
+       create a form, and replace YOUR_FORM_ID below with the ID.
+       Until then, falls back to mailto. */
+    var FORMSPREE_ID = "YOUR_FORM_ID";
+    var FORMSPREE_URL = "https://formspree.io/f/" + FORMSPREE_ID;
+
+    var form = document.getElementById("dp-form");
+    var success = document.getElementById("dp-success");
     if (!form) return;
 
     form.addEventListener("submit", function (e) {
       e.preventDefault();
-      const data = {
-        name: form.elements.name.value.trim(),
-        email: form.elements.email.value.trim(),
-        role: form.elements.role.value,
-        project: form.elements.project.value.trim(),
-        source: form.elements.source.value,
-        timestamp: new Date().toISOString(),
-        status: "pending"
-      };
+      var data = new FormData(form);
 
-      try {
-        const existing = JSON.parse(localStorage.getItem("dp_submissions") || "[]");
-        existing.push(data);
-        localStorage.setItem("dp_submissions", JSON.stringify(existing));
-      } catch (err) { /* fallback to mailto */ }
-
-      const subject = encodeURIComponent("Design Partner Request: " + data.name);
-      const body = encodeURIComponent(
-        "Name: " + data.name + "\n" +
-        "Email: " + data.email + "\n" +
-        "Role: " + data.role + "\n" +
-        "Project: " + data.project + "\n" +
-        "Source: " + data.source + "\n" +
-        "Submitted: " + data.timestamp
-      );
-
-      const mailLink = document.createElement("a");
-      mailLink.href = "mailto:contact@hamishbriggs.com?subject=" + subject + "&body=" + body;
-      mailLink.style.display = "none";
-      document.body.appendChild(mailLink);
-      mailLink.click();
-      document.body.removeChild(mailLink);
-
-      form.style.display = "none";
-      success.style.display = "block";
+      if (FORMSPREE_ID !== "YOUR_FORM_ID") {
+        /* Formspree AJAX submission */
+        fetch(FORMSPREE_URL, {
+          method: "POST",
+          body: data,
+          headers: { "Accept": "application/json" }
+        }).then(function (res) {
+          if (res.ok) {
+            form.style.display = "none";
+            success.style.display = "block";
+          } else {
+            alert("Something went wrong. Please try again or email contact@hamishbriggs.com directly.");
+          }
+        }).catch(function () {
+          alert("Something went wrong. Please try again or email contact@hamishbriggs.com directly.");
+        });
+      } else {
+        /* Mailto fallback until Formspree is configured */
+        var name = form.elements.name.value.trim();
+        var email = form.elements.email.value.trim();
+        var role = form.elements.role.value;
+        var project = form.elements.project.value.trim();
+        var source = form.elements.source.value;
+        var subject = encodeURIComponent("Design Partner Request: " + name);
+        var body = encodeURIComponent(
+          "Name: " + name + "\n" +
+          "Email: " + email + "\n" +
+          "Role: " + role + "\n" +
+          "Project: " + project + "\n" +
+          "Source: " + source
+        );
+        window.location.href = "mailto:contact@hamishbriggs.com?subject=" + subject + "&body=" + body;
+        form.style.display = "none";
+        success.style.display = "block";
+      }
     });
   })();
   </script>
@@ -192,5 +214,9 @@
     })();
   </script>
 
+
+  <!-- Cloudflare Web Analytics -->
+  <!-- To activate: go to Cloudflare dashboard > Web Analytics, add your site, and replace YOUR_CF_TOKEN -->
+  <script defer src="https://static.cloudflareinsights.com/beacon.min.js" data-cf-beacon='{"token": "YOUR_CF_TOKEN"}'></script>
 </body>
 </html>
