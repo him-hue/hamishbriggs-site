@@ -1017,11 +1017,11 @@ button { font: inherit; color: inherit; border: none; background: none; cursor: 
   width: 100%;
   height: 100%;
   object-fit: contain;
-  opacity: 0.6;
+  opacity: 1;
   transition: opacity 0.25s;
 }
 .product-nav-dot:hover .product-nav-icon {
-  opacity: 0.9;
+  opacity: 1;
 }
 .product-nav-dot.active .product-nav-icon {
   filter: invert(1);
