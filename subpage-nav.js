@@ -40,10 +40,13 @@
     }
   });
 
-  /* Blackout overlay for fade-to-black transitions */
+  /* Blackout overlay for fade-to-black transitions.
+     The overlay starts fully opaque via CSS so the page loads behind black.
+     On load we fade it out. On navigation we fade it back in, wait until
+     fully black, then navigate so there is never a visible gap. */
   var blackout = document.getElementById("page-blackout");
 
-  /* On page load: fade FROM black (overlay starts opaque, fades to transparent) */
+  /* On page load: fade FROM black */
   if (blackout) {
     blackout.classList.add("fade-from-black");
   }
@@ -52,11 +55,13 @@
   function navigateTo(url) {
     if (blackout) {
       blackout.classList.remove("fade-from-black");
+      blackout.classList.remove("ready");
       blackout.classList.add("fade-to-black");
     }
+    /* Wait until fully black before navigating */
     setTimeout(function () {
       window.location.href = url;
-    }, 450);
+    }, 500);
   }
 
   /* Intercept nav dot clicks for fade transition */

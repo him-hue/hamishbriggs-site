@@ -243,14 +243,17 @@
   const blackout = document.getElementById("page-blackout");
   function fadeNavigate(url) {
     if (blackout) {
+      blackout.classList.remove("fade-from-black");
+      blackout.classList.remove("fade-from-black-slow");
+      blackout.classList.remove("ready");
       blackout.classList.add("fade-to-black");
     }
-    setTimeout(() => { window.location.href = url; }, 450);
+    setTimeout(() => { window.location.href = url; }, 500);
   }
 
-  /* Fade from black on page load */
+  /* Fade from black on page load: slow fade to match camera movement */
   if (blackout) {
-    blackout.classList.add("fade-from-black");
+    blackout.classList.add("fade-from-black-slow");
   }
 
   productBtns.forEach((btn) => {
