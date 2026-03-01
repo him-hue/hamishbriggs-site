@@ -8,6 +8,9 @@
   --header-h: 60px;
   --ease: cubic-bezier(0.16, 1, 0.3, 1);
   --duration: 1200ms;
+  --gold: #C8A24D;
+  --gold-light: #D4B060;
+  --gold-dark: #A67C2E;
 }
 
 html, body {
@@ -24,6 +27,22 @@ html, body {
 a { color: inherit; text-decoration: none; }
 button { font: inherit; color: inherit; border: none; background: none; cursor: pointer; }
 
+/* ── Page transition crossfade ───────────────────── */
+.page-fade-out {
+  animation: pageFadeOut 0.4s ease forwards;
+}
+.page-fade-in {
+  animation: pageFadeIn 0.5s ease both;
+}
+@keyframes pageFadeOut {
+  from { opacity: 1; }
+  to { opacity: 0; }
+}
+@keyframes pageFadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
 /* ── Background layer ────────────────────────────── */
 .bg-layer {
   position: fixed;
@@ -35,11 +54,11 @@ button { font: inherit; color: inherit; border: none; background: none; cursor: 
   width: 100%;
   height: 100%;
   object-fit: cover;
-  object-position: 55% 50%;    /* you slightly right of center */
+  object-position: 55% 50%;
   display: block;
 }
 
-/* Mobile frames — hidden on desktop */
+/* Mobile frames: hidden on desktop */
 .bg-frames { display: none; }
 
 .bg-frame {
@@ -49,7 +68,7 @@ button { font: inherit; color: inherit; border: none; background: none; cursor: 
   height: 100%;
   object-fit: cover;
   object-position: 50% 0%;
-  transform: scale(1.72) translate(10%, 4%);  /* zoom 72%, right + down */
+  transform: scale(1.72) translate(10%, 4%);
   opacity: 0;
   transition: opacity 1s ease;
 }
@@ -57,9 +76,6 @@ button { font: inherit; color: inherit; border: none; background: none; cursor: 
 .bg-frame.active {
   opacity: 1;
 }
-
-/* No per-frame transforms needed — figure size + position
-   are normalized directly in the image data via Python processing. */
 
 .bg-darken {
   position: absolute; inset: 0;
@@ -93,9 +109,8 @@ button { font: inherit; color: inherit; border: none; background: none; cursor: 
 }
 
 .header-inner {
-  max-width: 72rem;
   height: 100%;
-  margin: 0 auto;
+  margin: 0;
   padding: 0 1.5rem;
   display: flex;
   align-items: center;
@@ -250,7 +265,6 @@ button { font: inherit; color: inherit; border: none; background: none; cursor: 
   height: 100%;
 }
 
-/* Left column lines — primary voice */
 .home-line {
   font-family: var(--font-serif);
   font-weight: 400;
@@ -266,7 +280,6 @@ button { font: inherit; color: inherit; border: none; background: none; cursor: 
   color: rgba(255,255,255,1);
 }
 
-/* Right column lines — mirror voice, close in weight */
 .home-mirror {
   font-family: var(--font-serif);
   font-weight: 400;
@@ -282,7 +295,6 @@ button { font: inherit; color: inherit; border: none; background: none; cursor: 
   color: rgba(255,255,255,0.92);
 }
 
-/* Bottom tagline — the thesis */
 .home-tagline {
   text-align: center;
   padding: 2.5rem 3rem 0;
@@ -312,7 +324,7 @@ button { font: inherit; color: inherit; border: none; background: none; cursor: 
   justify-content: space-between;
   align-items: flex-end;
   width: 100%;
-  padding: 0 3rem;
+  padding: 0 1.5rem;
 }
 
 .col-primary {
@@ -428,18 +440,18 @@ button { font: inherit; color: inherit; border: none; background: none; cursor: 
   display: inline-block;
   margin-top: 1.25rem;
   border-radius: 9999px;
-  border: 1px solid rgba(255,255,255,0.12);
-  background: rgba(255,255,255,0.04);
+  border: 1px solid rgba(200,162,77,0.35);
+  background: linear-gradient(135deg, rgba(200,162,77,0.15), rgba(166,124,46,0.10));
   padding: 0.4rem 1rem;
   font-size: 0.75rem;
   letter-spacing: 0.06em;
-  color: rgba(255,255,255,0.78);
+  color: var(--gold-light);
   transition: background 0.2s, color 0.2s, border-color 0.2s;
 }
 .product-visit-btn:hover {
-  background: rgba(255,255,255,0.10);
-  border-color: rgba(255,255,255,0.20);
-  color: #fff;
+  background: linear-gradient(135deg, rgba(200,162,77,0.28), rgba(166,124,46,0.18));
+  border-color: rgba(200,162,77,0.50);
+  color: #e0c068;
 }
 
 /* ── About ───────────────────────────────────────── */
@@ -488,23 +500,48 @@ button { font: inherit; color: inherit; border: none; background: none; cursor: 
 }
 .contact-value:hover { color: #fff; }
 
-/* ── Design Partner CTA ─────────────────────────── */
+.contact-cta {
+  margin-top: 1.5rem;
+  font-size: 0.85rem;
+  line-height: 1.7;
+  color: rgba(255,255,255,0.45);
+}
+
+/* ── Gold pill buttons (main page + subpages) ──── */
+.gold-pill {
+  display: inline-block;
+  border-radius: 9999px;
+  border: 1px solid rgba(200,162,77,0.35);
+  background: linear-gradient(135deg, rgba(200,162,77,0.15), rgba(166,124,46,0.10));
+  padding: 0.5rem 1.25rem;
+  font-size: 0.75rem;
+  letter-spacing: 0.08em;
+  color: var(--gold-light);
+  transition: background 0.2s, color 0.2s, border-color 0.2s;
+}
+.gold-pill:hover {
+  background: linear-gradient(135deg, rgba(200,162,77,0.28), rgba(166,124,46,0.18));
+  border-color: rgba(200,162,77,0.50);
+  color: #e0c068;
+}
+
+/* ── Design Partner CTA (gold) ───────────────────── */
 .design-partner-btn {
   display: inline-block;
   margin-top: 1.5rem;
   border-radius: 9999px;
-  border: 1px solid rgba(255,255,255,0.18);
-  background: rgba(255,255,255,0.06);
+  border: 1px solid rgba(200,162,77,0.35);
+  background: linear-gradient(135deg, rgba(200,162,77,0.15), rgba(166,124,46,0.10));
   padding: 0.5rem 1.25rem;
   font-size: 0.75rem;
   letter-spacing: 0.08em;
-  color: rgba(255,255,255,0.82);
+  color: var(--gold-light);
   transition: background 0.2s, color 0.2s, border-color 0.2s;
 }
 .design-partner-btn:hover {
-  background: rgba(255,255,255,0.12);
-  border-color: rgba(255,255,255,0.28);
-  color: #fff;
+  background: linear-gradient(135deg, rgba(200,162,77,0.28), rgba(166,124,46,0.18));
+  border-color: rgba(200,162,77,0.50);
+  color: #e0c068;
 }
 
 /* ── Subpages ───────────────────────────────────── */
@@ -528,7 +565,7 @@ button { font: inherit; color: inherit; border: none; background: none; cursor: 
 
 .subpage-inner {
   width: 100%;
-  padding: 4rem 3rem 6rem;
+  padding: 3rem 1.5rem 4rem;
 }
 
 .subpage-back {
@@ -540,7 +577,7 @@ button { font: inherit; color: inherit; border: none; background: none; cursor: 
   text-transform: uppercase;
   color: rgba(255,255,255,0.45);
   transition: color 0.2s;
-  margin-bottom: 3rem;
+  margin-bottom: 2rem;
 }
 .subpage-back:hover { color: rgba(255,255,255,0.80); }
 .subpage-back svg { width: 14px; height: 14px; opacity: 0.6; }
@@ -550,7 +587,10 @@ button { font: inherit; color: inherit; border: none; background: none; cursor: 
   letter-spacing: 0.22em;
   text-transform: uppercase;
   color: rgba(255,255,255,0.40);
-  margin-bottom: 0.75rem;
+  margin-bottom: 0.5rem;
+}
+.subpage-status.gold {
+  color: var(--gold);
 }
 
 .subpage-title {
@@ -567,38 +607,89 @@ button { font: inherit; color: inherit; border: none; background: none; cursor: 
   justify-content: space-between;
   align-items: flex-start;
   width: 100%;
-  margin-top: 2.5rem;
+  margin-top: 1.5rem;
   gap: 4rem;
 }
 
 .subpage-col-primary {
-  max-width: 22rem;
-  flex-shrink: 0;
+  max-width: 26rem;
+  flex: 1;
+  min-width: 0;
 }
 
 .subpage-col-primary .subpage-tagline {
   margin-top: 0;
   font-family: var(--font-serif);
-  font-size: 1.1rem;
-  color: rgba(255,255,255,0.60);
+  font-size: 1.05rem;
+  color: rgba(255,255,255,0.55);
   font-style: italic;
+  line-height: 1.5;
 }
-@media (min-width: 768px) { .subpage-col-primary .subpage-tagline { font-size: 1.25rem; } }
+@media (min-width: 768px) { .subpage-col-primary .subpage-tagline { font-size: 1.15rem; } }
 
 .subpage-col-primary .subpage-body {
-  margin-top: 1.5rem;
+  margin-top: 1.25rem;
   display: flex;
   flex-direction: column;
-  gap: 1rem;
-  font-size: 0.95rem;
-  line-height: 1.75;
-  color: rgba(255,255,255,0.65);
+  gap: 0.6rem;
+  font-size: 0.85rem;
+  line-height: 1.65;
+  color: rgba(255,255,255,0.60);
 }
-@media (min-width: 768px) { .subpage-col-primary .subpage-body { font-size: 1.025rem; } }
 
 .subpage-col-primary .subpage-body strong {
   font-weight: 500;
-  color: rgba(255,255,255,0.88);
+  color: rgba(255,255,255,0.85);
+}
+
+.subpage-col-primary .subpage-body em {
+  font-style: italic;
+  color: rgba(255,255,255,0.50);
+}
+
+/* Bullet list inside subpage body */
+.subpage-bullets {
+  list-style: none;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+.subpage-bullets li {
+  padding-left: 1rem;
+  position: relative;
+  font-size: 0.85rem;
+  line-height: 1.65;
+  color: rgba(255,255,255,0.60);
+}
+.subpage-bullets li::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0.55em;
+  width: 4px;
+  height: 4px;
+  border-radius: 50%;
+  background: rgba(255,255,255,0.25);
+}
+.subpage-bullets li strong {
+  font-weight: 500;
+  color: rgba(255,255,255,0.85);
+}
+
+/* Status + actions at bottom of left column */
+.subpage-left-footer {
+  margin-top: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+.subpage-left-footer .design-partner-btn {
+  margin-top: 0;
+  align-self: flex-start;
+}
+.subpage-left-footer .gold-pill {
+  align-self: flex-start;
 }
 
 .subpage-col-secondary {
@@ -619,12 +710,12 @@ button { font: inherit; color: inherit; border: none; background: none; cursor: 
 }
 
 .subpage-actions-center {
-  margin-top: 3rem;
+  margin-top: 2rem;
   display: flex;
   justify-content: center;
   flex-wrap: wrap;
   gap: 0.75rem;
-  padding: 0 3rem;
+  padding: 0 1.5rem;
 }
 
 .subpage-catchphrase {
@@ -633,7 +724,7 @@ button { font: inherit; color: inherit; border: none; background: none; cursor: 
   letter-spacing: 0.18em;
   text-transform: uppercase;
   color: rgba(255,255,255,0.30);
-  margin-bottom: 0.5rem;
+  margin-bottom: 0.25rem;
 }
 
 .subpage-beta-notice {
@@ -648,7 +739,7 @@ button { font: inherit; color: inherit; border: none; background: none; cursor: 
 }
 
 @media (max-width: 768px) {
-  .subpage-inner { padding: 3rem 1.5rem 5rem; }
+  .subpage-inner { padding: 2rem 1.5rem 4rem; }
   .subpage-cols {
     flex-direction: column;
     align-items: flex-start;
@@ -660,29 +751,29 @@ button { font: inherit; color: inherit; border: none; background: none; cursor: 
 .subpage-pill {
   display: inline-block;
   border-radius: 9999px;
-  border: 1px solid rgba(255,255,255,0.12);
-  background: rgba(255,255,255,0.04);
+  border: 1px solid rgba(200,162,77,0.35);
+  background: linear-gradient(135deg, rgba(200,162,77,0.15), rgba(166,124,46,0.10));
   padding: 0.45rem 1.1rem;
   font-size: 0.75rem;
   letter-spacing: 0.06em;
-  color: rgba(255,255,255,0.78);
+  color: var(--gold-light);
   transition: background 0.2s, color 0.2s, border-color 0.2s;
 }
 .subpage-pill:hover {
-  background: rgba(255,255,255,0.10);
-  border-color: rgba(255,255,255,0.20);
-  color: #fff;
+  background: linear-gradient(135deg, rgba(200,162,77,0.28), rgba(166,124,46,0.18));
+  border-color: rgba(200,162,77,0.50);
+  color: #e0c068;
 }
 
 .subpage-divider {
-  margin-top: 3rem;
+  margin-top: 2rem;
   border: none;
   border-top: 1px solid rgba(255,255,255,0.08);
 }
 
 /* ── Design Partner Form ────────────────────────── */
 .dp-form-section {
-  margin-top: 3rem;
+  margin-top: 2rem;
 }
 
 .dp-form-heading {
@@ -764,19 +855,19 @@ button { font: inherit; color: inherit; border: none; background: none; cursor: 
 .dp-submit {
   align-self: flex-start;
   border-radius: 9999px;
-  border: 1px solid rgba(255,255,255,0.18);
-  background: rgba(255,255,255,0.08);
+  border: 1px solid rgba(200,162,77,0.35);
+  background: linear-gradient(135deg, rgba(200,162,77,0.15), rgba(166,124,46,0.10));
   padding: 0.55rem 1.5rem;
   font-size: 0.8rem;
   letter-spacing: 0.06em;
-  color: rgba(255,255,255,0.85);
+  color: var(--gold-light);
   cursor: pointer;
   transition: background 0.2s, color 0.2s, border-color 0.2s;
 }
 .dp-submit:hover {
-  background: rgba(255,255,255,0.14);
-  border-color: rgba(255,255,255,0.30);
-  color: #fff;
+  background: linear-gradient(135deg, rgba(200,162,77,0.28), rgba(166,124,46,0.18));
+  border-color: rgba(200,162,77,0.50);
+  color: #e0c068;
 }
 
 .dp-success {
@@ -813,9 +904,8 @@ button { font: inherit; color: inherit; border: none; background: none; cursor: 
     display: block;
     position: absolute;
     inset: 0;
-    overflow: hidden;  /* clip scaled-up frames */
+    overflow: hidden;
   }
-  /* Strong vignette on mobile — hides edges from scaled frames + floor light */
   .bg-vignette {
     background:
       radial-gradient(ellipse at 45% 30%, rgba(0,0,0,0) 15%, rgba(0,0,0,0.8) 100%),

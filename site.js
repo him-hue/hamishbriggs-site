@@ -1,33 +1,24 @@
 /* ═══════════════════════════════════════════════════
-   Hamish Briggs — site controller
+   Hamish Briggs: site controller
    Background video scrub + section transitions
    ═══════════════════════════════════════════════════ */
 
 (function () {
   "use strict";
 
-  /* ── Video scrub config ─────────────────────────────
-     The reversed video is 3.25s / 78 frames @ 24fps.
-     Camera steps = section count. Each section maps to
-     an evenly spaced point in the video. Transitions
-     scrub smoothly between them.
-     ──────────────────────────────────────────────── */
-  const VIDEO_DURATION = 3.25;   // seconds
+  const VIDEO_DURATION = 3.25;
   const TOTAL_SECTIONS = 4;
-  const SCRUB_DURATION = 2000;   // ms — slow, cinematic scrub
-  const DURATION = 1200;         // ms — section text transition
+  const SCRUB_DURATION = 2000;
+  const DURATION = 1200;
 
-  /* ── State ──────────────────────────────────────── */
   let currentSection = 0;
   let transitioning = false;
 
-  /* Video scrub state */
   let scrubFrom = 0;
   let scrubTo = 0;
   let scrubStart = 0;
   let scrubRaf = null;
 
-  /* ── DOM refs ───────────────────────────────────── */
   const bgVideo   = document.getElementById("bg-video");
   const bgFrames  = document.querySelectorAll(".bg-frame");
   const dots      = document.querySelectorAll(".dot");
@@ -35,18 +26,14 @@
   const detail    = document.getElementById("product-detail");
   const productBtns = document.querySelectorAll(".product-btn");
 
-  /* ── Mobile detection ──────────────────────────── */
   const isMobile = window.matchMedia("(max-width: 640px)").matches;
 
-  /* ── Map section index → video time (reversed: wide shot first) ── */
   function sectionToTime(index) {
     const clamped = Math.max(0, Math.min(index, TOTAL_SECTIONS - 1));
     return (1 - clamped / (TOTAL_SECTIONS - 1)) * VIDEO_DURATION;
   }
 
-  /* ── Smooth scrub using requestAnimationFrame ──── */
   function easeInOut(t) {
-    // sine ease-in-out for buttery smooth acceleration and deceleration
     return -(Math.cos(Math.PI * t) - 1) / 2;
   }
 
@@ -67,7 +54,6 @@
 
   function scrubToSection(sectionIndex) {
     if (isMobile) {
-      // Mobile: crossfade to matching frame (reversed order)
       const frameIndex = (bgFrames.length - 1) - sectionIndex;
       bgFrames.forEach((f, i) => {
         f.classList.toggle("active", i === frameIndex);
@@ -75,7 +61,6 @@
       return;
     }
 
-    // Desktop: smooth video scrub
     if (scrubRaf) {
       cancelAnimationFrame(scrubRaf);
     }
@@ -86,7 +71,6 @@
     scrubRaf = requestAnimationFrame(animateScrub);
   }
 
-  /* ── Navigate to a section ─────────────────────── */
   function goTo(targetIndex) {
     if (transitioning) return;
     if (targetIndex < 0 || targetIndex >= TOTAL_SECTIONS) return;
@@ -97,36 +81,28 @@
     const prev = sections[currentSection];
     const next = sections[targetIndex];
 
-    // Exit current section
     prev.classList.remove("active");
     prev.classList.add(direction === "up" ? "exit-up" : "exit-down");
 
-    // Prepare incoming section on opposite side
     next.classList.remove("exit-up", "exit-down");
-    // Force it to start from correct side before transition kicks in
     next.style.transition = "none";
     next.style.opacity = "0";
     next.style.transform = direction === "up" ? "translateY(60px)" : "translateY(-60px)";
 
-    // Force reflow
     void next.offsetHeight;
 
-    // Animate in
     next.style.transition = "";
     next.classList.add("active");
     next.style.opacity = "";
     next.style.transform = "";
 
-    // Scrub video to match target section
     scrubToSection(targetIndex);
 
-    // Update dots
     dots.forEach((d) => d.classList.remove("active"));
     dots[targetIndex].classList.add("active");
 
     currentSection = targetIndex;
 
-    // Clean up exit class after transition
     setTimeout(() => {
       prev.classList.remove("exit-up", "exit-down");
       transitioning = false;
@@ -136,11 +112,9 @@
   /* ── Scroll / swipe handling ───────────────────── */
   let touchStartY = 0;
   let lastWheel = 0;
-
-  /* Accumulate small scroll deltas (trackpad) before triggering */
   let scrollAccum = 0;
-  const SCROLL_THRESHOLD = 30;   // lower = more sensitive
-  const SCROLL_COOLDOWN = 600;   // ms between transitions
+  const SCROLL_THRESHOLD = 30;
+  const SCROLL_COOLDOWN = 600;
 
   window.addEventListener("wheel", (e) => {
     e.preventDefault();
@@ -166,7 +140,7 @@
 
   window.addEventListener("touchend", (e) => {
     const diff = touchStartY - e.changedTouches[0].clientY;
-    if (Math.abs(diff) < 50) return; // minimum swipe
+    if (Math.abs(diff) < 50) return;
     if (diff > 0) {
       goTo(currentSection + 1);
     } else {
@@ -207,19 +181,16 @@
     });
   });
 
-  /* ── Product interaction (hover to preview, click to pin) ── */
+  /* ── Product interaction (hover preview, click navigates with crossfade) ── */
   const detailDefault = detail ? detail.innerHTML : "";
 
-  /* Build the detail HTML for a given product button */
   function buildDetail(btn) {
     const status = btn.dataset.status === "dev" ? "Under development" : "Planned";
     const note = btn.dataset.status === "dev"
       ? ""
       : "This product is planned. Details will appear as it comes into focus.";
     const name = btn.textContent;
-    const href = btn.getAttribute("href");
 
-    // Show a visit button for products with a live app
     const appLinks = { "StoryMap": "https://storymap.hamishbriggs.com" };
     const appUrl = appLinks[name];
     const visitBtn = appUrl
@@ -237,28 +208,35 @@
     `;
   }
 
-  /* Show detail for a button */
   function showDetail(btn) {
     detail.innerHTML = buildDetail(btn);
   }
 
-  /* Reset to default */
   function resetDetail() {
     detail.innerHTML = detailDefault;
   }
 
-  /* Highlight the active product name */
   function setActiveBtn(btn) {
     productBtns.forEach((b) => b.classList.remove("product-active"));
     if (btn) btn.classList.add("product-active");
   }
 
   productBtns.forEach((btn) => {
-    /* Click navigates to subpage */
+    /* Click navigates to subpage with crossfade */
     btn.addEventListener("click", (e) => {
       e.preventDefault();
       const href = btn.getAttribute("href");
-      if (href) window.location.href = href;
+      if (!href) return;
+
+      // Add fade-out class to the viewport
+      const viewport = document.getElementById("viewport");
+      if (viewport) {
+        viewport.classList.add("page-fade-out");
+      }
+      // Navigate after fade completes
+      setTimeout(() => {
+        window.location.href = href;
+      }, 350);
     });
 
     /* Hover preview (desktop only) */
@@ -276,7 +254,7 @@
   /* ── Init ───────────────────────────────────────── */
   if (!isMobile) {
     bgVideo.pause();
-    bgVideo.currentTime = VIDEO_DURATION;  // start on wide shot
+    bgVideo.currentTime = VIDEO_DURATION;
   }
 
 })();
