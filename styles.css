@@ -440,18 +440,18 @@ button { font: inherit; color: inherit; border: none; background: none; cursor: 
   display: inline-block;
   margin-top: 1.25rem;
   border-radius: 9999px;
-  border: 1px solid rgba(200,162,77,0.35);
-  background: linear-gradient(135deg, rgba(200,162,77,0.15), rgba(166,124,46,0.10));
+  border: 1px solid var(--gold);
+  background: linear-gradient(135deg, var(--gold-light), var(--gold-dark));
   padding: 0.4rem 1rem;
   font-size: 0.75rem;
-  letter-spacing: 0.06em;
-  color: var(--gold-light);
-  transition: background 0.2s, color 0.2s, border-color 0.2s;
+  font-weight: 500;
+  letter-spacing: 0.08em;
+  color: #111;
+  transition: filter 0.2s, transform 0.2s;
 }
 .product-visit-btn:hover {
-  background: linear-gradient(135deg, rgba(200,162,77,0.28), rgba(166,124,46,0.18));
-  border-color: rgba(200,162,77,0.50);
-  color: #e0c068;
+  filter: brightness(1.12);
+  transform: translateY(-1px);
 }
 
 /* ── About ───────────────────────────────────────── */
@@ -507,41 +507,60 @@ button { font: inherit; color: inherit; border: none; background: none; cursor: 
   color: rgba(255,255,255,0.45);
 }
 
-/* ── Gold pill buttons (main page + subpages) ──── */
+/* ── Gold pill buttons (solid fill, black text) ──── */
 .gold-pill {
   display: inline-block;
   border-radius: 9999px;
-  border: 1px solid rgba(200,162,77,0.35);
-  background: linear-gradient(135deg, rgba(200,162,77,0.15), rgba(166,124,46,0.10));
+  border: 1px solid var(--gold);
+  background: linear-gradient(135deg, var(--gold-light), var(--gold-dark));
   padding: 0.5rem 1.25rem;
   font-size: 0.75rem;
+  font-weight: 500;
   letter-spacing: 0.08em;
-  color: var(--gold-light);
-  transition: background 0.2s, color 0.2s, border-color 0.2s;
+  color: #111;
+  transition: filter 0.2s, transform 0.2s;
 }
 .gold-pill:hover {
-  background: linear-gradient(135deg, rgba(200,162,77,0.28), rgba(166,124,46,0.18));
-  border-color: rgba(200,162,77,0.50);
-  color: #e0c068;
+  filter: brightness(1.12);
+  transform: translateY(-1px);
 }
 
-/* ── Design Partner CTA (gold) ───────────────────── */
+/* Large gold pill (gateway buttons) */
+.gold-pill-lg {
+  display: inline-block;
+  border-radius: 9999px;
+  border: 1px solid var(--gold);
+  background: linear-gradient(135deg, var(--gold-light), var(--gold-dark));
+  padding: 0.65rem 1.75rem;
+  font-size: 0.85rem;
+  font-weight: 500;
+  letter-spacing: 0.08em;
+  color: #111;
+  transition: filter 0.2s, transform 0.2s, box-shadow 0.2s;
+}
+.gold-pill-lg:hover {
+  filter: brightness(1.12);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 20px rgba(200,162,77,0.25);
+}
+
+/* ── Design Partner CTA (solid gold) ─────────────── */
 .design-partner-btn {
   display: inline-block;
   margin-top: 1.5rem;
   border-radius: 9999px;
-  border: 1px solid rgba(200,162,77,0.35);
-  background: linear-gradient(135deg, rgba(200,162,77,0.15), rgba(166,124,46,0.10));
+  border: 1px solid var(--gold);
+  background: linear-gradient(135deg, var(--gold-light), var(--gold-dark));
   padding: 0.5rem 1.25rem;
   font-size: 0.75rem;
+  font-weight: 500;
   letter-spacing: 0.08em;
-  color: var(--gold-light);
-  transition: background 0.2s, color 0.2s, border-color 0.2s;
+  color: #111;
+  transition: filter 0.2s, transform 0.2s;
 }
 .design-partner-btn:hover {
-  background: linear-gradient(135deg, rgba(200,162,77,0.28), rgba(166,124,46,0.18));
-  border-color: rgba(200,162,77,0.50);
-  color: #e0c068;
+  filter: brightness(1.12);
+  transform: translateY(-1px);
 }
 
 /* ── Subpages ───────────────────────────────────── */
@@ -751,18 +770,18 @@ button { font: inherit; color: inherit; border: none; background: none; cursor: 
 .subpage-pill {
   display: inline-block;
   border-radius: 9999px;
-  border: 1px solid rgba(200,162,77,0.35);
-  background: linear-gradient(135deg, rgba(200,162,77,0.15), rgba(166,124,46,0.10));
-  padding: 0.45rem 1.1rem;
+  border: 1px solid var(--gold);
+  background: linear-gradient(135deg, var(--gold-light), var(--gold-dark));
+  padding: 0.5rem 1.25rem;
   font-size: 0.75rem;
-  letter-spacing: 0.06em;
-  color: var(--gold-light);
-  transition: background 0.2s, color 0.2s, border-color 0.2s;
+  font-weight: 500;
+  letter-spacing: 0.08em;
+  color: #111;
+  transition: filter 0.2s, transform 0.2s;
 }
 .subpage-pill:hover {
-  background: linear-gradient(135deg, rgba(200,162,77,0.28), rgba(166,124,46,0.18));
-  border-color: rgba(200,162,77,0.50);
-  color: #e0c068;
+  filter: brightness(1.12);
+  transform: translateY(-1px);
 }
 
 .subpage-divider {
@@ -855,19 +874,19 @@ button { font: inherit; color: inherit; border: none; background: none; cursor: 
 .dp-submit {
   align-self: flex-start;
   border-radius: 9999px;
-  border: 1px solid rgba(200,162,77,0.35);
-  background: linear-gradient(135deg, rgba(200,162,77,0.15), rgba(166,124,46,0.10));
+  border: 1px solid var(--gold);
+  background: linear-gradient(135deg, var(--gold-light), var(--gold-dark));
   padding: 0.55rem 1.5rem;
   font-size: 0.8rem;
-  letter-spacing: 0.06em;
-  color: var(--gold-light);
+  font-weight: 500;
+  letter-spacing: 0.08em;
+  color: #111;
   cursor: pointer;
-  transition: background 0.2s, color 0.2s, border-color 0.2s;
+  transition: filter 0.2s, transform 0.2s;
 }
 .dp-submit:hover {
-  background: linear-gradient(135deg, rgba(200,162,77,0.28), rgba(166,124,46,0.18));
-  border-color: rgba(200,162,77,0.50);
-  color: #e0c068;
+  filter: brightness(1.12);
+  transform: translateY(-1px);
 }
 
 .dp-success {
@@ -888,6 +907,69 @@ button { font: inherit; color: inherit; border: none; background: none; cursor: 
   margin-top: 0.5rem;
   font-size: 0.875rem;
   color: rgba(255,255,255,0.50);
+}
+
+/* ── StoryMap gateway button (bottom-right) ──────── */
+.subpage-gateway {
+  position: fixed;
+  bottom: 5rem;
+  right: 1.5rem;
+  z-index: 20;
+}
+
+/* ── Product nav bar (bottom center of subpages) ── */
+.product-nav {
+  position: fixed;
+  bottom: 1.25rem;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 30;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 0.5rem 1rem;
+  background: rgba(0,0,0,0.35);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(255,255,255,0.06);
+  border-radius: 9999px;
+}
+
+.product-nav-dot {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  background: rgba(255,255,255,0.10);
+  border: 1px solid rgba(255,255,255,0.10);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: background 0.25s, border-color 0.25s, transform 0.25s;
+  text-decoration: none;
+}
+.product-nav-dot:hover {
+  background: rgba(255,255,255,0.18);
+  border-color: rgba(255,255,255,0.20);
+  transform: scale(1.1);
+}
+.product-nav-dot.active {
+  background: rgba(255,255,255,0.85);
+  border-color: rgba(255,255,255,0.90);
+  transform: scale(1.15);
+}
+
+/* Dot label (abbreviation for now, will become icons) */
+.product-nav-label {
+  font-size: 0.5rem;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: rgba(255,255,255,0.50);
+  line-height: 1;
+}
+.product-nav-dot.active .product-nav-label {
+  color: #111;
 }
 
 /* ── Subpage scrollbar ──────────────────────────── */

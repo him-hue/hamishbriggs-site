@@ -257,4 +257,20 @@
     bgVideo.currentTime = VIDEO_DURATION;
   }
 
+  /* Handle hash-based deep links (e.g. index.html#products) */
+  var hashMap = { "#home": 0, "#products": 1, "#about": 2, "#contact": 3 };
+  var hash = window.location.hash;
+  if (hash && hashMap[hash] !== undefined) {
+    var target = hashMap[hash];
+    /* Jump immediately without animation on page load */
+    if (target !== 0) {
+      sections[0].classList.remove("active");
+      sections[target].classList.add("active");
+      dots[0].classList.remove("active");
+      dots[target].classList.add("active");
+      currentSection = target;
+      scrubToSection(target);
+    }
+  }
+
 })();
