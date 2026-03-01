@@ -1093,7 +1093,10 @@ button { font: inherit; color: inherit; border: none; background: none; cursor: 
 /* Hide the hero background on StoryMap — constellation video replaces it */
 [data-page="storymap.html"] .bg-static,
 [data-page="storymap.html"] .bg-darken,
-[data-page="storymap.html"] .bg-vignette {
+[data-page="storymap.html"] .bg-vignette,
+[data-page="index-app.html"] .bg-static,
+[data-page="index-app.html"] .bg-darken,
+[data-page="index-app.html"] .bg-vignette {
   display: none;
 }
 

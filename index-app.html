@@ -29,6 +29,15 @@
   </div>
   <div class="bg-grain" aria-hidden="true"></div>
 
+  <!-- Index constellation video -->
+  <div class="sm-video-wrap">
+    <video class="sm-video" id="idx-video"
+           src="images/idx-intro.mp4"
+           muted playsinline preload="auto"
+           disablepictureinpicture></video>
+    <div class="sm-video-vignette"></div>
+  </div>
+
   <header class="header">
     <div class="header-inner">
       <div class="header-left">
@@ -90,6 +99,31 @@
 
   <div class="page-blackout" id="page-blackout"></div>
   <script src="subpage-nav.js"></script>
+
+  <script>
+  (function () {
+    var vid = document.getElementById("idx-video");
+    if (!vid) return;
+
+    function switchToLoop() {
+      vid.src = "images/idx-loop.mp4";
+      vid.loop = true;
+      vid.play().catch(function () {});
+    }
+
+    vid.addEventListener("ended", switchToLoop, { once: true });
+
+    vid.play().catch(function () {
+      function startOnInteraction() {
+        vid.play().catch(function () {});
+        document.removeEventListener("click", startOnInteraction);
+        document.removeEventListener("scroll", startOnInteraction);
+      }
+      document.addEventListener("click", startOnInteraction, { once: true });
+      document.addEventListener("scroll", startOnInteraction, { once: true });
+    });
+  })();
+  </script>
 
   <!-- Cloudflare Web Analytics -->
   <!-- To activate: go to Cloudflare dashboard > Web Analytics, add your site, and replace YOUR_CF_TOKEN -->
