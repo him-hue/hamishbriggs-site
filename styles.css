@@ -386,20 +386,48 @@ button { font: inherit; color: inherit; border: none; background: none; cursor: 
 
 .product-list { display: flex; flex-direction: column; gap: 1.25rem; }
 .product-group { display: flex; flex-direction: column; gap: 0.35rem; }
-.product-list-flat { display: flex; flex-direction: column; gap: 0; }
+.product-list-flat { display: flex; flex-direction: column; gap: 0.3rem; }
 
 .product-btn {
-  display: block;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
   font-family: var(--font-serif);
   font-size: 1.5rem;
   color: rgba(255,255,255,0.90);
-  padding: 0.2rem 0;
+  padding: 0.3rem 0;
   transition: transform 0.2s, color 0.2s;
 }
 @media (min-width: 768px) { .product-btn { font-size: 1.75rem; } }
 .product-btn:hover { transform: translateX(3px); color: #fff; }
 .product-btn.planned { color: rgba(255,255,255,0.40); font-style: italic; }
 .product-btn.planned:hover { color: rgba(255,255,255,0.60); }
+
+/* Icon inside product menu button */
+.product-btn-icon {
+  width: 1.1em;
+  height: 1.1em;
+  object-fit: contain;
+  opacity: 0.45;
+  filter: grayscale(1) brightness(0.8);
+  transition: opacity 0.25s, filter 0.25s;
+  flex-shrink: 0;
+}
+.product-btn:hover .product-btn-icon {
+  opacity: 0.85;
+  filter: none;
+}
+.product-btn.planned .product-btn-icon {
+  opacity: 0.25;
+}
+.product-btn.planned:hover .product-btn-icon {
+  opacity: 0.55;
+  filter: grayscale(0.3) brightness(0.9);
+}
+.product-btn.product-active .product-btn-icon {
+  opacity: 1;
+  filter: none;
+}
 
 .product-detail { }
 
@@ -649,18 +677,17 @@ button { font: inherit; color: inherit; border: none; background: none; cursor: 
   color: rgba(255,255,255,0.95);
   line-height: 1.2;
   display: inline-flex;
-  align-items: flex-start;
+  align-items: flex-end;
 }
 @media (min-width: 768px) { .subpage-title { font-size: 3.2rem; } }
 
-/* Inline constellation icon next to title (TM-style) */
+/* Inline constellation icon next to title (subscript-style) */
 .title-icon {
   display: inline-block;
-  width: 0.4em;
-  height: 0.4em;
-  margin-left: 0.15em;
-  margin-top: 0.05em;
-  vertical-align: top;
+  width: 0.35em;
+  height: 0.35em;
+  margin-left: 0.12em;
+  margin-bottom: 0.15em;
   opacity: 0.5;
 }
 
