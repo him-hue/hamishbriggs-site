@@ -1086,8 +1086,15 @@ button { font: inherit; color: inherit; border: none; background: none; cursor: 
   position: absolute;
   inset: 0;
   background:
-    radial-gradient(ellipse at 50% 50%, rgba(0,0,0,0) 22%, rgba(0,0,0,0.5) 40%, rgba(0,0,0,0.92) 58%);
+    radial-gradient(ellipse at 50% 50%, rgba(0,0,0,0) 12%, rgba(0,0,0,0.7) 25%, rgba(0,0,0,1) 38%);
   pointer-events: none;
+}
+
+/* Hide the hero background on StoryMap — constellation video replaces it */
+[data-page="storymap.html"] .bg-static,
+[data-page="storymap.html"] .bg-darken,
+[data-page="storymap.html"] .bg-vignette {
+  display: none;
 }
 
 @media (max-width: 768px) {
