@@ -1,7 +1,7 @@
 /* ═══════════════════════════════════════════════════
    Subpage navigation controller
-   Handles swipe/scroll between product pages
-   and bottom nav bar highlighting
+   Handles swipe/scroll between product pages,
+   bottom nav bar highlighting, and crossfade transitions
    ═══════════════════════════════════════════════════ */
 
 (function () {
@@ -17,9 +17,25 @@
     "yggdrasil.html"
   ];
 
-  /* Figure out which page we're on */
-  var currentFile = window.location.pathname.split("/").pop() || "";
-  var currentIndex = PAGES.indexOf(currentFile);
+  /* Robust page detection: check pathname, handle trailing slashes, query strings */
+  var path = window.location.pathname;
+  var currentFile = "";
+  var currentIndex = -1;
+
+  for (var i = 0; i < PAGES.length; i++) {
+    if (path.indexOf(PAGES[i]) !== -1) {
+      currentFile = PAGES[i];
+      currentIndex = i;
+      break;
+    }
+  }
+
+  /* If still not found, try the last segment */
+  if (currentIndex === -1) {
+    var segments = path.replace(/\/$/, "").split("/");
+    var lastSeg = segments[segments.length - 1] || "";
+    currentIndex = PAGES.indexOf(lastSeg);
+  }
 
   /* Highlight the active nav dot */
   var navDots = document.querySelectorAll(".product-nav-dot");
@@ -29,23 +45,65 @@
     }
   });
 
+  /* Crossfade helper: fades out everything, then navigates */
+  function navigateTo(url) {
+    var subpage = document.querySelector(".subpage");
+    var gateway = document.querySelector(".subpage-gateway");
+    var productNav = document.querySelector(".product-nav");
+
+    /* Fade out all visible elements */
+    if (subpage) {
+      subpage.classList.remove("page-fade-in");
+      subpage.classList.add("page-fade-out");
+    }
+    if (gateway) gateway.style.opacity = "0";
+    if (productNav) productNav.style.opacity = "0";
+
+    setTimeout(function () {
+      window.location.href = url;
+    }, 380);
+  }
+
+  /* Intercept nav dot clicks for crossfade */
+  navDots.forEach(function (dot) {
+    dot.addEventListener("click", function (e) {
+      e.preventDefault();
+      var href = dot.getAttribute("href");
+      if (href && href !== currentFile) {
+        navigateTo(href);
+      }
+    });
+  });
+
+  /* Intercept back button for crossfade */
+  var backBtn = document.querySelector(".subpage-back");
+  if (backBtn) {
+    backBtn.addEventListener("click", function (e) {
+      e.preventDefault();
+      navigateTo(backBtn.getAttribute("href"));
+    });
+  }
+
+  /* Intercept header nav links that go to index.html for crossfade */
+  document.querySelectorAll(".header-sections .section-link, .logo").forEach(function (link) {
+    var href = link.getAttribute("href") || "";
+    if (href.indexOf("index.html") !== -1 || href === "index.html") {
+      link.addEventListener("click", function (e) {
+        e.preventDefault();
+        navigateTo(href);
+      });
+    }
+  });
+
   /* Swipe / scroll navigation between product pages */
   var subpage = document.querySelector(".subpage");
-  if (!subpage) return;
+  if (!subpage || currentIndex === -1) return;
 
   var touchStartY = 0;
   var lastNav = 0;
   var NAV_COOLDOWN = 800;
   var scrollAccum = 0;
-  var SCROLL_THRESHOLD = 60;
-
-  function navigateTo(url) {
-    subpage.classList.remove("page-fade-in");
-    subpage.classList.add("page-fade-out");
-    setTimeout(function () {
-      window.location.href = url;
-    }, 350);
-  }
+  var SCROLL_THRESHOLD = 80;
 
   function goPrev() {
     var now = Date.now();
@@ -53,7 +111,6 @@
     lastNav = now;
 
     if (currentIndex <= 0) {
-      /* First product page: go back to main products view */
       navigateTo("index.html#products");
     } else {
       navigateTo(PAGES[currentIndex - 1]);
@@ -66,14 +123,12 @@
     lastNav = now;
 
     if (currentIndex >= PAGES.length - 1) {
-      /* Last product page: go back to main products view */
       navigateTo("index.html#products");
     } else {
       navigateTo(PAGES[currentIndex + 1]);
     }
   }
 
-  /* Check if at scroll boundaries */
   function atTop() {
     return subpage.scrollTop <= 2;
   }
@@ -84,7 +139,6 @@
 
   /* Mouse wheel */
   subpage.addEventListener("wheel", function (e) {
-    /* If content doesn't overflow (fits on screen), always navigate */
     var fitsOnScreen = subpage.scrollHeight <= subpage.clientHeight + 5;
 
     if (fitsOnScreen) {
@@ -99,7 +153,6 @@
         goPrev();
       }
     } else {
-      /* Content overflows: only navigate at boundaries */
       if (e.deltaY < 0 && atTop()) {
         e.preventDefault();
         scrollAccum += e.deltaY;

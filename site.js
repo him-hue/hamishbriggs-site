@@ -184,12 +184,30 @@
   /* ── Product interaction (hover preview, click navigates with crossfade) ── */
   const detailDefault = detail ? detail.innerHTML : "";
 
+  /* Catchphrase tags for each product */
+  const catchphrases = {
+    "Index": "Foundation",
+    "StoryMap": "Structure",
+    "ProductionMap": "Momentum",
+    "MarketingMap": "Reach",
+    "DomainDataMine": "Insight",
+    "Yggdrasil": "World Tree"
+  };
+
+  const statusMap = {
+    "Index": "Under development",
+    "StoryMap": "Closed beta",
+    "ProductionMap": "Planned",
+    "MarketingMap": "Planned",
+    "DomainDataMine": "Planned",
+    "Yggdrasil": "The vision"
+  };
+
   function buildDetail(btn) {
-    const status = btn.dataset.status === "dev" ? "Under development" : "Planned";
-    const note = btn.dataset.status === "dev"
-      ? ""
-      : "This product is planned. Details will appear as it comes into focus.";
     const name = btn.textContent;
+    const status = statusMap[name] || (btn.dataset.status === "dev" ? "Under development" : "Planned");
+    const tag = catchphrases[name] || "";
+    const isStoryMap = name === "StoryMap";
 
     const appLinks = { "StoryMap": "https://storymap.hamishbriggs.com" };
     const appUrl = appLinks[name];
@@ -199,10 +217,10 @@
 
     return `
       <div class="detail-active">
-        <div class="detail-status">${status}</div>
+        ${tag ? `<div class="detail-tag">${tag}</div>` : ""}
+        <div class="detail-status${isStoryMap ? " gold" : ""}">${status}</div>
         <div class="detail-name">${name}</div>
         <div class="detail-blurb">${btn.dataset.blurb}</div>
-        ${note ? `<div class="detail-note">${note}</div>` : ""}
         ${visitBtn}
       </div>
     `;
@@ -256,6 +274,20 @@
     bgVideo.pause();
     bgVideo.currentTime = VIDEO_DURATION;
   }
+
+  /* Crossfade for any link that navigates away from the main page */
+  document.querySelectorAll("a.design-partner-btn, a.section-link").forEach((link) => {
+    const href = link.getAttribute("href") || "";
+    /* Only intercept links to local pages (not hash-only or external) */
+    if (href.endsWith(".html") && !href.startsWith("http") && !link.dataset.nav) {
+      link.addEventListener("click", (e) => {
+        e.preventDefault();
+        const viewport = document.getElementById("viewport");
+        if (viewport) viewport.classList.add("page-fade-out");
+        setTimeout(() => { window.location.href = href; }, 350);
+      });
+    }
+  });
 
   /* Handle hash-based deep links (e.g. index.html#products) */
   var hashMap = { "#home": 0, "#products": 1, "#about": 2, "#contact": 3 };
