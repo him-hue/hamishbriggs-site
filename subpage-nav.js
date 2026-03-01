@@ -1,7 +1,7 @@
 /* ═══════════════════════════════════════════════════
    Subpage navigation controller
    Handles swipe/scroll between product pages,
-   bottom nav bar highlighting, and crossfade transitions
+   bottom nav bar highlighting, and fade-to-black transitions
    ═══════════════════════════════════════════════════ */
 
 (function () {
@@ -17,24 +17,19 @@
     "yggdrasil.html"
   ];
 
-  /* Robust page detection: check pathname, handle trailing slashes, query strings */
-  var path = window.location.pathname;
-  var currentFile = "";
-  var currentIndex = -1;
+  /* Page detection via data-page attribute on body (reliable across all hosts) */
+  var currentPage = document.body.getAttribute("data-page") || "";
+  var currentIndex = PAGES.indexOf(currentPage);
 
-  for (var i = 0; i < PAGES.length; i++) {
-    if (path.indexOf(PAGES[i]) !== -1) {
-      currentFile = PAGES[i];
-      currentIndex = i;
-      break;
-    }
-  }
-
-  /* If still not found, try the last segment */
+  /* Fallback: try URL path matching */
   if (currentIndex === -1) {
-    var segments = path.replace(/\/$/, "").split("/");
-    var lastSeg = segments[segments.length - 1] || "";
-    currentIndex = PAGES.indexOf(lastSeg);
+    var href = window.location.href;
+    for (var i = 0; i < PAGES.length; i++) {
+      if (href.indexOf(PAGES[i]) !== -1) {
+        currentIndex = i;
+        break;
+      }
+    }
   }
 
   /* Highlight the active nav dot */
@@ -45,37 +40,37 @@
     }
   });
 
-  /* Crossfade helper: fades out everything, then navigates */
-  function navigateTo(url) {
-    var subpage = document.querySelector(".subpage");
-    var gateway = document.querySelector(".subpage-gateway");
-    var productNav = document.querySelector(".product-nav");
+  /* Blackout overlay for fade-to-black transitions */
+  var blackout = document.getElementById("page-blackout");
 
-    /* Fade out all visible elements */
-    if (subpage) {
-      subpage.classList.remove("page-fade-in");
-      subpage.classList.add("page-fade-out");
-    }
-    if (gateway) gateway.style.opacity = "0";
-    if (productNav) productNav.style.opacity = "0";
-
-    setTimeout(function () {
-      window.location.href = url;
-    }, 380);
+  /* On page load: fade FROM black (overlay starts opaque, fades to transparent) */
+  if (blackout) {
+    blackout.classList.add("fade-from-black");
   }
 
-  /* Intercept nav dot clicks for crossfade */
+  /* Navigate with fade-to-black effect */
+  function navigateTo(url) {
+    if (blackout) {
+      blackout.classList.remove("fade-from-black");
+      blackout.classList.add("fade-to-black");
+    }
+    setTimeout(function () {
+      window.location.href = url;
+    }, 450);
+  }
+
+  /* Intercept nav dot clicks for fade transition */
   navDots.forEach(function (dot) {
     dot.addEventListener("click", function (e) {
       e.preventDefault();
       var href = dot.getAttribute("href");
-      if (href && href !== currentFile) {
+      if (href) {
         navigateTo(href);
       }
     });
   });
 
-  /* Intercept back button for crossfade */
+  /* Intercept back button for fade transition */
   var backBtn = document.querySelector(".subpage-back");
   if (backBtn) {
     backBtn.addEventListener("click", function (e) {
@@ -84,10 +79,21 @@
     });
   }
 
-  /* Intercept header nav links that go to index.html for crossfade */
+  /* Intercept header nav links that go to index.html for fade transition */
   document.querySelectorAll(".header-sections .section-link, .logo").forEach(function (link) {
     var href = link.getAttribute("href") || "";
     if (href.indexOf("index.html") !== -1 || href === "index.html") {
+      link.addEventListener("click", function (e) {
+        e.preventDefault();
+        navigateTo(href);
+      });
+    }
+  });
+
+  /* Intercept Design Partners link for fade transition */
+  document.querySelectorAll("a.design-partner-btn, .header-sections .section-link").forEach(function (link) {
+    var href = link.getAttribute("href") || "";
+    if (href.endsWith(".html") && href.indexOf("index.html") === -1) {
       link.addEventListener("click", function (e) {
         e.preventDefault();
         navigateTo(href);

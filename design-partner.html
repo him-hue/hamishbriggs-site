@@ -10,7 +10,7 @@
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600&family=Inter:wght@300;400;500&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="styles.css" />
 </head>
-<body>
+<body data-page="design-partner.html">
 
   <!-- Background -->
   <div class="bg-layer">
@@ -172,6 +172,25 @@
       success.style.display = "block";
     });
   })();
+  </script>
+
+  <div class="page-blackout" id="page-blackout"></div>
+  <script>
+    /* Fade from black on load + fade-to-black on nav links */
+    (function () {
+      var bo = document.getElementById("page-blackout");
+      if (bo) bo.classList.add("fade-from-black");
+      document.querySelectorAll(".header-sections .section-link, .logo").forEach(function (link) {
+        var href = link.getAttribute("href") || "";
+        if (href.indexOf("index.html") !== -1 || href.endsWith(".html")) {
+          link.addEventListener("click", function (e) {
+            e.preventDefault();
+            if (bo) bo.classList.add("fade-to-black");
+            setTimeout(function () { window.location.href = href; }, 450);
+          });
+        }
+      });
+    })();
   </script>
 
 </body>

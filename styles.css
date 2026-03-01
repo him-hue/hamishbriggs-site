@@ -27,20 +27,29 @@ html, body {
 a { color: inherit; text-decoration: none; }
 button { font: inherit; color: inherit; border: none; background: none; cursor: pointer; }
 
-/* ── Page transition crossfade ───────────────────── */
-.page-fade-out {
-  animation: pageFadeOut 0.4s ease forwards;
+/* ── Page transition: fade to/from black overlay ─── */
+.page-blackout {
+  position: fixed;
+  inset: 0;
+  background: #000;
+  z-index: 9999;
+  pointer-events: none;
+  opacity: 0;
 }
-.page-fade-in {
-  animation: pageFadeIn 0.5s ease both;
+.page-blackout.fade-to-black {
+  animation: blackoutIn 0.4s ease forwards;
 }
-@keyframes pageFadeOut {
-  from { opacity: 1; }
-  to { opacity: 0; }
+.page-blackout.fade-from-black {
+  opacity: 1;
+  animation: blackoutOut 0.5s ease 0.05s forwards;
 }
-@keyframes pageFadeIn {
+@keyframes blackoutIn {
   from { opacity: 0; }
   to { opacity: 1; }
+}
+@keyframes blackoutOut {
+  from { opacity: 1; }
+  to { opacity: 0; }
 }
 
 /* ── Background layer ────────────────────────────── */
@@ -678,6 +687,18 @@ button { font: inherit; color: inherit; border: none; background: none; cursor: 
   color: rgba(255,255,255,0.50);
 }
 
+/* Recap paragraph (used on Yggdrasil) */
+.subpage-recap {
+  margin-top: 1rem;
+  font-size: 0.85rem;
+  line-height: 1.65;
+  color: rgba(255,255,255,0.60);
+}
+.subpage-recap strong {
+  font-weight: 500;
+  color: rgba(255,255,255,0.85);
+}
+
 /* Bullet list inside subpage body */
 .subpage-bullets {
   list-style: none;
@@ -927,7 +948,7 @@ button { font: inherit; color: inherit; border: none; background: none; cursor: 
   bottom: 5rem;
   right: 1.5rem;
   z-index: 20;
-  animation: pageFadeIn 0.6s ease 0.1s both;
+  animation: blackoutOut 0.6s ease 0.1s both;
   transition: opacity 0.35s ease;
 }
 
@@ -947,7 +968,7 @@ button { font: inherit; color: inherit; border: none; background: none; cursor: 
   -webkit-backdrop-filter: blur(12px);
   border: 1px solid rgba(255,255,255,0.06);
   border-radius: 9999px;
-  animation: pageFadeIn 0.6s ease 0.15s both;
+  animation: blackoutOut 0.6s ease 0.15s both;
   transition: opacity 0.35s ease;
 }
 

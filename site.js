@@ -200,7 +200,7 @@
     "ProductionMap": "Planned",
     "MarketingMap": "Planned",
     "DomainDataMine": "Planned",
-    "Yggdrasil": "The vision"
+    "Yggdrasil": "Planned"
   };
 
   function buildDetail(btn) {
@@ -239,22 +239,27 @@
     if (btn) btn.classList.add("product-active");
   }
 
+  /* Fade-to-black navigation helper */
+  const blackout = document.getElementById("page-blackout");
+  function fadeNavigate(url) {
+    if (blackout) {
+      blackout.classList.add("fade-to-black");
+    }
+    setTimeout(() => { window.location.href = url; }, 450);
+  }
+
+  /* Fade from black on page load */
+  if (blackout) {
+    blackout.classList.add("fade-from-black");
+  }
+
   productBtns.forEach((btn) => {
-    /* Click navigates to subpage with crossfade */
+    /* Click navigates to subpage with fade-to-black */
     btn.addEventListener("click", (e) => {
       e.preventDefault();
       const href = btn.getAttribute("href");
       if (!href) return;
-
-      // Add fade-out class to the viewport
-      const viewport = document.getElementById("viewport");
-      if (viewport) {
-        viewport.classList.add("page-fade-out");
-      }
-      // Navigate after fade completes
-      setTimeout(() => {
-        window.location.href = href;
-      }, 350);
+      fadeNavigate(href);
     });
 
     /* Hover preview (desktop only) */
@@ -275,16 +280,14 @@
     bgVideo.currentTime = VIDEO_DURATION;
   }
 
-  /* Crossfade for any link that navigates away from the main page */
+  /* Fade-to-black for any link that navigates away from the main page */
   document.querySelectorAll("a.design-partner-btn, a.section-link").forEach((link) => {
     const href = link.getAttribute("href") || "";
     /* Only intercept links to local pages (not hash-only or external) */
     if (href.endsWith(".html") && !href.startsWith("http") && !link.dataset.nav) {
       link.addEventListener("click", (e) => {
         e.preventDefault();
-        const viewport = document.getElementById("viewport");
-        if (viewport) viewport.classList.add("page-fade-out");
-        setTimeout(() => { window.location.href = href; }, 350);
+        fadeNavigate(href);
       });
     }
   });
