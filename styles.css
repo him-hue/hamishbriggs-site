@@ -1063,6 +1063,40 @@ button { font: inherit; color: inherit; border: none; background: none; cursor: 
   filter: none;
 }
 
+/* ── StoryMap constellation video ─────────────── */
+.sm-video-wrap {
+  position: fixed;
+  inset: 0;
+  z-index: 2;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  pointer-events: none;
+}
+
+.sm-video {
+  width: 55vw;
+  max-width: 700px;
+  height: auto;
+  object-fit: contain;
+  opacity: 0.55;
+}
+
+.sm-video-vignette {
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(ellipse at 50% 50%, rgba(0,0,0,0) 18%, rgba(0,0,0,0.6) 38%, rgba(0,0,0,0.95) 55%);
+  pointer-events: none;
+}
+
+@media (max-width: 768px) {
+  .sm-video {
+    width: 80vw;
+    opacity: 0.4;
+  }
+}
+
 /* ── Subpage scrollbar ──────────────────────────── */
 .subpage::-webkit-scrollbar { width: 4px; }
 .subpage::-webkit-scrollbar-track { background: transparent; }

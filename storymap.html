@@ -29,6 +29,15 @@
   </div>
   <div class="bg-grain" aria-hidden="true"></div>
 
+  <!-- StoryMap constellation video -->
+  <div class="sm-video-wrap">
+    <video class="sm-video" id="sm-video"
+           src="images/sm-intro.mp4"
+           muted playsinline preload="auto"
+           disablepictureinpicture></video>
+    <div class="sm-video-vignette"></div>
+  </div>
+
   <header class="header">
     <div class="header-inner">
       <div class="header-left">
@@ -96,6 +105,19 @@
 
   <div class="page-blackout" id="page-blackout"></div>
   <script src="subpage-nav.js"></script>
+
+  <script>
+  (function () {
+    var vid = document.getElementById("sm-video");
+    if (!vid) return;
+    vid.addEventListener("ended", function () {
+      vid.src = "images/sm-loop.mp4";
+      vid.loop = true;
+      vid.play();
+    }, { once: true });
+    vid.play().catch(function () {});
+  })();
+  </script>
 
   <!-- Cloudflare Web Analytics -->
   <!-- To activate: go to Cloudflare dashboard > Web Analytics, add your site, and replace YOUR_CF_TOKEN -->
