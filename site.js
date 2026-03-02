@@ -291,16 +291,19 @@
       fadeNavigate(href);
     });
 
-    /* Hover preview (desktop only) */
-    btn.addEventListener("mouseenter", () => {
-      setActiveBtn(btn);
-      showDetail(btn);
-    });
+    /* Hover preview (desktop only — touch devices fire mouseenter
+       erratically which causes jittering on the product list) */
+    if (!isMobile) {
+      btn.addEventListener("mouseenter", () => {
+        setActiveBtn(btn);
+        showDetail(btn);
+      });
 
-    btn.addEventListener("mouseleave", () => {
-      setActiveBtn(null);
-      resetDetail();
-    });
+      btn.addEventListener("mouseleave", () => {
+        setActiveBtn(null);
+        resetDetail();
+      });
+    }
   });
 
   /* ── Init ───────────────────────────────────────── */

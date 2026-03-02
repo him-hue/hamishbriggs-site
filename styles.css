@@ -1249,10 +1249,10 @@ button { font: inherit; color: inherit; border: none; background: none; cursor: 
 
 /* Overlay + vignette fade in once actor disappears (JS adds .drifting) */
 .transition-bg.drifting .transition-bg-overlay {
-  animation: overlayFadeIn 2.5s ease-in forwards;
+  animation: overlayFadeIn 1.25s ease-in forwards;
 }
 .transition-bg.drifting .transition-bg-vignette {
-  animation: overlayFadeIn 2.5s ease-in forwards;
+  animation: overlayFadeIn 1.25s ease-in forwards;
 }
 
 @keyframes overlayFadeIn {
@@ -1370,13 +1370,18 @@ button { font: inherit; color: inherit; border: none; background: none; cursor: 
 
 /* ── Mobile product-page fixes ───────────────────── */
 @media (max-width: 768px) {
-  /* Touch targets: ensure minimum 44px tap area */
+  /* Touch targets: 44px invisible tap area around small visual dot */
   .dot {
-    width: 12px;
-    height: 12px;
-    padding: 16px;
-    margin: -16px;
-    box-sizing: content-box;
+    position: relative;
+  }
+  .dot::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 44px;
+    height: 44px;
+    transform: translate(-50%, -50%);
   }
   .product-nav-dot {
     width: 44px;
