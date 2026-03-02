@@ -250,7 +250,7 @@
        destination page's first video frame matches this background exactly. */
     if (TRANSITION_PAGES.some((p) => url.indexOf(p) !== -1)) {
       document.body.classList.add("content-fade-out");
-      setTimeout(() => { window.location.href = url; }, 600);
+      setTimeout(() => { window.location.href = url; }, 120);
       return;
     }
     if (blackout) {
