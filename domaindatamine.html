@@ -59,10 +59,27 @@
       </div>
       <nav class="header-nav">
         <a href="design-partner.html" class="nav-pill">Design Partners</a>
-        <a href="https://storymap.hamishbriggs.com" class="nav-pill">StoryMap</a>
+        <a href="https://storymap.hamishbriggs.com" class="nav-pill" target="_blank" rel="noopener">StoryMap</a>
       </nav>
+      <button class="burger-btn" aria-label="Menu" onclick="document.getElementById('mobile-nav').classList.add('open')">
+        <svg viewBox="0 0 24 24" fill="none" stroke-width="1.8"><path d="M4 7h16M4 12h16M4 17h16"/></svg>
+      </button>
     </div>
   </header>
+
+  <!-- Mobile navigation overlay -->
+  <div class="mobile-nav-overlay" id="mobile-nav" onclick="if(event.target===this)this.classList.remove('open')">
+    <button class="mobile-nav-close" aria-label="Close" onclick="this.parentElement.classList.remove('open')">
+      <svg viewBox="0 0 24 24" fill="none" stroke-width="1.8"><path d="M18 6L6 18M6 6l12 12"/></svg>
+    </button>
+    <a href="index.html" class="mobile-nav-link">Home</a>
+    <a href="index.html#products" class="mobile-nav-link">Products</a>
+    <a href="index.html#about" class="mobile-nav-link">About</a>
+    <a href="index.html#contact" class="mobile-nav-link">Contact</a>
+    <div class="mobile-nav-divider"></div>
+    <a href="design-partner.html" class="mobile-nav-link">Design Partners</a>
+    <a href="https://storymap.hamishbriggs.com" class="mobile-nav-link" target="_blank" rel="noopener">StoryMap</a>
+  </div>
 
   <main class="subpage">
     <div class="subpage-inner">

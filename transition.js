@@ -19,6 +19,50 @@
 
   var isMobile = window.matchMedia("(max-width: 768px)").matches;
 
+  /* Check if arriving from another product page (product-to-product nav) */
+  var skipTransition = false;
+  try { skipTransition = sessionStorage.getItem("skipTransition") === "1"; sessionStorage.removeItem("skipTransition"); } catch(e) {}
+
+  /* ── Skip transition: show still + text immediately (product-to-product or mobile) ── */
+  if (skipTransition && !isMobile) {
+    vid.removeAttribute("src");
+    vid.load();
+    vid.style.display    = "none";
+    still.style.display  = "block";
+    wrap.classList.add("drifting");
+    document.body.classList.add("content-visible");
+    /* Reverse transition still works normally from the skipped state */
+    window.__reverseTransition = function (destinationUrl) {
+      var bo = document.getElementById("page-blackout");
+      document.body.classList.remove("content-visible");
+      document.body.classList.add("content-hiding");
+      wrap.classList.remove("drifting");
+      wrap.classList.add("undrifting");
+      vid.style.display   = "none";
+      still.style.display = "none";
+      vidRev.style.display = "block";
+      vidRev.currentTime = 0;
+      vidRev.playbackRate = 1;
+      vidRev.play().catch(function () {});
+      var dipTriggered = false;
+      var DIP_LEAD = 0.2;
+      function checkForDip() {
+        if (vidRev.paused || vidRev.ended) return;
+        if (!dipTriggered && vidRev.duration - vidRev.currentTime <= DIP_LEAD) {
+          dipTriggered = true;
+          if (bo) { bo.classList.remove("fade-from-black"); bo.style.transition = "opacity 0.18s ease"; bo.style.opacity = "1"; }
+        }
+        requestAnimationFrame(checkForDip);
+      }
+      requestAnimationFrame(checkForDip);
+      vidRev.addEventListener("ended", function () {
+        try { sessionStorage.setItem("skipBlackout", "1"); } catch(e) {}
+        window.location.href = destinationUrl;
+      }, { once: true });
+    };
+    return;
+  }
+
   /* ── Mobile: skip videos, show still frame + text immediately ── */
   if (isMobile) {
     /* Prevent video downloads by clearing sources */

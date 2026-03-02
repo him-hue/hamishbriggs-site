@@ -55,6 +55,14 @@
   var REVERSE_TRANSITION_PAGES = ["index-app.html", "storymap.html", "productionmap.html", "marketingmap.html", "domaindatamine.html", "yggdrasil.html"];
   var hasReverseTransition = REVERSE_TRANSITION_PAGES.indexOf(currentPage) !== -1;
 
+  /* Is the destination another product page (not the product menu)? */
+  function isProductPage(url) {
+    for (var i = 0; i < PAGES.length; i++) {
+      if (url.indexOf(PAGES[i]) !== -1) return true;
+    }
+    return false;
+  }
+
   /* Navigate with fade-to-black effect */
   function navigateTo(url) {
     /* If this page has a reverse transition and we're going back to
@@ -64,6 +72,13 @@
       window.__reverseTransition(url);
       return;
     }
+
+    /* Product-to-product: skip the intro transition on the destination,
+       go straight to still-image end state */
+    if (isProductPage(url)) {
+      try { sessionStorage.setItem("skipTransition", "1"); } catch(e) {}
+    }
+
     if (blackout) {
       blackout.classList.remove("fade-from-black");
       blackout.classList.remove("ready");
