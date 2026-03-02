@@ -242,7 +242,7 @@
   /* Fade-to-black navigation helper */
   const blackout = document.getElementById("page-blackout");
   /* Pages with transition videos — skip fade-to-black, navigate immediately */
-  const TRANSITION_PAGES = ["productionmap.html"];
+  const TRANSITION_PAGES = ["index-app.html", "storymap.html", "productionmap.html", "marketingmap.html", "domaindatamine.html", "yggdrasil.html"];
 
   function fadeNavigate(url) {
     /* If the target has a transition video, fade only the foreground content

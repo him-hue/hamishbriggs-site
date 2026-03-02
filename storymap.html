@@ -29,19 +29,20 @@
   </div>
   <div class="bg-grain" aria-hidden="true"></div>
 
-  <!-- StoryMap constellation video -->
-  <div class="sm-video-wrap">
-    <div class="sm-video-stack">
-      <video class="sm-video" id="sm-video"
-             src="images/sm-intro.mp4"
-             muted playsinline preload="auto"
-             disablepictureinpicture></video>
-      <video class="sm-video sm-video-loop" id="sm-video-loop"
-             src="images/sm-loop.mp4"
-             muted playsinline preload="auto" loop
-             disablepictureinpicture></video>
-    </div>
-    <div class="sm-video-vignette"></div>
+  <!-- Portrait → Blueprint transition background -->
+  <div class="transition-bg" id="transition-bg">
+    <video id="transition-video"
+           src="images/pm-transition.mp4"
+           muted playsinline preload="auto"
+           disablepictureinpicture></video>
+    <video id="transition-video-rev"
+           src="images/pm-transition-rev.mp4"
+           muted playsinline preload="auto"
+           disablepictureinpicture
+           style="display:none"></video>
+    <img id="transition-still" src="images/pm-bg.jpg" alt="" />
+    <div class="transition-bg-overlay"></div>
+    <div class="transition-bg-vignette"></div>
   </div>
 
   <header class="header">
@@ -112,50 +113,7 @@
   <div class="page-blackout" id="page-blackout"></div>
   <script src="subpage-nav.js"></script>
 
-  <script>
-  (function () {
-    var intro = document.getElementById("sm-video");
-    var loop  = document.getElementById("sm-video-loop");
-    if (!intro || !loop) return;
-
-    /* Preload the loop video */
-    loop.load();
-
-    var fading = false;
-    function crossfadeToLoop() {
-      if (fading) return;
-      fading = true;
-      loop.play().catch(function () {});
-      loop.classList.add("active");
-      /* After the CSS transition finishes, hide intro to save resources */
-      setTimeout(function () {
-        intro.pause();
-        intro.style.display = "none";
-      }, 1000);
-    }
-
-    /* Start the crossfade 0.8s before intro ends */
-    intro.addEventListener("timeupdate", function () {
-      if (intro.duration - intro.currentTime < 0.8) {
-        crossfadeToLoop();
-      }
-    });
-
-    /* Fallback: if timeupdate misses, crossfade on ended */
-    intro.addEventListener("ended", crossfadeToLoop, { once: true });
-
-    /* Try autoplay; if blocked, start on first user interaction */
-    intro.play().catch(function () {
-      function startOnInteraction() {
-        intro.play().catch(function () {});
-        document.removeEventListener("click", startOnInteraction);
-        document.removeEventListener("scroll", startOnInteraction);
-      }
-      document.addEventListener("click", startOnInteraction, { once: true });
-      document.addEventListener("scroll", startOnInteraction, { once: true });
-    });
-  })();
-  </script>
+  <script src="transition.js"></script>
 
   <!-- Cloudflare Web Analytics -->
   <!-- To activate: go to Cloudflare dashboard > Web Analytics, add your site, and replace YOUR_CF_TOKEN -->

@@ -52,7 +52,7 @@
   }
 
   /* Pages that have a reverse transition video */
-  var REVERSE_TRANSITION_PAGES = ["productionmap.html"];
+  var REVERSE_TRANSITION_PAGES = ["index-app.html", "storymap.html", "productionmap.html", "marketingmap.html", "domaindatamine.html", "yggdrasil.html"];
   var hasReverseTransition = REVERSE_TRANSITION_PAGES.indexOf(currentPage) !== -1;
 
   /* Navigate with fade-to-black effect */

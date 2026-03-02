@@ -29,6 +29,22 @@
   </div>
   <div class="bg-grain" aria-hidden="true"></div>
 
+  <!-- Portrait → Blueprint transition background -->
+  <div class="transition-bg" id="transition-bg">
+    <video id="transition-video"
+           src="images/pm-transition.mp4"
+           muted playsinline preload="auto"
+           disablepictureinpicture></video>
+    <video id="transition-video-rev"
+           src="images/pm-transition-rev.mp4"
+           muted playsinline preload="auto"
+           disablepictureinpicture
+           style="display:none"></video>
+    <img id="transition-still" src="images/pm-bg.jpg" alt="" />
+    <div class="transition-bg-overlay"></div>
+    <div class="transition-bg-vignette"></div>
+  </div>
+
   <header class="header">
     <div class="header-inner">
       <div class="header-left">
@@ -90,6 +106,7 @@
 
   <div class="page-blackout" id="page-blackout"></div>
   <script src="subpage-nav.js"></script>
+  <script src="transition.js"></script>
 
   <!-- Cloudflare Web Analytics -->
   <!-- To activate: go to Cloudflare dashboard > Web Analytics, add your site, and replace YOUR_CF_TOKEN -->

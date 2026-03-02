@@ -1185,7 +1185,12 @@ button { font: inherit; color: inherit; border: none; background: none; cursor: 
 /* On pages with a transition video, clear the blackout on arrival.
    Uses animation (not !important) so JS can still set opacity for
    the reverse-transition black dip at the end. */
-[data-page="productionmap.html"] .page-blackout {
+[data-page="index-app.html"] .page-blackout,
+[data-page="storymap.html"] .page-blackout,
+[data-page="productionmap.html"] .page-blackout,
+[data-page="marketingmap.html"] .page-blackout,
+[data-page="domaindatamine.html"] .page-blackout,
+[data-page="yggdrasil.html"] .page-blackout {
   animation: blackoutOut 0s forwards;
 }
 
@@ -1246,34 +1251,74 @@ button { font: inherit; color: inherit; border: none; background: none; cursor: 
   100% { opacity: 0; }
 }
 
-/* Content hidden until actor disappears, then fades in */
-[data-page="productionmap.html"] .subpage-inner {
+/* Content hidden until actor disappears, then fades in (all product subpages) */
+[data-page="index-app.html"] .subpage-inner,
+[data-page="storymap.html"] .subpage-inner,
+[data-page="productionmap.html"] .subpage-inner,
+[data-page="marketingmap.html"] .subpage-inner,
+[data-page="domaindatamine.html"] .subpage-inner,
+[data-page="yggdrasil.html"] .subpage-inner {
   opacity: 0;
   transition: opacity 1.2s ease;
 }
-[data-page="productionmap.html"].content-visible .subpage-inner {
+[data-page="index-app.html"].content-visible .subpage-inner,
+[data-page="storymap.html"].content-visible .subpage-inner,
+[data-page="productionmap.html"].content-visible .subpage-inner,
+[data-page="marketingmap.html"].content-visible .subpage-inner,
+[data-page="domaindatamine.html"].content-visible .subpage-inner,
+[data-page="yggdrasil.html"].content-visible .subpage-inner {
   opacity: 1;
 }
 /* Fast hide for reverse transition */
-[data-page="productionmap.html"].content-hiding .subpage-inner {
+[data-page="index-app.html"].content-hiding .subpage-inner,
+[data-page="storymap.html"].content-hiding .subpage-inner,
+[data-page="productionmap.html"].content-hiding .subpage-inner,
+[data-page="marketingmap.html"].content-hiding .subpage-inner,
+[data-page="domaindatamine.html"].content-hiding .subpage-inner,
+[data-page="yggdrasil.html"].content-hiding .subpage-inner {
   opacity: 0;
   transition: opacity 0.15s ease;
 }
 
-/* Widen text columns on ProductionMap — no central subject to avoid */
-[data-page="productionmap.html"] .subpage-col-primary {
+/* Widen text columns on transition pages — no central subject to avoid */
+[data-page="index-app.html"] .subpage-col-primary,
+[data-page="storymap.html"] .subpage-col-primary,
+[data-page="productionmap.html"] .subpage-col-primary,
+[data-page="marketingmap.html"] .subpage-col-primary,
+[data-page="domaindatamine.html"] .subpage-col-primary,
+[data-page="yggdrasil.html"] .subpage-col-primary {
   flex: 0 0 55%;
   max-width: 55%;
 }
-[data-page="productionmap.html"] .subpage-col-secondary {
+[data-page="index-app.html"] .subpage-col-secondary,
+[data-page="storymap.html"] .subpage-col-secondary,
+[data-page="productionmap.html"] .subpage-col-secondary,
+[data-page="marketingmap.html"] .subpage-col-secondary,
+[data-page="domaindatamine.html"] .subpage-col-secondary,
+[data-page="yggdrasil.html"] .subpage-col-secondary {
   flex: 0 0 35%;
   max-width: 35%;
 }
 
 /* Hide hero.jpg on pages with transition video */
+[data-page="index-app.html"] .bg-static,
+[data-page="index-app.html"] .bg-darken,
+[data-page="index-app.html"] .bg-vignette,
+[data-page="storymap.html"] .bg-static,
+[data-page="storymap.html"] .bg-darken,
+[data-page="storymap.html"] .bg-vignette,
 [data-page="productionmap.html"] .bg-static,
 [data-page="productionmap.html"] .bg-darken,
-[data-page="productionmap.html"] .bg-vignette {
+[data-page="productionmap.html"] .bg-vignette,
+[data-page="marketingmap.html"] .bg-static,
+[data-page="marketingmap.html"] .bg-darken,
+[data-page="marketingmap.html"] .bg-vignette,
+[data-page="domaindatamine.html"] .bg-static,
+[data-page="domaindatamine.html"] .bg-darken,
+[data-page="domaindatamine.html"] .bg-vignette,
+[data-page="yggdrasil.html"] .bg-static,
+[data-page="yggdrasil.html"] .bg-darken,
+[data-page="yggdrasil.html"] .bg-vignette {
   display: none;
 }
 
