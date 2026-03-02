@@ -61,12 +61,9 @@ button { font: inherit; color: inherit; border: none; background: none; cursor: 
   to { opacity: 0; }
 }
 
-/* Transition-page exit: fade out foreground content, keep background visible */
-.content-fade-out .header,
+/* Transition-page exit: fade out only text/UI, keep background + header visible */
 .content-fade-out .sections-viewport,
-.content-fade-out .dot-nav,
-.content-fade-out .product-nav,
-.content-fade-out .subpage {
+.content-fade-out .dot-nav {
   transition: opacity 0.55s ease;
   opacity: 0;
 }
