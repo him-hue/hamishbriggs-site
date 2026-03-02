@@ -953,6 +953,56 @@ button { font: inherit; color: inherit; border: none; background: none; cursor: 
   resize: vertical;
 }
 
+.dp-field-hint {
+  font-size: 0.75rem;
+  color: rgba(255,255,255,0.4);
+  margin-bottom: 0.5rem;
+}
+
+.dp-checkbox-group {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem 1.2rem;
+}
+
+.dp-checkbox {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-size: 0.82rem;
+  color: rgba(255,255,255,0.7);
+  cursor: pointer;
+}
+
+.dp-checkbox input[type="checkbox"] {
+  appearance: none;
+  width: 15px;
+  height: 15px;
+  border: 1px solid rgba(255,255,255,0.25);
+  border-radius: 3px;
+  background: rgba(255,255,255,0.05);
+  cursor: pointer;
+  flex-shrink: 0;
+  position: relative;
+}
+
+.dp-checkbox input[type="checkbox"]:checked {
+  background: var(--gold);
+  border-color: var(--gold);
+}
+
+.dp-checkbox input[type="checkbox"]:checked::after {
+  content: "";
+  position: absolute;
+  left: 4px;
+  top: 1px;
+  width: 5px;
+  height: 9px;
+  border: solid #111;
+  border-width: 0 2px 2px 0;
+  transform: rotate(45deg);
+}
+
 .dp-submit {
   align-self: flex-start;
   border-radius: 9999px;
@@ -1124,10 +1174,11 @@ button { font: inherit; color: inherit; border: none; background: none; cursor: 
   overflow: hidden;
 }
 
-/* On pages with a transition video, clear the blackout almost instantly
-   so the video is visible from its first frame (the portrait) */
-[data-page="productionmap.html"] .page-blackout.fade-from-black {
-  animation: blackoutOut 0.15s ease forwards;
+/* On pages with a transition video, clear the blackout instantly —
+   the video's first frame matches the previous page, no black needed */
+[data-page="productionmap.html"] .page-blackout {
+  opacity: 0 !important;
+  animation: none !important;
 }
 
 .transition-bg video,

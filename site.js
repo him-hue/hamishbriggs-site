@@ -241,7 +241,15 @@
 
   /* Fade-to-black navigation helper */
   const blackout = document.getElementById("page-blackout");
+  /* Pages with transition videos — skip fade-to-black, navigate immediately */
+  const TRANSITION_PAGES = ["productionmap.html"];
+
   function fadeNavigate(url) {
+    /* If the target has a transition video, navigate instantly (crossfade via video) */
+    if (TRANSITION_PAGES.some((p) => url.indexOf(p) !== -1)) {
+      window.location.href = url;
+      return;
+    }
     if (blackout) {
       blackout.classList.remove("fade-from-black");
       blackout.classList.remove("fade-from-black-slow");

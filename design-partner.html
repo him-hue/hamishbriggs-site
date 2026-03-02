@@ -123,6 +123,32 @@
             </select>
           </div>
 
+          <div class="dp-field">
+            <label class="dp-label">Which products interest you?</label>
+            <p class="dp-field-hint">Select all that you think you might use.</p>
+            <div class="dp-checkbox-group">
+              <label class="dp-checkbox"><input type="checkbox" name="interest" value="Index" /><span>Index</span></label>
+              <label class="dp-checkbox"><input type="checkbox" name="interest" value="StoryMap" /><span>StoryMap</span></label>
+              <label class="dp-checkbox"><input type="checkbox" name="interest" value="ProductionMap" /><span>ProductionMap</span></label>
+              <label class="dp-checkbox"><input type="checkbox" name="interest" value="MarketingMap" /><span>MarketingMap</span></label>
+              <label class="dp-checkbox"><input type="checkbox" name="interest" value="DomainDataMine" /><span>DomainDataMine</span></label>
+              <label class="dp-checkbox"><input type="checkbox" name="interest" value="Yggdrasil" /><span>Yggdrasil</span></label>
+            </div>
+          </div>
+
+          <div class="dp-field">
+            <label class="dp-label">Do you understand what each product does?</label>
+            <p class="dp-field-hint">Check the ones you feel you understand.</p>
+            <div class="dp-checkbox-group">
+              <label class="dp-checkbox"><input type="checkbox" name="understand" value="Index" /><span>Index</span></label>
+              <label class="dp-checkbox"><input type="checkbox" name="understand" value="StoryMap" /><span>StoryMap</span></label>
+              <label class="dp-checkbox"><input type="checkbox" name="understand" value="ProductionMap" /><span>ProductionMap</span></label>
+              <label class="dp-checkbox"><input type="checkbox" name="understand" value="MarketingMap" /><span>MarketingMap</span></label>
+              <label class="dp-checkbox"><input type="checkbox" name="understand" value="DomainDataMine" /><span>DomainDataMine</span></label>
+              <label class="dp-checkbox"><input type="checkbox" name="understand" value="Yggdrasil" /><span>Yggdrasil</span></label>
+            </div>
+          </div>
+
           <button type="submit" class="dp-submit">Submit Request</button>
         </form>
 
@@ -156,7 +182,7 @@
       e.preventDefault();
       var data = new FormData(form);
 
-      if (FORMSPREE_ID !== "xbdaewyw") {
+      if (FORMSPREE_ID !== "YOUR_FORM_ID") {
         /* Formspree AJAX submission */
         fetch(FORMSPREE_URL, {
           method: "POST",
@@ -179,13 +205,17 @@
         var role = form.elements.role.value;
         var project = form.elements.project.value.trim();
         var source = form.elements.source.value;
+        var interests = Array.from(form.querySelectorAll('input[name="interest"]:checked')).map(function(c){return c.value;}).join(", ") || "None selected";
+        var understands = Array.from(form.querySelectorAll('input[name="understand"]:checked')).map(function(c){return c.value;}).join(", ") || "None selected";
         var subject = encodeURIComponent("Design Partner Request: " + name);
         var body = encodeURIComponent(
           "Name: " + name + "\n" +
           "Email: " + email + "\n" +
           "Role: " + role + "\n" +
           "Project: " + project + "\n" +
-          "Source: " + source
+          "Source: " + source + "\n" +
+          "Products of interest: " + interests + "\n" +
+          "Products understood: " + understands
         );
         window.location.href = "mailto:contact@hamishbriggs.com?subject=" + subject + "&body=" + body;
         form.style.display = "none";
