@@ -35,6 +35,11 @@
            src="images/pm-transition.mp4"
            muted playsinline preload="auto"
            disablepictureinpicture></video>
+    <video id="transition-video-rev"
+           src="images/pm-transition-rev.mp4"
+           muted playsinline preload="auto"
+           disablepictureinpicture
+           style="display:none"></video>
     <img id="transition-still" src="images/pm-bg.jpg" alt="" />
     <div class="transition-bg-overlay"></div>
     <div class="transition-bg-vignette"></div>
@@ -104,18 +109,16 @@
 
   <script>
   (function () {
-    var vid   = document.getElementById("transition-video");
-    var still = document.getElementById("transition-still");
-    var wrap  = document.getElementById("transition-bg");
-    if (!vid || !still || !wrap) return;
+    var vid    = document.getElementById("transition-video");
+    var vidRev = document.getElementById("transition-video-rev");
+    var still  = document.getElementById("transition-still");
+    var wrap   = document.getElementById("transition-bg");
+    if (!vid || !vidRev || !still || !wrap) return;
 
-    /* ── Timing constants ──
-       Actor disappears at ~1.6s in the speed-ramped video.
-       At that point: slow playback to a drift, fade in overlay/vignette,
-       and reveal the page text. */
-    var DRIFT_TIME     = 1.6;    /* seconds: when actor vanishes */
-    var DRIFT_RATE     = 0.35;   /* target playbackRate for the drift phase */
-    var EASE_DURATION  = 0.8;    /* seconds to ease the rate down (wall-clock) */
+    /* ── Forward transition constants ── */
+    var DRIFT_TIME     = 1.6;
+    var DRIFT_RATE     = 0.35;
+    var EASE_DURATION  = 0.8;
     var drifting        = false;
     var easeStart       = null;
 
@@ -123,49 +126,68 @@
       if (drifting) return;
       drifting = true;
       easeStart = performance.now();
-
-      /* Trigger overlay + vignette fade-in (CSS animation via class) */
       wrap.classList.add("drifting");
-
-      /* Reveal the page text */
       document.body.classList.add("content-visible");
-
-      /* Gradually ease the playback rate from 1.0 → DRIFT_RATE */
       easeRate();
     }
 
     function easeRate() {
       var elapsed = (performance.now() - easeStart) / 1000;
       var t = Math.min(elapsed / EASE_DURATION, 1);
-      /* Smooth ease-out curve */
       var eased = 1 - Math.pow(1 - t, 3);
       vid.playbackRate = 1.0 - (1.0 - DRIFT_RATE) * eased;
-      if (t < 1) {
-        requestAnimationFrame(easeRate);
-      }
+      if (t < 1) requestAnimationFrame(easeRate);
     }
 
-    /* Use rAF for precise timing (timeupdate is too coarse) */
     function checkTime() {
       if (vid.paused || vid.ended) return;
-      if (vid.currentTime >= DRIFT_TIME) {
-        startDrift();
-      }
+      if (vid.currentTime >= DRIFT_TIME) startDrift();
       if (!drifting) requestAnimationFrame(checkTime);
     }
 
-    /* When the transition video ends, show the static frame */
     vid.addEventListener("ended", function () {
       still.style.display = "block";
       vid.style.display   = "none";
-      /* Ensure text is visible even if drift didn't trigger */
       if (!drifting) startDrift();
     });
 
-    /* Start playback */
     vid.addEventListener("playing", function () {
       requestAnimationFrame(checkTime);
     }, { once: true });
+
+    /* ── Reverse transition ──
+       1. Fade out text quickly
+       2. Fade out overlay/vignette (reveal blueprint bg)
+       3. Swap to reverse video and play it
+       4. Navigate when it ends */
+    window.__reverseTransition = function (destinationUrl) {
+      /* Step 1: hide text */
+      document.body.classList.remove("content-visible");
+      document.body.classList.add("content-hiding");
+
+      /* Step 2: fade out overlay + vignette */
+      wrap.classList.remove("drifting");
+      wrap.classList.add("undrifting");
+
+      /* Step 3: after overlay fades, swap to reverse video and play */
+      setTimeout(function () {
+        /* Hide forward video / still, show reverse video */
+        vid.style.display   = "none";
+        vid.pause();
+        still.style.display = "none";
+        vidRev.style.display = "block";
+        vidRev.currentTime = 0;
+        vidRev.playbackRate = 1;
+        vidRev.play().catch(function () {});
+
+        /* Step 4: navigate when reverse video ends */
+        vidRev.addEventListener("ended", function () {
+          /* Tell the landing page to skip the blackout overlay */
+          try { sessionStorage.setItem("skipBlackout", "1"); } catch(e) {}
+          window.location.href = destinationUrl;
+        }, { once: true });
+      }, 500);
+    };
 
     vid.play().catch(function () {
       function startOnInteraction() {

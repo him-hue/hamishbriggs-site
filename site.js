@@ -262,9 +262,16 @@
     setTimeout(() => { window.location.href = url; }, 500);
   }
 
-  /* Fade from black on page load: slow fade to match camera movement */
+  /* Fade from black on page load: slow fade to match camera movement.
+     Skip if arriving from a reverse transition (background already matches). */
+  var skipBlackout = false;
+  try { skipBlackout = sessionStorage.getItem("skipBlackout") === "1"; sessionStorage.removeItem("skipBlackout"); } catch(e) {}
   if (blackout) {
-    blackout.classList.add("fade-from-black-slow");
+    if (skipBlackout) {
+      blackout.style.opacity = "0";
+    } else {
+      blackout.classList.add("fade-from-black-slow");
+    }
   }
 
   productBtns.forEach((btn) => {

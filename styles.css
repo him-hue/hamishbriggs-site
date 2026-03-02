@@ -1235,6 +1235,16 @@ button { font: inherit; color: inherit; border: none; background: none; cursor: 
   100% { opacity: 1; }
 }
 
+/* Reverse: fade overlay/vignette back out before reverse video plays */
+.transition-bg.undrifting .transition-bg-overlay,
+.transition-bg.undrifting .transition-bg-vignette {
+  animation: overlayFadeOut 0.45s ease-out forwards;
+}
+@keyframes overlayFadeOut {
+  0%   { opacity: 1; }
+  100% { opacity: 0; }
+}
+
 /* Content hidden until actor disappears, then fades in */
 [data-page="productionmap.html"] .subpage-inner {
   opacity: 0;
@@ -1242,6 +1252,11 @@ button { font: inherit; color: inherit; border: none; background: none; cursor: 
 }
 [data-page="productionmap.html"].content-visible .subpage-inner {
   opacity: 1;
+}
+/* Fast hide for reverse transition */
+[data-page="productionmap.html"].content-hiding .subpage-inner {
+  opacity: 0;
+  transition: opacity 0.15s ease;
 }
 
 /* Widen text columns on ProductionMap — no central subject to avoid */

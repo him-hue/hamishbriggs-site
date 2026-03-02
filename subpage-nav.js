@@ -51,8 +51,19 @@
     blackout.classList.add("fade-from-black");
   }
 
+  /* Pages that have a reverse transition video */
+  var REVERSE_TRANSITION_PAGES = ["productionmap.html"];
+  var hasReverseTransition = REVERSE_TRANSITION_PAGES.indexOf(currentPage) !== -1;
+
   /* Navigate with fade-to-black effect */
   function navigateTo(url) {
+    /* If this page has a reverse transition and we're going back to
+       the product menu, play the reverse video instead of fading to black */
+    if (hasReverseTransition && url.indexOf("index.html") !== -1 &&
+        typeof window.__reverseTransition === "function") {
+      window.__reverseTransition(url);
+      return;
+    }
     if (blackout) {
       blackout.classList.remove("fade-from-black");
       blackout.classList.remove("ready");
@@ -121,11 +132,9 @@
     if (now - lastNav < NAV_COOLDOWN) return;
     lastNav = now;
 
-    if (currentIndex <= 0) {
-      navigateTo("index.html#products");
-    } else {
-      navigateTo(PAGES[currentIndex - 1]);
-    }
+    /* Don't swipe from first product page back to product menu */
+    if (currentIndex <= 0) return;
+    navigateTo(PAGES[currentIndex - 1]);
   }
 
   function goNext() {
@@ -133,11 +142,9 @@
     if (now - lastNav < NAV_COOLDOWN) return;
     lastNav = now;
 
-    if (currentIndex >= PAGES.length - 1) {
-      navigateTo("index.html#products");
-    } else {
-      navigateTo(PAGES[currentIndex + 1]);
-    }
+    /* Don't swipe from last product page back to product menu */
+    if (currentIndex >= PAGES.length - 1) return;
+    navigateTo(PAGES[currentIndex + 1]);
   }
 
   function atTop() {
