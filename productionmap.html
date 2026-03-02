@@ -36,6 +36,7 @@
            muted playsinline preload="auto"
            disablepictureinpicture></video>
     <img id="transition-still" src="images/pm-bg.jpg" alt="" />
+    <div class="transition-bg-edge"></div>
     <div class="transition-bg-overlay"></div>
     <div class="transition-bg-vignette"></div>
   </div>
@@ -107,6 +108,34 @@
     var vid   = document.getElementById("transition-video");
     var still = document.getElementById("transition-still");
     if (!vid || !still) return;
+
+    /* ── Scale-down counteraction ──
+       The source clip pushes in during the last ~30 frames (1.25s).
+       We counteract this by smoothly scaling the video element DOWN
+       during that window so the net motion still feels like a pull-back. */
+    var PULLBACK_WINDOW = 1.25;   /* seconds before end to start scaling */
+    var SCALE_START     = 1.20;   /* matches the CSS default scale */
+    var SCALE_END       = 1.02;   /* slightly above 1 so vignette still covers */
+    var pullbackActive  = false;
+
+    function animatePullback() {
+      if (vid.paused || vid.ended) return;
+      var remaining = vid.duration - vid.currentTime;
+      if (remaining <= PULLBACK_WINDOW) {
+        var progress = 1 - (remaining / PULLBACK_WINDOW);       /* 0 → 1 */
+        var eased    = progress * progress;                       /* ease-in */
+        var s        = SCALE_START - (SCALE_START - SCALE_END) * eased;
+        vid.style.transform = "scale(" + s.toFixed(4) + ")";
+      }
+      requestAnimationFrame(animatePullback);
+    }
+
+    vid.addEventListener("timeupdate", function () {
+      if (!pullbackActive && vid.duration - vid.currentTime < PULLBACK_WINDOW + 0.3) {
+        pullbackActive = true;
+        requestAnimationFrame(animatePullback);
+      }
+    });
 
     /* When the transition video ends, show the static frame and hide the video */
     vid.addEventListener("ended", function () {

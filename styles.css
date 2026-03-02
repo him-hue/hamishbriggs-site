@@ -1186,10 +1186,26 @@ button { font: inherit; color: inherit; border: none; background: none; cursor: 
   width: 100%;
   height: 100%;
   object-fit: cover;
+  transform: scale(1.2);
+  transform-origin: center center;
 }
 
 .transition-bg img {
   display: none;          /* hidden until video ends */
+}
+
+/* Always-visible hard vignette to completely hide video edges */
+.transition-bg-edge {
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(
+    ellipse at 50% 50%,
+    rgba(0,0,0,0) 25%,
+    rgba(0,0,0,0.6) 45%,
+    rgba(0,0,0,1) 62%
+  );
+  pointer-events: none;
+  z-index: 1;
 }
 
 .transition-bg-overlay {
@@ -1199,6 +1215,7 @@ button { font: inherit; color: inherit; border: none; background: none; cursor: 
   opacity: 0;
   animation: overlayFadeIn 3.1s ease-in forwards;
   pointer-events: none;
+  z-index: 2;
 }
 
 .transition-bg-vignette {
@@ -1207,13 +1224,14 @@ button { font: inherit; color: inherit; border: none; background: none; cursor: 
   background: radial-gradient(
     ellipse at 50% 45%,
     rgba(0,0,0,0) 10%,
-    rgba(0,0,0,0.5) 40%,
-    rgba(0,0,0,0.85) 70%,
-    rgba(0,0,0,1) 100%
+    rgba(0,0,0,0.5) 35%,
+    rgba(0,0,0,0.85) 55%,
+    rgba(0,0,0,1) 72%
   );
   opacity: 0;
   animation: overlayFadeIn 3.1s ease-in forwards;
   pointer-events: none;
+  z-index: 3;
 }
 
 @keyframes overlayFadeIn {
