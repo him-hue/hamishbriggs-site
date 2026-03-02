@@ -80,15 +80,13 @@
       <div class="subpage-cols">
         <div class="subpage-col-primary">
           <div class="subpage-body">
-            <p>World Tree is being built in collaboration with working creators. Design Partners get early access to each tool as it enters beta, starting with StoryMap.</p>
-            <p><strong>What we're looking for:</strong> Storytellers actively working on a project. Writers, filmmakers, game designers, comic creators. People who know what's broken about their current workflow.</p>
-            <p><strong>What you get:</strong> Beta access to each tool before public release. A direct line to shape the direction of development. Monthly check-ins where your feedback directly informs what gets built next.</p>
-            <p><strong>What we ask:</strong> Use the tools on a real project. Share feedback and bug reports as you go. Join a brief monthly video check-in. That's it.</p>
+            <p>World Tree is being built with the people who'll use it. Design Partners get early access to each tool as it enters beta, starting with StoryMap.</p>
+            <p><strong>What you get:</strong> Beta access before public release, and a direct line to shape what gets built. Your feedback goes straight into development.</p>
+            <p><strong>What we ask:</strong> Try the tools. Share what works and what doesn't. That's it.</p>
           </div>
         </div>
         <div class="subpage-col-secondary">
-          <p class="secondary-text">These tools are being built for creators, by a creator. The Design Partner program exists to make sure that's not just a tagline.</p>
-          <p class="secondary-text" style="margin-top: 0.5rem;">30 partners. Limited intake.</p>
+          <p class="secondary-text">Whether you're a novelist, a filmmaker, a hobbyist worldbuilder, or someone with a story they've never quite known how to organize — if these tools sound useful to you, we'd love to have you involved.</p>
         </div>
       </div>
 
@@ -98,7 +96,7 @@
         <form class="dp-form" id="dp-form">
           <div class="dp-field">
             <label class="dp-label" for="dp-name">Name</label>
-            <input class="dp-input" type="text" id="dp-name" name="name" required placeholder="Your full name" />
+            <input class="dp-input" type="text" id="dp-name" name="name" required placeholder="Your name" />
           </div>
 
           <div class="dp-field">
@@ -107,42 +105,13 @@
           </div>
 
           <div class="dp-field">
-            <label class="dp-label" for="dp-role">What do you do?</label>
-            <select class="dp-select" id="dp-role" name="role" required>
-              <option value="" disabled selected>Select your primary role</option>
-              <option value="writer">Writer / Author</option>
-              <option value="screenwriter">Screenwriter</option>
-              <option value="filmmaker">Filmmaker / Director</option>
-              <option value="producer">Producer</option>
-              <option value="game-designer">Game Designer</option>
-              <option value="comic-creator">Comic Book Creator</option>
-              <option value="musician">Musician / Composer</option>
-              <option value="marketer">Marketing Professional</option>
-              <option value="educator">Educator</option>
-              <option value="other">Other Creative Professional</option>
-            </select>
-          </div>
-
-          <div class="dp-field">
-            <label class="dp-label" for="dp-project">Tell us about your project</label>
-            <textarea class="dp-textarea" id="dp-project" name="project" required placeholder="What are you working on right now? What's the hardest part of keeping it organized as it grows?"></textarea>
-          </div>
-
-          <div class="dp-field">
-            <label class="dp-label" for="dp-source">How did you hear about this?</label>
-            <select class="dp-select" id="dp-source" name="source">
-              <option value="" disabled selected>Select one</option>
-              <option value="social">Social media</option>
-              <option value="friend">Friend or colleague</option>
-              <option value="search">Search engine</option>
-              <option value="event">Event or conference</option>
-              <option value="other">Other</option>
-            </select>
+            <label class="dp-label" for="dp-about">Tell us a bit about yourself</label>
+            <textarea class="dp-textarea" id="dp-about" name="about" required placeholder="What do you make? What are you working on? What draws you to these tools?"></textarea>
           </div>
 
           <div class="dp-field">
             <label class="dp-label">Which products interest you?</label>
-            <p class="dp-field-hint">Select all that you think you might use.</p>
+            <p class="dp-field-hint">Select any that catch your eye.</p>
             <div class="dp-checkbox-group">
               <label class="dp-checkbox"><input type="checkbox" name="interest" value="Index" /><span>Index</span></label>
               <label class="dp-checkbox"><input type="checkbox" name="interest" value="StoryMap" /><span>StoryMap</span></label>
@@ -153,31 +122,18 @@
             </div>
           </div>
 
-          <div class="dp-field">
-            <label class="dp-label">Do you understand what each product does?</label>
-            <p class="dp-field-hint">Check the ones you feel you understand.</p>
-            <div class="dp-checkbox-group">
-              <label class="dp-checkbox"><input type="checkbox" name="understand" value="Index" /><span>Index</span></label>
-              <label class="dp-checkbox"><input type="checkbox" name="understand" value="StoryMap" /><span>StoryMap</span></label>
-              <label class="dp-checkbox"><input type="checkbox" name="understand" value="ProductionMap" /><span>ProductionMap</span></label>
-              <label class="dp-checkbox"><input type="checkbox" name="understand" value="MarketingMap" /><span>MarketingMap</span></label>
-              <label class="dp-checkbox"><input type="checkbox" name="understand" value="DomainDataMine" /><span>DomainDataMine</span></label>
-              <label class="dp-checkbox"><input type="checkbox" name="understand" value="Yggdrasil" /><span>Yggdrasil</span></label>
-            </div>
-          </div>
-
-          <button type="submit" class="dp-submit">Submit Request</button>
+          <button type="submit" class="dp-submit">Sign Up</button>
         </form>
 
         <div class="dp-success" id="dp-success" style="display: none;">
           <p class="dp-success-title">Thank you.</p>
-          <p class="dp-success-text">Your request has been received. We'll be in touch soon.</p>
+          <p class="dp-success-text">We'll be in touch soon.</p>
         </div>
       </div>
 
       <hr class="subpage-divider" />
       <div class="dp-form-section">
-        <p class="dp-form-intro" style="margin-bottom: 0;">Already a Design Partner and want to opt out? Email <a href="mailto:contact@hamishbriggs.com" style="color: rgba(255,255,255,0.70); text-decoration: underline;">contact@hamishbriggs.com</a> with the subject line "Design Partner Opt-Out" and we'll remove you from the program.</p>
+        <p class="dp-form-intro" style="margin-bottom: 0;">Want to opt out? Email <a href="mailto:contact@hamishbriggs.com" style="color: rgba(255,255,255,0.70); text-decoration: underline;">contact@hamishbriggs.com</a>.</p>
       </div>
     </div>
   </main>
@@ -219,20 +175,14 @@
         /* Mailto fallback until Formspree is configured */
         var name = form.elements.name.value.trim();
         var email = form.elements.email.value.trim();
-        var role = form.elements.role.value;
-        var project = form.elements.project.value.trim();
-        var source = form.elements.source.value;
+        var about = form.elements.about.value.trim();
         var interests = Array.from(form.querySelectorAll('input[name="interest"]:checked')).map(function(c){return c.value;}).join(", ") || "None selected";
-        var understands = Array.from(form.querySelectorAll('input[name="understand"]:checked')).map(function(c){return c.value;}).join(", ") || "None selected";
         var subject = encodeURIComponent("Design Partner Request: " + name);
         var body = encodeURIComponent(
           "Name: " + name + "\n" +
           "Email: " + email + "\n" +
-          "Role: " + role + "\n" +
-          "Project: " + project + "\n" +
-          "Source: " + source + "\n" +
-          "Products of interest: " + interests + "\n" +
-          "Products understood: " + understands
+          "About: " + about + "\n" +
+          "Products of interest: " + interests
         );
         window.location.href = "mailto:contact@hamishbriggs.com?subject=" + subject + "&body=" + body;
         form.style.display = "none";
