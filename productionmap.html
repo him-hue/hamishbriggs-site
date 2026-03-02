@@ -116,7 +116,7 @@
     if (!vid || !vidRev || !still || !wrap) return;
 
     /* ── Forward transition constants ── */
-    var DRIFT_TIME     = 1.6;
+    var DRIFT_TIME     = 1.2;
     var DRIFT_RATE     = 0.35;
     var EASE_DURATION  = 0.8;
     var drifting        = false;
@@ -156,37 +156,32 @@
     }, { once: true });
 
     /* ── Reverse transition ──
-       1. Fade out text quickly
-       2. Fade out overlay/vignette (reveal blueprint bg)
-       3. Swap to reverse video and play it
-       4. Navigate when it ends */
+       Everything happens simultaneously: text hides, overlay fades out
+       over ~1.2s (matching when the actor reappears in the reverse video),
+       and the reverse video plays underneath. Navigate when video ends. */
     window.__reverseTransition = function (destinationUrl) {
-      /* Step 1: hide text */
+      /* Hide text immediately */
       document.body.classList.remove("content-visible");
       document.body.classList.add("content-hiding");
 
-      /* Step 2: fade out overlay + vignette */
+      /* Fade out overlay + vignette slowly (CSS duration matches actor reappearance) */
       wrap.classList.remove("drifting");
       wrap.classList.add("undrifting");
 
-      /* Step 3: after overlay fades, swap to reverse video and play */
-      setTimeout(function () {
-        /* Hide forward video / still, show reverse video */
-        vid.style.display   = "none";
-        vid.pause();
-        still.style.display = "none";
-        vidRev.style.display = "block";
-        vidRev.currentTime = 0;
-        vidRev.playbackRate = 1;
-        vidRev.play().catch(function () {});
+      /* Swap to reverse video and play immediately alongside the overlay fade */
+      vid.style.display   = "none";
+      vid.pause();
+      still.style.display = "none";
+      vidRev.style.display = "block";
+      vidRev.currentTime = 0;
+      vidRev.playbackRate = 1;
+      vidRev.play().catch(function () {});
 
-        /* Step 4: navigate when reverse video ends */
-        vidRev.addEventListener("ended", function () {
-          /* Tell the landing page to skip the blackout overlay */
-          try { sessionStorage.setItem("skipBlackout", "1"); } catch(e) {}
-          window.location.href = destinationUrl;
-        }, { once: true });
-      }, 500);
+      /* Navigate when reverse video ends */
+      vidRev.addEventListener("ended", function () {
+        try { sessionStorage.setItem("skipBlackout", "1"); } catch(e) {}
+        window.location.href = destinationUrl;
+      }, { once: true });
     };
 
     vid.play().catch(function () {

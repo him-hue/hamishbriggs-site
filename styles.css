@@ -1235,10 +1235,11 @@ button { font: inherit; color: inherit; border: none; background: none; cursor: 
   100% { opacity: 1; }
 }
 
-/* Reverse: fade overlay/vignette back out before reverse video plays */
+/* Reverse: fade overlay/vignette out in sync with reverse video —
+   fully clear by the time the actor reappears (~1.2s in) */
 .transition-bg.undrifting .transition-bg-overlay,
 .transition-bg.undrifting .transition-bg-vignette {
-  animation: overlayFadeOut 0.45s ease-out forwards;
+  animation: overlayFadeOut 1.2s ease-in forwards;
 }
 @keyframes overlayFadeOut {
   0%   { opacity: 1; }
