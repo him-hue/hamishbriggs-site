@@ -325,7 +325,13 @@
       dots[0].classList.remove("active");
       dots[target].classList.add("active");
       currentSection = target;
-      scrubToSection(target);
+      /* If arriving from a reverse transition, set bg video time instantly
+         (no animated scrub) so the background matches without a visible sweep */
+      if (skipBlackout && !isMobile && bgVideo) {
+        bgVideo.currentTime = sectionToTime(target);
+      } else {
+        scrubToSection(target);
+      }
     }
   }
 
