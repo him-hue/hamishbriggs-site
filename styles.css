@@ -61,6 +61,16 @@ button { font: inherit; color: inherit; border: none; background: none; cursor: 
   to { opacity: 0; }
 }
 
+/* Transition-page exit: fade out foreground content, keep background visible */
+.content-fade-out .header,
+.content-fade-out .sections-viewport,
+.content-fade-out .dot-nav,
+.content-fade-out .product-nav,
+.content-fade-out .subpage {
+  transition: opacity 0.55s ease;
+  opacity: 0;
+}
+
 /* ── Background layer ────────────────────────────── */
 .bg-layer {
   position: fixed;
@@ -752,9 +762,10 @@ button { font: inherit; color: inherit; border: none; background: none; cursor: 
 .subpage-bullets {
   list-style: none;
   padding: 0;
+  margin-top: 1.25rem;
   display: flex;
   flex-direction: column;
-  gap: 0.5rem;
+  gap: 1.1rem;
 }
 .subpage-bullets li {
   padding-left: 1rem;
@@ -800,7 +811,7 @@ button { font: inherit; color: inherit; border: none; background: none; cursor: 
 }
 
 .subpage-col-secondary .secondary-text {
-  margin-bottom: 0.75rem;
+  margin-bottom: 1.2rem;
 }
 
 .subpage-actions {

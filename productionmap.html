@@ -115,20 +115,34 @@
        and reveal the page text. */
     var DRIFT_TIME     = 1.6;    /* seconds: when actor vanishes */
     var DRIFT_RATE     = 0.35;   /* target playbackRate for the drift phase */
+    var EASE_DURATION  = 0.8;    /* seconds to ease the rate down (wall-clock) */
     var drifting        = false;
+    var easeStart       = null;
 
     function startDrift() {
       if (drifting) return;
       drifting = true;
-
-      /* Slow the video to a gentle drift */
-      vid.playbackRate = DRIFT_RATE;
+      easeStart = performance.now();
 
       /* Trigger overlay + vignette fade-in (CSS animation via class) */
       wrap.classList.add("drifting");
 
       /* Reveal the page text */
       document.body.classList.add("content-visible");
+
+      /* Gradually ease the playback rate from 1.0 → DRIFT_RATE */
+      easeRate();
+    }
+
+    function easeRate() {
+      var elapsed = (performance.now() - easeStart) / 1000;
+      var t = Math.min(elapsed / EASE_DURATION, 1);
+      /* Smooth ease-out curve */
+      var eased = 1 - Math.pow(1 - t, 3);
+      vid.playbackRate = 1.0 - (1.0 - DRIFT_RATE) * eased;
+      if (t < 1) {
+        requestAnimationFrame(easeRate);
+      }
     }
 
     /* Use rAF for precise timing (timeupdate is too coarse) */
@@ -137,7 +151,7 @@
       if (vid.currentTime >= DRIFT_TIME) {
         startDrift();
       }
-      requestAnimationFrame(checkTime);
+      if (!drifting) requestAnimationFrame(checkTime);
     }
 
     /* When the transition video ends, show the static frame */

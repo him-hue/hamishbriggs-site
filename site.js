@@ -245,9 +245,12 @@
   const TRANSITION_PAGES = ["productionmap.html"];
 
   function fadeNavigate(url) {
-    /* If the target has a transition video, navigate instantly (crossfade via video) */
+    /* If the target has a transition video, fade only the foreground content
+       (text, UI) while keeping the background video/image visible — the
+       destination page's first video frame matches this background exactly. */
     if (TRANSITION_PAGES.some((p) => url.indexOf(p) !== -1)) {
-      window.location.href = url;
+      document.body.classList.add("content-fade-out");
+      setTimeout(() => { window.location.href = url; }, 600);
       return;
     }
     if (blackout) {
