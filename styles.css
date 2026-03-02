@@ -379,6 +379,12 @@ button { font: inherit; color: inherit; border: none; background: none; cursor: 
   color: rgba(255,255,255,0.55);
 }
 
+.secondary-note {
+  margin-top: 0.75rem;
+  font-style: italic;
+  color: rgba(255,255,255,0.45);
+}
+
 @media (max-width: 768px) {
   .two-col {
     flex-direction: column;
@@ -688,7 +694,7 @@ button { font: inherit; color: inherit; border: none; background: none; cursor: 
 }
 @media (min-width: 768px) { .subpage-title { font-size: 3.2rem; } }
 
-/* Inline constellation icon next to title (subscript-style) */
+/* Inline icon next to title (subscript-style) */
 .title-icon {
   display: inline-block;
   width: 0.35em;
@@ -1121,59 +1127,6 @@ button { font: inherit; color: inherit; border: none; background: none; cursor: 
   filter: none;
 }
 
-/* ── StoryMap constellation video ─────────────── */
-.sm-video-wrap {
-  position: fixed;
-  inset: 0;
-  z-index: 2;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  pointer-events: none;
-}
-
-.sm-video-stack {
-  display: grid;
-  width: 65vw;
-  max-width: 820px;
-}
-.sm-video-stack > video {
-  grid-area: 1 / 1;
-}
-
-.sm-video {
-  width: 100%;
-  height: auto;
-  object-fit: contain;
-  opacity: 0.7;
-}
-
-.sm-video-loop {
-  opacity: 0;
-  transition: opacity 0.8s ease;
-}
-.sm-video-loop.active {
-  opacity: 0.7;
-}
-
-.sm-video-vignette {
-  position: absolute;
-  inset: 0;
-  background:
-    radial-gradient(ellipse at 50% 50%, rgba(0,0,0,0) 12%, rgba(0,0,0,0.7) 25%, rgba(0,0,0,1) 38%);
-  pointer-events: none;
-}
-
-/* Hide the hero background on StoryMap — constellation video replaces it */
-[data-page="storymap.html"] .bg-static,
-[data-page="storymap.html"] .bg-darken,
-[data-page="storymap.html"] .bg-vignette,
-[data-page="index-app.html"] .bg-static,
-[data-page="index-app.html"] .bg-darken,
-[data-page="index-app.html"] .bg-vignette {
-  display: none;
-}
-
 /* ── Product-page transition video background ───── */
 .transition-bg {
   position: fixed;
@@ -1322,18 +1275,6 @@ button { font: inherit; color: inherit; border: none; background: none; cursor: 
   display: none;
 }
 
-@media (max-width: 768px) {
-  .sm-video-stack {
-    width: 80vw;
-  }
-  .sm-video {
-    opacity: 0.4;
-  }
-  .sm-video-loop.active {
-    opacity: 0.4;
-  }
-}
-
 /* ── Subpage scrollbar ──────────────────────────── */
 .subpage::-webkit-scrollbar { width: 4px; }
 .subpage::-webkit-scrollbar-track { background: transparent; }
@@ -1357,5 +1298,67 @@ button { font: inherit; color: inherit; border: none; background: none; cursor: 
       linear-gradient(to bottom, rgba(0,0,0,0.7) 0%, transparent 22%),
       linear-gradient(to left, rgba(0,0,0,0.7) 0%, transparent 18%),
       linear-gradient(to right, rgba(0,0,0,0.7) 0%, transparent 18%);
+  }
+}
+
+/* ── Mobile product-page fixes ───────────────────── */
+@media (max-width: 768px) {
+  /* Touch targets: ensure minimum 44px tap area */
+  .dot {
+    width: 12px;
+    height: 12px;
+    padding: 16px;
+    margin: -16px;
+    box-sizing: content-box;
+  }
+  .product-nav-dot {
+    width: 44px;
+    height: 44px;
+    transform: scale(1);   /* override desktop scale(0.7) */
+  }
+  .product-nav-icon {
+    opacity: 0.5;
+  }
+  .product-nav-dot.active .product-nav-icon {
+    opacity: 1;
+  }
+
+  /* Reset wider columns — on mobile they stack vertically */
+  [data-page="index-app.html"] .subpage-col-primary,
+  [data-page="storymap.html"] .subpage-col-primary,
+  [data-page="productionmap.html"] .subpage-col-primary,
+  [data-page="marketingmap.html"] .subpage-col-primary,
+  [data-page="domaindatamine.html"] .subpage-col-primary,
+  [data-page="yggdrasil.html"] .subpage-col-primary,
+  [data-page="index-app.html"] .subpage-col-secondary,
+  [data-page="storymap.html"] .subpage-col-secondary,
+  [data-page="productionmap.html"] .subpage-col-secondary,
+  [data-page="marketingmap.html"] .subpage-col-secondary,
+  [data-page="domaindatamine.html"] .subpage-col-secondary,
+  [data-page="yggdrasil.html"] .subpage-col-secondary {
+    flex: 1 1 auto;
+    max-width: 100%;
+  }
+
+  /* Product nav: compact on mobile */
+  .product-nav {
+    gap: 0.25rem;
+    padding: 0.5rem 1rem;
+  }
+
+  /* Subpage bottom padding so content isn't hidden behind product-nav */
+  .subpage-inner {
+    padding-bottom: 6rem;
+  }
+
+  /* Secondary text: left-align on mobile */
+  .subpage-col-secondary {
+    text-align: left;
+  }
+
+  /* Gateway button (StoryMap "Open StoryMap"): reposition for mobile */
+  .subpage-gateway {
+    bottom: 4.5rem;
+    right: 1rem;
   }
 }

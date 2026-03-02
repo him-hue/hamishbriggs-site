@@ -1,6 +1,7 @@
 /* ═══════════════════════════════════════════════════
    Portrait → Blueprint transition controller
    Shared across all product subpages.
+   On mobile: skip videos entirely, show still + reveal text immediately.
    ═══════════════════════════════════════════════════ */
 
 (function () {
@@ -8,9 +9,44 @@
   var vidRev = document.getElementById("transition-video-rev");
   var still  = document.getElementById("transition-still");
   var wrap   = document.getElementById("transition-bg");
-  if (!vid || !vidRev || !still || !wrap) return;
 
-  /* ── Forward transition constants ── */
+  /* Always define the reverse transition function so subpage-nav.js
+     can find it, even if video elements are missing (fallback: just navigate) */
+  if (!vid || !vidRev || !still || !wrap) {
+    window.__reverseTransition = function (url) { window.location.href = url; };
+    return;
+  }
+
+  var isMobile = window.matchMedia("(max-width: 768px)").matches;
+
+  /* ── Mobile: skip videos, show still frame + text immediately ── */
+  if (isMobile) {
+    /* Prevent video downloads by clearing sources */
+    vid.removeAttribute("src");
+    vid.load();
+    vidRev.removeAttribute("src");
+    vidRev.load();
+    vid.style.display    = "none";
+    vidRev.style.display = "none";
+    still.style.display  = "block";
+    wrap.classList.add("drifting");
+    document.body.classList.add("content-visible");
+
+    /* On mobile, reverse transition is a simple fade-to-black */
+    window.__reverseTransition = function (destinationUrl) {
+      var bo = document.getElementById("page-blackout");
+      if (bo) {
+        bo.style.transition = "opacity 0.3s ease";
+        bo.style.opacity = "1";
+      }
+      setTimeout(function () {
+        window.location.href = destinationUrl;
+      }, 350);
+    };
+    return;
+  }
+
+  /* ── Desktop: full video transition ── */
   var DRIFT_TIME     = 1.2;
   var DRIFT_RATE     = 0.35;
   var EASE_DURATION  = 0.8;
@@ -76,7 +112,7 @@
 
     /* Near the end of the reverse video, dip to black to mask the page swap */
     var dipTriggered = false;
-    var DIP_LEAD = 0.2; /* seconds before end to start the dip */
+    var DIP_LEAD = 0.2;
     function checkForDip() {
       if (vidRev.paused || vidRev.ended) return;
       if (!dipTriggered && vidRev.duration - vidRev.currentTime <= DIP_LEAD) {
