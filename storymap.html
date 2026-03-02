@@ -31,10 +31,16 @@
 
   <!-- StoryMap constellation video -->
   <div class="sm-video-wrap">
-    <video class="sm-video" id="sm-video"
-           src="images/sm-intro.mp4"
-           muted playsinline preload="auto"
-           disablepictureinpicture></video>
+    <div class="sm-video-stack">
+      <video class="sm-video" id="sm-video"
+             src="images/sm-intro.mp4"
+             muted playsinline preload="auto"
+             disablepictureinpicture></video>
+      <video class="sm-video sm-video-loop" id="sm-video-loop"
+             src="images/sm-loop.mp4"
+             muted playsinline preload="auto" loop
+             disablepictureinpicture></video>
+    </div>
     <div class="sm-video-vignette"></div>
   </div>
 
@@ -108,21 +114,40 @@
 
   <script>
   (function () {
-    var vid = document.getElementById("sm-video");
-    if (!vid) return;
+    var intro = document.getElementById("sm-video");
+    var loop  = document.getElementById("sm-video-loop");
+    if (!intro || !loop) return;
 
-    function switchToLoop() {
-      vid.src = "images/sm-loop.mp4";
-      vid.loop = true;
-      vid.play().catch(function () {});
+    /* Preload the loop video */
+    loop.load();
+
+    var fading = false;
+    function crossfadeToLoop() {
+      if (fading) return;
+      fading = true;
+      loop.play().catch(function () {});
+      loop.classList.add("active");
+      /* After the CSS transition finishes, hide intro to save resources */
+      setTimeout(function () {
+        intro.pause();
+        intro.style.display = "none";
+      }, 1000);
     }
 
-    vid.addEventListener("ended", switchToLoop, { once: true });
+    /* Start the crossfade 0.8s before intro ends */
+    intro.addEventListener("timeupdate", function () {
+      if (intro.duration - intro.currentTime < 0.8) {
+        crossfadeToLoop();
+      }
+    });
+
+    /* Fallback: if timeupdate misses, crossfade on ended */
+    intro.addEventListener("ended", crossfadeToLoop, { once: true });
 
     /* Try autoplay; if blocked, start on first user interaction */
-    vid.play().catch(function () {
+    intro.play().catch(function () {
       function startOnInteraction() {
-        vid.play().catch(function () {});
+        intro.play().catch(function () {});
         document.removeEventListener("click", startOnInteraction);
         document.removeEventListener("scroll", startOnInteraction);
       }

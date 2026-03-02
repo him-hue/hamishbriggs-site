@@ -29,6 +29,17 @@
   </div>
   <div class="bg-grain" aria-hidden="true"></div>
 
+  <!-- Portrait → Blueprint transition background -->
+  <div class="transition-bg" id="transition-bg">
+    <video id="transition-video"
+           src="images/pm-transition.mp4"
+           muted playsinline preload="auto"
+           disablepictureinpicture></video>
+    <img id="transition-still" src="images/pm-bg.jpg" alt="" />
+    <div class="transition-bg-overlay"></div>
+    <div class="transition-bg-vignette"></div>
+  </div>
+
   <header class="header">
     <div class="header-inner">
       <div class="header-left">
@@ -90,6 +101,31 @@
 
   <div class="page-blackout" id="page-blackout"></div>
   <script src="subpage-nav.js"></script>
+
+  <script>
+  (function () {
+    var vid   = document.getElementById("transition-video");
+    var still = document.getElementById("transition-still");
+    if (!vid || !still) return;
+
+    /* When the transition video ends, show the static frame and hide the video */
+    vid.addEventListener("ended", function () {
+      still.style.display = "block";
+      vid.style.display   = "none";
+    });
+
+    /* Autoplay the transition; fallback to user interaction */
+    vid.play().catch(function () {
+      function startOnInteraction() {
+        vid.play().catch(function () {});
+        document.removeEventListener("click", startOnInteraction);
+        document.removeEventListener("scroll", startOnInteraction);
+      }
+      document.addEventListener("click", startOnInteraction, { once: true });
+      document.addEventListener("scroll", startOnInteraction, { once: true });
+    });
+  })();
+  </script>
 
   <!-- Cloudflare Web Analytics -->
   <!-- To activate: go to Cloudflare dashboard > Web Analytics, add your site, and replace YOUR_CF_TOKEN -->

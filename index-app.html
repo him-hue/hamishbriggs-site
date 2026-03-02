@@ -31,10 +31,16 @@
 
   <!-- Index constellation video -->
   <div class="sm-video-wrap">
-    <video class="sm-video" id="idx-video"
-           src="images/idx-intro.mp4"
-           muted playsinline preload="auto"
-           disablepictureinpicture></video>
+    <div class="sm-video-stack">
+      <video class="sm-video" id="idx-video"
+             src="images/idx-intro.mp4"
+             muted playsinline preload="auto"
+             disablepictureinpicture></video>
+      <video class="sm-video sm-video-loop" id="idx-video-loop"
+             src="images/idx-loop.mp4"
+             muted playsinline preload="auto" loop
+             disablepictureinpicture></video>
+    </div>
     <div class="sm-video-vignette"></div>
   </div>
 
@@ -102,20 +108,40 @@
 
   <script>
   (function () {
-    var vid = document.getElementById("idx-video");
-    if (!vid) return;
+    var intro = document.getElementById("idx-video");
+    var loop  = document.getElementById("idx-video-loop");
+    if (!intro || !loop) return;
 
-    function switchToLoop() {
-      vid.src = "images/idx-loop.mp4";
-      vid.loop = true;
-      vid.play().catch(function () {});
+    /* Preload the loop video */
+    loop.load();
+
+    var fading = false;
+    function crossfadeToLoop() {
+      if (fading) return;
+      fading = true;
+      loop.play().catch(function () {});
+      loop.classList.add("active");
+      /* After the CSS transition finishes, hide intro to save resources */
+      setTimeout(function () {
+        intro.pause();
+        intro.style.display = "none";
+      }, 1000);
     }
 
-    vid.addEventListener("ended", switchToLoop, { once: true });
+    /* Start the crossfade 0.8s before intro ends */
+    intro.addEventListener("timeupdate", function () {
+      if (intro.duration - intro.currentTime < 0.8) {
+        crossfadeToLoop();
+      }
+    });
 
-    vid.play().catch(function () {
+    /* Fallback: if timeupdate misses, crossfade on ended */
+    intro.addEventListener("ended", crossfadeToLoop, { once: true });
+
+    /* Try autoplay; if blocked, start on first user interaction */
+    intro.play().catch(function () {
       function startOnInteraction() {
-        vid.play().catch(function () {});
+        intro.play().catch(function () {});
         document.removeEventListener("click", startOnInteraction);
         document.removeEventListener("scroll", startOnInteraction);
       }
