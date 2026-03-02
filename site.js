@@ -268,7 +268,15 @@
   try { skipBlackout = sessionStorage.getItem("skipBlackout") === "1"; sessionStorage.removeItem("skipBlackout"); } catch(e) {}
   if (blackout) {
     if (skipBlackout) {
-      blackout.style.opacity = "0";
+      /* Arriving from reverse transition — quick fade from black to
+         mask the page swap, then clear completely */
+      blackout.style.opacity = "1";
+      blackout.style.transition = "opacity 0.2s ease";
+      requestAnimationFrame(() => {
+        requestAnimationFrame(() => {
+          blackout.style.opacity = "0";
+        });
+      });
     } else {
       blackout.classList.add("fade-from-black-slow");
     }

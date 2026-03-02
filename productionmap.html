@@ -160,6 +160,8 @@
        over ~1.2s (matching when the actor reappears in the reverse video),
        and the reverse video plays underneath. Navigate when video ends. */
     window.__reverseTransition = function (destinationUrl) {
+      var bo = document.getElementById("page-blackout");
+
       /* Hide text immediately */
       document.body.classList.remove("content-visible");
       document.body.classList.add("content-hiding");
@@ -176,6 +178,23 @@
       vidRev.currentTime = 0;
       vidRev.playbackRate = 1;
       vidRev.play().catch(function () {});
+
+      /* Near the end of the reverse video, dip to black to mask the page swap */
+      var dipTriggered = false;
+      var DIP_LEAD = 0.2; /* seconds before end to start the dip */
+      function checkForDip() {
+        if (vidRev.paused || vidRev.ended) return;
+        if (!dipTriggered && vidRev.duration - vidRev.currentTime <= DIP_LEAD) {
+          dipTriggered = true;
+          if (bo) {
+            bo.classList.remove("fade-from-black");
+            bo.style.transition = "opacity 0.18s ease";
+            bo.style.opacity = "1";
+          }
+        }
+        requestAnimationFrame(checkForDip);
+      }
+      requestAnimationFrame(checkForDip);
 
       /* Navigate when reverse video ends */
       vidRev.addEventListener("ended", function () {

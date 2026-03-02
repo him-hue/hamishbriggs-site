@@ -1182,11 +1182,11 @@ button { font: inherit; color: inherit; border: none; background: none; cursor: 
   overflow: hidden;
 }
 
-/* On pages with a transition video, clear the blackout instantly —
-   the video's first frame matches the previous page, no black needed */
+/* On pages with a transition video, clear the blackout on arrival.
+   Uses animation (not !important) so JS can still set opacity for
+   the reverse-transition black dip at the end. */
 [data-page="productionmap.html"] .page-blackout {
-  opacity: 0 !important;
-  animation: none !important;
+  animation: blackoutOut 0s forwards;
 }
 
 .transition-bg video,
