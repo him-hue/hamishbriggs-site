@@ -29,7 +29,11 @@
     vid.load();
     vid.style.display    = "none";
     still.style.display  = "block";
-    wrap.classList.add("drifting");
+    /* Jump overlay + vignette to final darkened state instantly (no animation) */
+    var ov = wrap.querySelector(".transition-bg-overlay");
+    var vg = wrap.querySelector(".transition-bg-vignette");
+    if (ov) ov.style.opacity = "1";
+    if (vg) vg.style.opacity = "1";
     document.body.classList.add("content-visible");
     /* Reverse transition still works normally from the skipped state */
     window.__reverseTransition = function (destinationUrl) {
@@ -73,7 +77,11 @@
     vid.style.display    = "none";
     vidRev.style.display = "none";
     still.style.display  = "block";
-    wrap.classList.add("drifting");
+    /* Jump overlay + vignette to final darkened state instantly */
+    var ov = wrap.querySelector(".transition-bg-overlay");
+    var vg = wrap.querySelector(".transition-bg-vignette");
+    if (ov) ov.style.opacity = "1";
+    if (vg) vg.style.opacity = "1";
     document.body.classList.add("content-visible");
 
     /* On mobile, reverse transition is a simple fade-to-black */
