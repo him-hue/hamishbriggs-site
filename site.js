@@ -195,7 +195,7 @@
   };
 
   const statusMap = {
-    "Index": "Under development",
+    "Index": "Closed beta",
     "StoryMap": "Closed beta",
     "ProductionMap": "Planned",
     "MarketingMap": "Planned",
@@ -205,11 +205,11 @@
 
   function buildDetail(btn) {
     const name = btn.textContent;
-    const status = statusMap[name] || (btn.dataset.status === "dev" ? "Under development" : "Planned");
+    const status = statusMap[name] || (btn.dataset.status === "dev" ? "Under development" : btn.dataset.status === "beta" ? "Closed beta" : "Planned");
     const tag = catchphrases[name] || "";
-    const isStoryMap = name === "StoryMap";
+    const isInBeta = name === "StoryMap" || name === "Index";
 
-    const appLinks = { "StoryMap": "https://storymap.hamishbriggs.com" };
+    const appLinks = { "StoryMap": "https://storymap.hamishbriggs.com", "Index": "https://index.hamishbriggs.com" };
     const appUrl = appLinks[name];
     const visitBtn = appUrl
       ? `<a href="${appUrl}" class="product-visit-btn" onclick="event.stopPropagation()">Visit ${name}</a>`
@@ -218,7 +218,7 @@
     return `
       <div class="detail-active">
         ${tag ? `<div class="detail-tag">${tag}</div>` : ""}
-        <div class="detail-status${isStoryMap ? " gold" : ""}">${status}</div>
+        <div class="detail-status${isInBeta ? " gold" : ""}">${status}</div>
         <div class="detail-name">${name}</div>
         <div class="detail-blurb">${btn.dataset.blurb}</div>
         ${visitBtn}
