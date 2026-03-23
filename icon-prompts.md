@@ -47,7 +47,7 @@ All six icons should feel like they belong to the same family. Hand these constr
 **Key visual elements:** Grid-like node network + abstracted clapperboard/film frame
 
 
-### 4. MarketingMap
+### 4. BrandMap
 
 **Concept:** A neural network with a marketing/audience twist.
 

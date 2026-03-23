@@ -1084,6 +1084,34 @@ button { font: inherit; color: inherit; border: none; background: none; cursor: 
   transform: rotate(45deg);
 }
 
+.dp-checkbox input[type="radio"] {
+  appearance: none;
+  width: 15px;
+  height: 15px;
+  border: 1px solid rgba(255,255,255,0.25);
+  border-radius: 50%;
+  background: rgba(255,255,255,0.05);
+  cursor: pointer;
+  flex-shrink: 0;
+  position: relative;
+}
+
+.dp-checkbox input[type="radio"]:checked {
+  background: var(--gold);
+  border-color: var(--gold);
+}
+
+.dp-checkbox input[type="radio"]:checked::after {
+  content: "";
+  position: absolute;
+  left: 4px;
+  top: 4px;
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: #111;
+}
+
 .dp-submit {
   align-self: flex-start;
   border-radius: 9999px;
@@ -1208,7 +1236,7 @@ button { font: inherit; color: inherit; border: none; background: none; cursor: 
 [data-page="index-app.html"] .page-blackout,
 [data-page="storymap.html"] .page-blackout,
 [data-page="productionmap.html"] .page-blackout,
-[data-page="marketingmap.html"] .page-blackout,
+[data-page="brandmap.html"] .page-blackout,
 [data-page="domaindatamine.html"] .page-blackout,
 [data-page="yggdrasil.html"] .page-blackout {
   animation: blackoutOut 0s forwards;
@@ -1275,7 +1303,7 @@ button { font: inherit; color: inherit; border: none; background: none; cursor: 
 [data-page="index-app.html"] .subpage-inner,
 [data-page="storymap.html"] .subpage-inner,
 [data-page="productionmap.html"] .subpage-inner,
-[data-page="marketingmap.html"] .subpage-inner,
+[data-page="brandmap.html"] .subpage-inner,
 [data-page="domaindatamine.html"] .subpage-inner,
 [data-page="yggdrasil.html"] .subpage-inner {
   opacity: 0;
@@ -1284,7 +1312,7 @@ button { font: inherit; color: inherit; border: none; background: none; cursor: 
 [data-page="index-app.html"].content-visible .subpage-inner,
 [data-page="storymap.html"].content-visible .subpage-inner,
 [data-page="productionmap.html"].content-visible .subpage-inner,
-[data-page="marketingmap.html"].content-visible .subpage-inner,
+[data-page="brandmap.html"].content-visible .subpage-inner,
 [data-page="domaindatamine.html"].content-visible .subpage-inner,
 [data-page="yggdrasil.html"].content-visible .subpage-inner {
   opacity: 1;
@@ -1293,7 +1321,7 @@ button { font: inherit; color: inherit; border: none; background: none; cursor: 
 [data-page="index-app.html"].content-hiding .subpage-inner,
 [data-page="storymap.html"].content-hiding .subpage-inner,
 [data-page="productionmap.html"].content-hiding .subpage-inner,
-[data-page="marketingmap.html"].content-hiding .subpage-inner,
+[data-page="brandmap.html"].content-hiding .subpage-inner,
 [data-page="domaindatamine.html"].content-hiding .subpage-inner,
 [data-page="yggdrasil.html"].content-hiding .subpage-inner {
   opacity: 0;
@@ -1304,7 +1332,7 @@ button { font: inherit; color: inherit; border: none; background: none; cursor: 
 [data-page="index-app.html"] .subpage-col-primary,
 [data-page="storymap.html"] .subpage-col-primary,
 [data-page="productionmap.html"] .subpage-col-primary,
-[data-page="marketingmap.html"] .subpage-col-primary,
+[data-page="brandmap.html"] .subpage-col-primary,
 [data-page="domaindatamine.html"] .subpage-col-primary,
 [data-page="yggdrasil.html"] .subpage-col-primary {
   flex: 0 0 55%;
@@ -1313,7 +1341,7 @@ button { font: inherit; color: inherit; border: none; background: none; cursor: 
 [data-page="index-app.html"] .subpage-col-secondary,
 [data-page="storymap.html"] .subpage-col-secondary,
 [data-page="productionmap.html"] .subpage-col-secondary,
-[data-page="marketingmap.html"] .subpage-col-secondary,
+[data-page="brandmap.html"] .subpage-col-secondary,
 [data-page="domaindatamine.html"] .subpage-col-secondary,
 [data-page="yggdrasil.html"] .subpage-col-secondary {
   flex: 0 0 35%;
@@ -1330,9 +1358,9 @@ button { font: inherit; color: inherit; border: none; background: none; cursor: 
 [data-page="productionmap.html"] .bg-static,
 [data-page="productionmap.html"] .bg-darken,
 [data-page="productionmap.html"] .bg-vignette,
-[data-page="marketingmap.html"] .bg-static,
-[data-page="marketingmap.html"] .bg-darken,
-[data-page="marketingmap.html"] .bg-vignette,
+[data-page="brandmap.html"] .bg-static,
+[data-page="brandmap.html"] .bg-darken,
+[data-page="brandmap.html"] .bg-vignette,
 [data-page="domaindatamine.html"] .bg-static,
 [data-page="domaindatamine.html"] .bg-darken,
 [data-page="domaindatamine.html"] .bg-vignette,
@@ -1399,13 +1427,13 @@ button { font: inherit; color: inherit; border: none; background: none; cursor: 
   [data-page="index-app.html"] .subpage-col-primary,
   [data-page="storymap.html"] .subpage-col-primary,
   [data-page="productionmap.html"] .subpage-col-primary,
-  [data-page="marketingmap.html"] .subpage-col-primary,
+  [data-page="brandmap.html"] .subpage-col-primary,
   [data-page="domaindatamine.html"] .subpage-col-primary,
   [data-page="yggdrasil.html"] .subpage-col-primary,
   [data-page="index-app.html"] .subpage-col-secondary,
   [data-page="storymap.html"] .subpage-col-secondary,
   [data-page="productionmap.html"] .subpage-col-secondary,
-  [data-page="marketingmap.html"] .subpage-col-secondary,
+  [data-page="brandmap.html"] .subpage-col-secondary,
   [data-page="domaindatamine.html"] .subpage-col-secondary,
   [data-page="yggdrasil.html"] .subpage-col-secondary {
     flex: 1 1 auto;

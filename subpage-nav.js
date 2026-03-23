@@ -12,7 +12,7 @@
     "index-app.html",
     "storymap.html",
     "productionmap.html",
-    "marketingmap.html",
+    "brandmap.html",
     "domaindatamine.html",
     "yggdrasil.html"
   ];
@@ -52,7 +52,7 @@
   }
 
   /* Pages that have a reverse transition video */
-  var REVERSE_TRANSITION_PAGES = ["index-app.html", "storymap.html", "productionmap.html", "marketingmap.html", "domaindatamine.html", "yggdrasil.html"];
+  var REVERSE_TRANSITION_PAGES = ["index-app.html", "storymap.html", "productionmap.html", "brandmap.html", "domaindatamine.html", "yggdrasil.html"];
   var hasReverseTransition = REVERSE_TRANSITION_PAGES.indexOf(currentPage) !== -1;
 
   /* Is the destination another product page (not the product menu)? */

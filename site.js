@@ -189,7 +189,7 @@
     "Index": "Foundation",
     "StoryMap": "Structure",
     "ProductionMap": "Momentum",
-    "MarketingMap": "Reach",
+    "BrandMap": "Reach",
     "DomainDataMine": "Insight",
     "Yggdrasil": "World Tree"
   };
@@ -198,7 +198,7 @@
     "Index": "Closed beta",
     "StoryMap": "Closed beta",
     "ProductionMap": "Planned",
-    "MarketingMap": "Planned",
+    "BrandMap": "Planned",
     "DomainDataMine": "Planned",
     "Yggdrasil": "Planned"
   };
@@ -242,7 +242,7 @@
   /* Fade-to-black navigation helper */
   const blackout = document.getElementById("page-blackout");
   /* Pages with transition videos — skip fade-to-black, navigate immediately */
-  const TRANSITION_PAGES = ["index-app.html", "storymap.html", "productionmap.html", "marketingmap.html", "domaindatamine.html", "yggdrasil.html"];
+  const TRANSITION_PAGES = ["index-app.html", "storymap.html", "productionmap.html", "brandmap.html", "domaindatamine.html", "yggdrasil.html"];
 
   function fadeNavigate(url) {
     /* If the target has a transition video, fade only the foreground content
