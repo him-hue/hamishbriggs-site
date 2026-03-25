@@ -1,0 +1,3733 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Vision — Yggdrasil</title>
+<link rel="icon" href="favicon.ico">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+:root {
+  color-scheme: dark;
+  --font-sans: 'Inter', system-ui, -apple-system, sans-serif;
+  --font-serif: 'Cormorant Garamond', 'Georgia', serif;
+  --gold: #C8A24D;
+  --gold-light: #D4B060;
+  --gold-dark: #A67C2E;
+  --ease: cubic-bezier(0.16, 1, 0.3, 1);
+  --duration: 1200ms;
+  --surface: #1A1A1E;
+  --border: #2E2E35;
+  --muted: #8A8880;
+  --body: #E8E6E1;
+}
+html, body {
+  height: 100%; overflow: hidden;
+  font-family: var(--font-sans);
+  background: #000; color: #fff;
+  -webkit-font-smoothing: antialiased;
+}
+::selection { background: rgba(255,255,255,0.14); }
+a { color: inherit; text-decoration: none; }
+button { font: inherit; color: inherit; border: none; background: none; cursor: pointer; }
+
+/* ── Progress bar ── */
+.progress-bar {
+  position: fixed; top: 0; left: 0; height: 2px;
+  background: var(--gold); z-index: 1000;
+  transition: width 0.6s var(--ease);
+}
+
+/* ── Header bar: absolutely positioned labels between divider lines ── */
+.header-bar {
+  position: fixed; top: 0; left: 0; right: 0; height: 48px;
+  z-index: 900;
+  background: rgba(0,0,0,0.4);
+  border-bottom: 1px solid rgba(255,255,255,0.05);
+  opacity: 0; transition: opacity 0.6s;
+}
+.header-bar.visible { opacity: 1; }
+.header-col {
+  position: absolute; top: 0; height: 48px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 11px; letter-spacing: 0.14em; text-transform: uppercase;
+  color: rgba(255,255,255,0.35); font-weight: 400;
+  padding: 0 8px;
+  user-select: none;
+  pointer-events: none;
+}
+.header-col:first-child { padding-left: 0; }
+.header-col.active { color: var(--gold); }
+
+/* ── Footer bar: persistent black bar at bottom for subtitles ── */
+.footer-bar {
+  display: none; /* removed — no longer needed */
+}
+/* Subtext area inside footer */
+.footer-subtext {
+  position: absolute;
+  bottom: 5vh;
+  left: 0; right: 0;
+  text-align: center;
+  font-size: clamp(16px, 1.6vw, 20px);
+  color: rgba(255,255,255,0.55);
+  letter-spacing: 0.01em;
+  line-height: 1.6;
+  pointer-events: none;
+}
+
+/* ── Bottom nav ── */
+.bottom-left {
+  position: fixed; bottom: 28px; left: 36px; z-index: 850;
+}
+.bottom-left .back-link {
+  font-size: 11px; letter-spacing: 0.06em; color: var(--gold);
+  transition: color 0.3s;
+}
+.bottom-left .back-link:hover { color: var(--gold-light); }
+.bottom-right {
+  position: fixed; bottom: 28px; right: 36px;
+  display: flex; align-items: center; gap: 10px; z-index: 850;
+}
+.nav-btn {
+  width: 36px; height: 36px; border-radius: 50%;
+  border: 1px solid var(--gold-dark);
+  background: rgba(0,0,0,0.4); backdrop-filter: blur(6px);
+  display: flex; align-items: center; justify-content: center;
+  transition: all 0.3s; font-size: 14px; color: var(--gold);
+}
+.nav-btn:hover { border-color: var(--gold-light); color: var(--gold-light); }
+.nav-btn:disabled { opacity: 0.15; pointer-events: none; }
+
+/* ── Section container ── */
+.sections-viewport { position: fixed; inset: 0; z-index: 1; }
+.v-section {
+  position: absolute; inset: 0;
+  display: flex; flex-direction: column; align-items: center; justify-content: center;
+  padding: 60px 40px 80px;
+  opacity: 0; pointer-events: none;
+  transition: opacity var(--duration) var(--ease);
+}
+.v-section.active { opacity: 1; pointer-events: auto; }
+/* CRITICAL: force ALL descendants of inactive sections to ignore pointer events.
+   Without this, a child with pointer-events:auto (e.g. cloned .s3-unspool.active
+   inside S4) would still capture events even when the section is inactive,
+   because CSS pointer-events:none on a parent does NOT prevent children with
+   pointer-events:auto from receiving events. */
+.v-section:not(.active) * { pointer-events: none !important; }
+
+/* ════════════════════════════════════════════
+   S1: CAROUSEL + BACKGROUND QUOTES
+   ════════════════════════════════════════════ */
+
+/* Background quote oval frame */
+.bg-quotes {
+  position: absolute; inset: 0; z-index: 0;
+  pointer-events: none; overflow: hidden;
+}
+.bg-q {
+  position: absolute;
+  color: rgba(255,255,255,0.28);
+  font-size: 12px;
+  font-weight: 300;
+  line-height: 1.7;
+  font-family: var(--font-sans);
+  max-width: 28%;
+}
+.bg-q.align-r { text-align: right; }
+.bg-q .attr {
+  display: block; margin-top: 4px;
+  font-style: italic; font-size: 12px;
+  opacity: 1;
+  color: rgba(255,255,255,0.38);
+}
+.bg-q .big {
+  font-size: 22px;
+  font-weight: 600;
+  line-height: 1.2;
+  color: rgba(255,255,255,0.38);
+  letter-spacing: 0.01em;
+}
+.bg-q .med {
+  font-size: 16px;
+  font-weight: 500;
+  color: rgba(255,255,255,0.34);
+}
+
+/* Sentence + carousel */
+.s1-content {
+  position: relative; z-index: 1;
+  display: flex; flex-direction: column; align-items: center;
+}
+.s1-sentence {
+  display: flex; align-items: center; justify-content: center;
+  font-size: clamp(16px, 2vw, 24px);
+  font-weight: 300; line-height: 1;
+  /* Position so the gap between carousel and "is Storytelling" sits at center frame */
+}
+
+/* Carousel: fixed-width box, items centered, rolodex perspective */
+.s1-carousel {
+  width: 320px;
+  height: 7em; /* tall enough to show several items */
+  overflow: hidden; position: relative;
+  /* Fade edges */
+  mask-image: linear-gradient(to bottom, transparent 0%, #000 25%, #000 75%, transparent 100%);
+  -webkit-mask-image: linear-gradient(to bottom, transparent 0%, #000 25%, #000 75%, transparent 100%);
+}
+.s1-carousel-track {
+  display: flex; flex-direction: column; align-items: flex-end;
+  /* No CSS transition — JS handles smooth animation */
+}
+.s1-carousel-item {
+  height: 1.4em;
+  display: flex; align-items: center; justify-content: flex-end;
+  white-space: nowrap;
+  font-weight: 500;
+  color: var(--gold);
+  width: 100%;
+  cursor: pointer;
+  user-select: none;
+  transform-origin: right center;
+  transition: opacity 0.15s, transform 0.15s;
+}
+.s1-carousel-item.everything {
+  font-weight: 700;
+}
+.s1-after {
+  text-align: left; padding-left: 0.3em;
+}
+
+/* ════════════════════════════════════════════
+   S2: FOUR-COLUMN PROOF
+   ════════════════════════════════════════════ */
+
+/* S2: 7-column grid — VISION(wide) | connective | MEDIUM | connective | DOWNSTREAM | empty(STORY) */
+.s2-grid {
+  position: relative;
+  display: grid;
+  grid-template-columns: 1.6fr auto auto auto auto 1fr;
+  column-gap: 0;
+  width: 100%; height: 100%;
+  align-items: center;
+  padding: 0 40px;
+  transform: translateX(-8px);
+}
+/* "You"/"Your" — fixed-position label, like the divider lines */
+.vision-label {
+  position: fixed;
+  left: 130px;
+  top: 50%;
+  transform: translateY(calc(-50% - 10px));
+  z-index: 2;
+  pointer-events: none;
+  font-size: clamp(13px, 1.6vw, 19px);
+  font-weight: 300;
+  color: #fff;
+  opacity: 0; transition: opacity 0.6s;
+}
+.vision-label.visible { opacity: 1; }
+/* Hide cell-vision text — fixed label renders it instead */
+.s2-cell.cell-vision {
+  justify-content: flex-start; padding: 0;
+  visibility: hidden;
+}
+/* Nudge S2 first connective + role carousel right */
+#s2 .s2-grid > :nth-child(2),
+#s2 .s2-grid > :nth-child(3) {
+  transform: translateX(86px);
+}
+/* Nudge S2 second connective + action carousel right */
+#s2 .s2-grid > :nth-child(4),
+#s2 .s2-grid > :nth-child(5) {
+  transform: translateX(57px);
+}
+/* Nudge S3 first connective + role carousel right */
+#s3 .s2-grid > :nth-child(2),
+#s3 .s2-grid > :nth-child(3) {
+  transform: translateX(100px);
+}
+/* Nudge S3 second connective + action carousel right */
+#s3 .s2-grid > :nth-child(4),
+#s3 .s2-grid > :nth-child(5) {
+  transform: translateX(50px);
+}
+
+/* Vertical divider lines — absolutely positioned from content grid boundaries */
+.v-dividers {
+  position: fixed; top: 0; bottom: 0; left: 0; right: 0;
+  z-index: 10;
+  pointer-events: none;
+  opacity: 0; transition: opacity 0.6s;
+}
+.v-dividers.visible { opacity: 1; }
+.v-divider-line {
+  position: absolute;
+  top: 0; bottom: 0;
+  width: 1px;
+  background: rgba(255,255,255,0.08);
+}
+
+/* Column content */
+.s2-cell {
+  position: relative; z-index: 1;
+  display: flex; align-items: center;
+  font-size: clamp(16px, 2vw, 24px);
+  font-weight: 300;
+}
+
+/* Connective text — inline grid cells with gradient to fade divider */
+.s2-connective {
+  position: relative; z-index: 1;
+  font-size: clamp(16px, 2vw, 24px);
+  font-weight: 300;
+  color: var(--muted);
+  white-space: nowrap;
+  padding: 0 0.8em;
+  background: radial-gradient(ellipse at center, #000 40%, transparent 100%);
+}
+
+/* S2 carousels — same as S1 but left-aligned */
+.s2-carousel {
+  width: 320px;
+  height: 7em;
+  overflow: hidden; position: relative; z-index: 3;
+  mask-image: linear-gradient(to bottom, transparent 0%, #000 25%, #000 75%, transparent 100%);
+  -webkit-mask-image: linear-gradient(to bottom, transparent 0%, #000 25%, #000 75%, transparent 100%);
+}
+.s2-carousel-track {
+  display: flex; flex-direction: column; align-items: flex-start;
+}
+.s2-carousel-item {
+  height: 1.4em;
+  display: flex; align-items: center; justify-content: flex-start;
+  white-space: nowrap;
+  font-weight: 500;
+  color: var(--gold);
+  width: 100%;
+  cursor: pointer;
+  user-select: none;
+  transform-origin: left center;
+  transition: opacity 0.15s, transform 0.15s;
+}
+.s2-carousel-item.everything {
+  font-weight: 700;
+}
+.s2-carousel-item.locked {
+  font-weight: 700;
+}
+
+/* ════════════════════════════════════════════
+   S3: YOUR JOB IS [ROLE] — CAROUSEL UNSPOOL
+   ════════════════════════════════════════════ */
+
+/* S2 and S3 grids size their connective columns independently (different text) */
+
+/* S3 grid nudge */
+#s3 .s2-grid { transform: translateX(0px); }
+
+/* S3 carousels — no pointer events (frozen) */
+#s3 .s2-carousel { pointer-events: none; }
+
+/* Unspool overlay — clip-path reveals rows from center outward */
+.s3-unspool {
+  position: absolute; inset: 0;
+  z-index: 5;
+  pointer-events: none;
+  clip-path: inset(50% 0 50% 0); /* starts fully clipped */
+}
+.s3-unspool.active { pointer-events: auto; }
+
+/* Track inside overlay — positioned absolutely, rows placed by JS using pixel coords from S3 grid */
+.s3-unspool-track {
+  position: absolute;
+  left: 0; right: 0;
+}
+
+/* Overlay cells — black background covers carousel underneath */
+.s3-ucell {
+  background: #000;
+  height: 1.4em; line-height: 1.4em;
+  display: flex; align-items: center;
+}
+.s3-uconn {
+  font-size: clamp(16px, 2vw, 24px);
+  font-weight: 400;
+  color: rgba(255,255,255,0.6);
+  white-space: nowrap;
+  padding: 0 0.8em;
+}
+.s3-urole, .s3-uaction {
+  font-size: clamp(16px, 2vw, 24px);
+  font-weight: 500;
+  color: var(--gold);
+  white-space: nowrap;
+}
+.s3-urole.s3-selected, .s3-uaction.s3-selected {
+  font-weight: 700;
+}
+.s3-uyour {
+  font-size: clamp(16px, 2vw, 24px);
+  font-weight: 300;
+  color: #fff;
+  justify-content: flex-end;
+  padding-right: 0.4em;
+}
+
+/* Solid black bottom bar */
+.s3-bottom-bar {
+  position: absolute;
+  bottom: 0; left: 0; right: 0;
+  height: 14vh;
+  background: #000;
+  z-index: 10;
+  pointer-events: none;
+}
+
+/* Subtext */
+.s3-subtext {
+  position: absolute;
+  bottom: 4vh;
+  left: 0; right: 0;
+  text-align: center;
+  font-size: clamp(16px, 1.6vw, 20px);
+  color: rgba(255,255,255,0.55);
+  letter-spacing: 0.01em;
+  line-height: 1.6;
+  z-index: 11;
+  transition: opacity 0.8s var(--ease);
+}
+.s3-subtext.hidden { opacity: 0; }
+
+/* Scroll hint */
+.s3-scroll-hint {
+  position: absolute;
+  bottom: 1vh;
+  left: 50%; transform: translateX(-50%);
+  font-size: 18px;
+  color: rgba(255,255,255,0.25);
+  z-index: 11;
+  animation: s3pulse 2s ease-in-out infinite;
+  transition: opacity 0.6s;
+}
+.s3-scroll-hint.hidden { opacity: 0; }
+@keyframes s3pulse {
+  0%, 100% { opacity: 0.25; }
+  50% { opacity: 0.5; }
+}
+
+/* ════════════════════════════════════════════
+   S4: FEEL THE PROBLEM — IDEA SPRAWL
+   ════════════════════════════════════════════ */
+
+/* Override v-section defaults — S4 needs no padding/flex since world is inset:0 */
+#s4.v-section {
+  padding: 0;
+  display: block;
+}
+
+/*
+ * The "world" is a full-viewport container (same size as a section).
+ * At scale(1) it's pixel-identical to S3's final state.
+ * Transitioning to scale(0.6) is the "camera pull-back".
+ *
+ * position:fixed elements cloned inside a transformed parent automatically
+ * behave like position:absolute — so cloned header/dividers/label just work.
+ */
+.s4-world {
+  position: absolute;
+  inset: 0;
+  transform: scale(1);
+  transform-origin: center center;
+  transition: transform 1.4s var(--ease);
+  pointer-events: none;
+}
+.s4-world.zoomed-out {
+  transform: translateX(-80px) scale(0.8);
+}
+
+/* Side panels — positioned outside the scaled world */
+.s4-panel {
+  position: absolute;
+  top: 0; bottom: 0;
+  opacity: 0;
+  transition: opacity 0.8s var(--ease) 0.6s; /* fade in after zoom starts */
+  pointer-events: none;
+}
+.s4-panel.visible {
+  opacity: 1;
+  pointer-events: auto;
+}
+.s4-panel-left {
+  left: 0;
+  width: 280px;
+}
+.s4-panel-right {
+  right: 0;
+  width: 350px;
+}
+
+/* S4 inherits S3's grid nudges for the cloned grid */
+#s4World .s2-grid { transform: translateX(0px); }
+#s4World .s2-grid > :nth-child(2),
+#s4World .s2-grid > :nth-child(3) {
+  transform: translateX(100px);
+}
+#s4World .s2-grid > :nth-child(4),
+#s4World .s2-grid > :nth-child(5) {
+  transform: translateX(50px);
+}
+/* Cell-vision hidden in clone — "Your" handled by cloned label */
+#s4World .s2-cell.cell-vision {
+  visibility: hidden;
+}
+
+/* ── Section problem labels — below the scaled world ── */
+.section-problem-label {
+  position: absolute;
+  bottom: 22vh;
+  z-index: 12;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.05s ease;
+}
+.section-problem-label.visible { opacity: 1; }
+.section-problem-label.pos-left {
+  left: 15%;
+  text-align: left;
+}
+.section-problem-label.pos-center {
+  left: 50%;
+  transform: translateX(-50%);
+  text-align: center;
+}
+.section-problem-label.pos-right {
+  right: 15%;
+  text-align: right;
+}
+
+/* ── Story column centered text (S4/S5/S6) ── */
+.story-col-centered {
+  display: flex !important;
+  align-items: flex-start;
+  justify-content: center;
+  grid-template-rows: none;
+}
+.story-col-text {
+  font-family: var(--font-serif);
+  font-size: clamp(18px, 1.8vw, 26px);
+  font-weight: 600;
+  color: #fff;
+  text-align: center;
+  white-space: nowrap;
+  position: absolute;
+  transform: translateY(-50%);
+}
+.story-col-gold {
+  color: var(--gold);
+}
+
+/* ── S4 Story column: 6-row grid for problem/solution pairs ── */
+.s4-story-col {
+  position: fixed;
+  top: 48px;             /* below header bar */
+  bottom: 20vh;          /* above footer bar */
+  z-index: 11;
+  pointer-events: none;
+  display: grid;
+  grid-template-rows: repeat(6, 1fr);
+  gap: 0;
+  opacity: 0;
+  transition: opacity 0.05s ease;
+}
+.s4-story-col.visible { opacity: 1; }
+
+/* Each row cell */
+.s4-story-row {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  padding: 0 20px;
+}
+
+/* Problem label — small, muted, uppercase */
+.s4-problem-label {
+  font-size: 10px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: rgba(255,255,255,0.3);
+  margin-bottom: 8px;
+}
+
+/* Problem title */
+.s4-problem-title {
+  font-family: var(--font-serif);
+  font-size: clamp(18px, 1.8vw, 26px);
+  font-weight: 600;
+  color: #fff;
+  line-height: 1.2;
+  margin-bottom: 6px;
+}
+
+/* Problem description — subtle, smaller */
+.s4-problem-desc {
+  font-size: clamp(11px, 1vw, 14px);
+  color: rgba(255,255,255,0.45);
+  line-height: 1.5;
+  font-weight: 300;
+}
+
+/* ── S4 sprawl arrows SVG overlay ── */
+.s4-arrows {
+  position: fixed;
+  inset: 0;
+  z-index: 9; /* below dividers (10), above scaled world */
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.15s ease; /* fast fade by default; JS overrides for initial entry */
+}
+.s4-arrows.visible { opacity: 1; }
+.s4-arrows path {
+  fill: none;
+  stroke: rgba(255,255,255,0.15);
+  stroke-width: 1.5;
+  stroke-linecap: round;
+}
+/* Draw-in animation */
+.s4-arrows path {
+  stroke-dasharray: var(--path-len);
+  stroke-dashoffset: var(--path-len);
+  transition: stroke-dashoffset 0.8s var(--ease) 0.6s;
+}
+.s4-arrows.visible path {
+  stroke-dashoffset: 0;
+}
+/* Arrowhead markers */
+.s4-arrows .arrow-head {
+  fill: rgba(255,255,255,0.15);
+  stroke: none;
+}
+
+/* ════════════════════════════════════════════
+   S5: COST OF OUTSOURCING
+   ════════════════════════════════════════════ */
+
+#s5.v-section {
+  padding: 0;
+  display: block;
+}
+
+/* ── S5 straight arrows SVG overlay ── */
+.s5-arrows {
+  position: fixed;
+  inset: 0;
+  z-index: 9;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.15s ease;
+}
+.s5-arrows.visible { opacity: 1; }
+.s5-arrows path, .s5-arrows line {
+  fill: none;
+  stroke: rgba(255,255,255,0.15);
+  stroke-width: 1.5;
+  stroke-linecap: round;
+  stroke-dasharray: var(--path-len);
+  stroke-dashoffset: var(--path-len);
+  transition: stroke-dashoffset 0.15s ease;
+}
+.s5-arrows.visible path, .s5-arrows.visible line {
+  stroke-dashoffset: 0;
+}
+.s5-arrows .arrow-head {
+  fill: rgba(255,255,255,0.15);
+  stroke: none;
+}
+
+/* S5 Story column — same as S4 but different ID */
+.s5-story-col {
+  opacity: 0;
+  transition: opacity 0.05s ease;
+}
+.s5-story-col.visible { opacity: 1; }
+
+/* ════════════════════════════════════════════
+   S6: YOUR JOB IS [ROLE] — ROLE HEADER
+   ════════════════════════════════════════════ */
+
+#s6.v-section {
+  padding: 0;
+  display: block;
+}
+
+/* "job is [Role]" overlay — slides in above the first unspool row */
+.s6-role-header {
+  position: fixed;
+  z-index: 12;
+  pointer-events: none;
+  white-space: nowrap;
+  opacity: 0;
+  transition: opacity 0.3s var(--ease);
+  padding: 6px 24px 6px 12px;
+  background: radial-gradient(ellipse at center, rgba(0,0,0,0.9) 30%, rgba(0,0,0,0.6) 65%, transparent 100%);
+}
+.s6-role-header.visible { opacity: 1; }
+
+.s6-rh-jobis {
+  font-size: clamp(12px, 1.5vw, 18px);
+  font-weight: 400;
+  color: rgba(255,255,255,0.6);
+  margin-right: 0.4em;
+}
+.s6-rh-role {
+  font-size: clamp(12px, 1.5vw, 18px);
+  font-weight: 700;
+  color: var(--gold);
+}
+
+.s6-story-col {
+  opacity: 0;
+  transition: opacity 0.05s ease;
+}
+.s6-story-col.visible { opacity: 1; }
+
+/* ── Left-side diverging arrows (S4/S5/S6) ── */
+.left-arrows {
+  position: fixed;
+  inset: 0;
+  z-index: 9;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.15s ease;
+}
+.left-arrows.visible { opacity: 1; }
+.left-arrows path {
+  fill: none;
+  stroke: rgba(255,255,255,0.15);
+  stroke-width: 1.5;
+  stroke-linecap: round;
+  stroke-dasharray: var(--path-len);
+  stroke-dashoffset: var(--path-len);
+  transition: stroke-dashoffset 0.8s var(--ease) 0.6s;
+}
+.left-arrows.visible path {
+  stroke-dashoffset: 0;
+}
+.left-arrows .arrow-head {
+  fill: rgba(255,255,255,0.15);
+  stroke: none;
+}
+
+.s6-cost-circle {
+  position: fixed;
+  z-index: 10;
+  pointer-events: none;
+  width: 72px; height: 72px;
+  border-radius: 50%;
+  background: #000;
+  border: 1.5px solid rgba(255,255,255,0.15);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 13px; font-weight: 600;
+  color: rgba(255,255,255,0.8);
+  white-space: nowrap;
+  opacity: 0;
+  transition: opacity 0.3s var(--ease);
+  transform: translate(-50%, -50%);
+}
+.s6-cost-circle.visible { opacity: 1; }
+
+/* ════════════════════════════════════════════
+   S7: ALL BECAUSE — locked S2 recycled
+   ════════════════════════════════════════════ */
+/* Same nudges as S2 */
+#s7 .s2-grid > :nth-child(2),
+#s7 .s2-grid > :nth-child(3) {
+  transform: translateX(86px);
+}
+#s7 .s2-grid > :nth-child(4),
+#s7 .s2-grid > :nth-child(5) {
+  transform: translateX(57px);
+}
+/* Show "You" text (normally hidden since fixed label renders it) */
+#s7 .s2-cell.cell-vision {
+  visibility: visible;
+}
+/* No interaction — frozen carousels; only show selected item */
+#s7 .s2-carousel {
+  pointer-events: none;
+  mask-image: none;
+  -webkit-mask-image: none;
+}
+#s7 .s2-carousel-item:not(.locked) {
+  opacity: 0 !important;
+}
+
+/* ════════════════════════════════════════════
+   S8: BUT THERE IS A SOLUTION
+   ════════════════════════════════════════════ */
+.s8-text {
+  font-size: clamp(24px, 3vw, 40px);
+  font-weight: 300;
+  color: #fff;
+  letter-spacing: 0.01em;
+}
+.s8-gold {
+  color: var(--gold);
+  font-weight: 500;
+}
+
+/* ════════════════════════════════════════════
+   S9 / S10: "Everything is Storytelling" / swapped
+   ════════════════════════════════════════════ */
+.s9-text {
+  font-size: clamp(24px, 3vw, 40px);
+  font-weight: 300;
+  letter-spacing: 0.01em;
+  white-space: nowrap;
+}
+.s9-white { color: #fff; }
+.s9-gold { color: var(--gold); font-weight: 500; }
+
+/* ════════════════════════════════════════════
+   S11: CONSISTENT OUTPUT / INPUT
+   ════════════════════════════════════════════ */
+.s11-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 3em;
+}
+.s11-sub {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.3em;
+}
+.s11-line {
+  font-size: clamp(18px, 2.2vw, 28px);
+  font-weight: 300;
+  color: #fff;
+  letter-spacing: 0.01em;
+  white-space: nowrap;
+}
+.s11-gold {
+  color: var(--gold);
+  font-weight: 500;
+}
+
+/* ════════════════════════════════════════════
+   S12: YGGDRASIL
+   ════════════════════════════════════════════ */
+.s12-content {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1em;
+}
+.s12-title {
+  font-family: var(--font-serif);
+  font-size: clamp(36px, 5vw, 64px);
+  font-weight: 600;
+  color: var(--gold);
+  letter-spacing: 0.02em;
+}
+.s12-sub {
+  font-size: clamp(16px, 1.8vw, 22px);
+  font-weight: 300;
+  color: rgba(255,255,255,0.6);
+  letter-spacing: 0.02em;
+}
+
+/* S13 blurb — absolutely positioned so title+sub don't shift */
+.s13-blurb {
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  max-width: 520px;
+  width: max-content;
+  font-size: clamp(14px, 1.4vw, 18px);
+  font-weight: 300;
+  color: rgba(255,255,255,0.55);
+  line-height: 1.7;
+  text-align: center;
+  margin-top: 1.5em;
+}
+
+/* ════════════════════════════════════════════
+   S14: YGGDRASIL SOLUTION VIEW — box overlay
+   ════════════════════════════════════════════ */
+.ygg-box {
+  position: fixed;
+  z-index: 8; /* below arrows (z-index 9) so they render on top */
+  pointer-events: none;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 6px;
+  opacity: 0;
+  transition: opacity 0.05s ease;
+}
+.ygg-box.visible { opacity: 1; }
+.ygg-box-label {
+  position: absolute;
+  top: -1px; left: 12px;
+  transform: translateY(-100%);
+  font-size: 11px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--gold);
+  font-weight: 400;
+  padding: 0 6px;
+  background: #000;
+}
+.ygg-box-bottom-label {
+  position: absolute;
+  bottom: 16px; left: 16px;
+  font-family: var(--font-serif);
+  font-size: clamp(13px, 1.2vw, 18px);
+  font-weight: 600;
+  color: #fff;
+  white-space: nowrap;
+  z-index: 12; /* above the box border */
+}
+
+/* S14: black gradient behind role names AND connectives so box border disappears behind them */
+#s14World .s3-urole,
+#s14World .s3-uconn {
+  position: relative;
+  z-index: 12;
+  background: linear-gradient(to right, #000 60%, transparent);
+  padding-left: 0.8em;
+  padding-right: 0.8em;
+}
+
+/* S14: grey out problem descriptions — they are solved by Yggdrasil */
+#s14 .s4-problem-title {
+  color: rgba(255,255,255,0.3);
+}
+#s14 .s4-problem-desc {
+  color: rgba(255,255,255,0.15);
+}
+
+/* ── S14 solution labels (beneath problem labels) ── */
+.section-solution-label {
+  position: absolute;
+  bottom: 12vh;
+  z-index: 12;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.05s ease;
+}
+.section-solution-label.visible { opacity: 1; }
+.section-solution-label.pos-left {
+  left: 15%;
+  text-align: left;
+}
+.section-solution-label.pos-center {
+  left: 50%;
+  transform: translateX(-50%);
+  text-align: center;
+}
+.section-solution-label.pos-right {
+  right: 15%;
+  text-align: right;
+}
+.s14-solution-title {
+  font-family: var(--font-serif);
+  font-size: clamp(18px, 1.8vw, 26px);
+  font-weight: 600;
+  color: #fff;
+  line-height: 1.2;
+  margin-bottom: 6px;
+}
+.s14-solution-desc {
+  font-size: clamp(11px, 1vw, 14px);
+  color: rgba(255,255,255,0.45);
+  line-height: 1.5;
+  font-weight: 300;
+}
+
+/* Orbital swap overlay words */
+.orbital-word {
+  position: fixed;
+  z-index: 2000;
+  pointer-events: none;
+  font-family: var(--font-sans);
+  font-size: clamp(24px, 3vw, 40px);
+  letter-spacing: 0.01em;
+  line-height: 1;
+  white-space: nowrap;
+  opacity: 0;
+  will-change: transform;
+}
+.orbital-word.animating {
+  opacity: 1;
+}
+</style>
+</head>
+<body>
+
+<div class="progress-bar" id="progressBar" style="width:0%"></div>
+
+<div class="header-bar" id="headerBar">
+  <div class="header-col" data-col="vision">Vision</div>
+  <div class="header-col" data-col="medium">Medium</div>
+  <div class="header-col" data-col="execution">Downstream Execution</div>
+  <div class="header-col" data-col="story">Story</div>
+</div>
+
+<div class="v-dividers" id="vDividers">
+  <div class="v-divider-line" id="divLine1"></div>
+  <div class="v-divider-line" id="divLine2"></div>
+  <div class="v-divider-line" id="divLine3"></div>
+</div>
+<div class="vision-label" id="visionLabel">You</div>
+<div class="footer-bar" id="footerBar">
+  <div class="footer-subtext" id="footerSubtext"></div>
+</div>
+
+<!-- Left-side diverging arrows: one SVG per section -->
+<svg class="left-arrows" id="s4LeftArrows" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <marker id="leftArrowHead4" markerWidth="6" markerHeight="5" refX="5" refY="2.5" orient="auto">
+      <polygon class="arrow-head" points="0,0 6,2.5 0,5" />
+    </marker>
+  </defs>
+</svg>
+<svg class="left-arrows" id="s5LeftArrows" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <marker id="leftArrowHead5" markerWidth="6" markerHeight="5" refX="5" refY="2.5" orient="auto">
+      <polygon class="arrow-head" points="0,0 6,2.5 0,5" />
+    </marker>
+  </defs>
+</svg>
+<svg class="left-arrows" id="s6LeftArrows" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <marker id="leftArrowHead6" markerWidth="6" markerHeight="5" refX="5" refY="2.5" orient="auto">
+      <polygon class="arrow-head" points="0,0 6,2.5 0,5" />
+    </marker>
+  </defs>
+</svg>
+
+<!-- S4 sprawl arrows: SVG overlay drawn dynamically by JS -->
+<svg class="s4-arrows" id="s4Arrows" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <marker id="arrowHead" markerWidth="6" markerHeight="5" refX="5" refY="2.5" orient="auto">
+      <polygon class="arrow-head" points="0,0 6,2.5 0,5" />
+    </marker>
+  </defs>
+</svg>
+
+<!-- S4 Story column -->
+<div class="s4-story-col story-col-centered" id="s4StoryCol">
+  <div class="story-col-text">Unfocused <span class="story-col-gold">output</span></div>
+</div>
+
+<div class="sections-viewport">
+  <section class="v-section active" id="s1">
+    <div class="bg-quotes">
+      <!-- Quotes reordered: 3 long ones (Peters, Vaynerchuk, Jobs/Apple) spread evenly, alternating sides -->
+
+      <!-- L1 (top) — short, pushed far inward -->
+      <div class="bg-q" style="top:4%; left:18%;">&ldquo;I&rsquo;m not a businessman. I&rsquo;m a <span class="big">business,</span> man.&rdquo;<span class="attr">&mdash; Jay-Z</span></div>
+      <!-- R1 (top) — medium, pushed far inward -->
+      <div class="bg-q align-r" style="top:4%; right:18%;">&ldquo;The problem with the music business is that it is not a music business, it is a <span class="big">business</span> business.&rdquo;<span class="attr">&mdash; Brian Eno</span></div>
+
+      <!-- L2 — LONG (Peters), pushed somewhat inward -->
+      <div class="bg-q" style="top:18%; left:8%;">&ldquo;We are <span class="big">CEOs</span> of our own companies: <span class="med">Me Inc.</span> To be in business today, our most important job is to be <span class="big">head marketer</span> for the <span class="med">brand called You.</span>&rdquo;<span class="attr">&mdash; Tom Peters</span></div>
+      <!-- R2 — short, pushed somewhat inward -->
+      <div class="bg-q align-r" style="top:18%; right:8%;">&ldquo;I look at myself as a <span class="big">brand.</span> I look at myself as a <span class="med">business.</span>&rdquo;<span class="attr">&mdash; Kevin Hart</span></div>
+
+      <!-- L3 (middle) — short, at the edge -->
+      <div class="bg-q" style="top:34%; left:2%;">&ldquo;<span class="med">Stories</span> are a primary way in which people <span class="big">make sense</span> of organizations.&rdquo;<span class="attr">&mdash; David M. Boje</span></div>
+      <!-- R3 (middle) — medium, at the edge -->
+      <div class="bg-q align-r" style="top:34%; right:2%;">&ldquo;You have to <span class="med">think outside the box.</span> You have to see yourself as a <span class="big">business.</span>&rdquo;<span class="attr">&mdash; Arnold Schwarzenegger</span></div>
+
+      <!-- L4 (middle) — LONG (Vaynerchuk), at the edge -->
+      <div class="bg-q" style="top:50%; left:2%;">&ldquo;Everyone has a <span class="big">personal brand.</span> The question is, are you going to decide what it is, or let <span class="med">other people</span> decide it for you?&rdquo;<span class="attr">&mdash; Gary Vaynerchuk</span></div>
+      <!-- R4 (middle) — medium, at the edge -->
+      <div class="bg-q align-r" style="top:50%; right:2%;">&ldquo;People think in <span class="big">stories</span>, not statistics, and marketers need to be <span class="med">master storytellers.</span>&rdquo;<span class="attr">&mdash; Arianna Huffington</span></div>
+
+      <!-- L5 — short, pushed somewhat inward -->
+      <div class="bg-q" style="top:66%; left:8%;">&ldquo;<span class="med">Entrepreneurs</span> are storytellers. We <span class="big">sell our ideas</span> by telling stories.&rdquo;<span class="attr">&mdash; Richard Branson</span></div>
+      <!-- R5 — LONG (Jobs/Apple), pushed somewhat inward -->
+      <div class="bg-q align-r" style="top:66%; right:8%;">&ldquo;It&rsquo;s in Apple&rsquo;s DNA that <span class="med">technology alone</span> is not enough &mdash; it&rsquo;s technology married with <span class="big">liberal arts</span>, married with the humanities, that yields the results that make our <span class="med">hearts sing.</span>&rdquo;<span class="attr">&mdash; Steve Jobs</span></div>
+
+      <!-- L6 (bottom) — medium, pushed far inward -->
+      <div class="bg-q" style="top:82%; left:18%;">&ldquo;People do not buy goods and services. They buy <span class="med">relations</span>, stories, and <span class="big">magic.</span>&rdquo;<span class="attr">&mdash; Seth Godin</span></div>
+      <!-- R6 (bottom) — short, pushed far inward -->
+      <div class="bg-q align-r" style="top:82%; right:18%;">&ldquo;The <span class="big">storyteller</span> sets the vision, values, and agenda of an <span class="med">entire generation</span> that is to come.&rdquo;<span class="attr">&mdash; Steve Jobs</span></div>
+    </div>
+    <div class="s1-content">
+      <div class="s1-sentence">
+        <div class="s1-carousel" id="s1Carousel">
+          <div class="s1-carousel-track" id="s1Track"></div>
+        </div>
+        <span class="s1-after">is Storytelling.</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- ════ S2: PROVE THE PREMISE ════ -->
+  <section class="v-section" id="s2" style="z-index:2;">
+    <!-- Inline grid: You | are into | [MEDIUM] | and want to | [ACTION] | (empty) -->
+    <div class="s2-grid">
+      <div class="s2-cell cell-vision">You</div>
+      <div class="s2-connective">are into</div>
+      <div class="s2-cell">
+        <div class="s2-carousel" id="s2MediumCarousel">
+          <div class="s2-carousel-track" id="s2MediumTrack"></div>
+        </div>
+      </div>
+      <div class="s2-connective">and want to</div>
+      <div class="s2-cell">
+        <div class="s2-carousel" id="s2ActionCarousel">
+          <div class="s2-carousel-track" id="s2ActionTrack"></div>
+        </div>
+      </div>
+      <div class="s2-cell"></div>
+    </div>
+  </section>
+
+  <!-- ════ S3: YOUR JOB IS [ROLE] — CAROUSEL UNSPOOL ════ -->
+  <section class="v-section" id="s3" style="z-index:3;">
+    <!-- Grid: Your | job is | [ROLE CAROUSEL] | because you need to | [ACTION CAROUSEL] | (empty) -->
+    <div class="s2-grid" id="s3Grid">
+      <div class="s2-cell cell-vision">Your</div>
+      <div class="s2-connective">job is</div>
+      <div class="s2-cell">
+        <div class="s2-carousel" id="s3RoleCarousel">
+          <div class="s2-carousel-track" id="s3RoleTrack"></div>
+        </div>
+      </div>
+      <div class="s2-connective">because you need to</div>
+      <div class="s2-cell">
+        <div class="s2-carousel" id="s3ActionCarousel">
+          <div class="s2-carousel-track" id="s3ActionTrack"></div>
+        </div>
+      </div>
+      <div class="s2-cell"></div>
+    </div>
+    <!-- Unspool overlay (populated by JS on break) -->
+    <div class="s3-unspool" id="s3Unspool">
+      <div class="s3-unspool-track" id="s3UnspoolTrack"></div>
+    </div>
+    <!-- S3 bottom bar replaced by global footer-bar -->
+    <div class="s3-subtext" id="s3Subtext" style="display:none;">
+      But that&rsquo;s not your only job.<br>
+      Scroll down to find out what else you have to do&hellip;
+    </div>
+    <div class="s3-scroll-hint" id="s3ScrollHint">&darr;</div>
+  </section>
+
+  <!-- ════ S4: FEEL THE PROBLEM — IDEA SPRAWL ════ -->
+  <section class="v-section" id="s4" style="z-index:4;">
+    <div class="s4-world" id="s4World">
+      <!-- JS clones S3 section content + header + dividers + label here -->
+    </div>
+    <div class="s4-panel s4-panel-left" id="s4PanelLeft"></div>
+    <div class="s4-panel s4-panel-right" id="s4PanelRight"></div>
+    <div class="section-problem-label pos-left" id="s4ProblemLabel">
+      <div class="s4-problem-title">Idea Sprawl</div>
+      <div class="s4-problem-desc">Ideas grow wide instead of tall</div>
+    </div>
+  </section>
+
+  <section class="v-section" id="s5" style="z-index:5;">
+    <div class="s4-world" id="s5World">
+      <!-- JS clones S3 content here, same zoom-out as S4 -->
+    </div>
+    <div class="s4-panel s4-panel-left" id="s5PanelLeft"></div>
+    <div class="s4-panel s4-panel-right" id="s5PanelRight"></div>
+    <div class="section-problem-label pos-left" id="s5ProblemLabel1">
+      <div class="s4-problem-title">Idea Sprawl</div>
+      <div class="s4-problem-desc">Ideas grow wide instead of tall</div>
+    </div>
+    <div class="section-problem-label pos-center" id="s5ProblemLabel">
+      <div class="s4-problem-title">Cohesion Collapse</div>
+      <div class="s4-problem-desc">Pieces don&rsquo;t fit together</div>
+    </div>
+  </section>
+
+  <section class="v-section" id="s6" style="z-index:6;">
+    <div class="s4-world" id="s6World">
+      <!-- JS clones S3 content here -->
+    </div>
+    <div class="s4-panel s4-panel-left" id="s6PanelLeft"></div>
+    <div class="s4-panel s4-panel-right" id="s6PanelRight"></div>
+    <div class="section-problem-label pos-left" id="s6ProblemLabel1">
+      <div class="s4-problem-title">Idea Sprawl</div>
+      <div class="s4-problem-desc">Ideas grow wide instead of tall</div>
+    </div>
+    <div class="section-problem-label pos-center" id="s6ProblemLabel2">
+      <div class="s4-problem-title">Cohesion Collapse</div>
+      <div class="s4-problem-desc">Pieces don&rsquo;t fit together</div>
+    </div>
+    <div class="section-problem-label pos-right" id="s6ProblemLabel">
+      <div class="s4-problem-title">Dead Ends</div>
+      <div class="s4-problem-desc">There are no next steps</div>
+    </div>
+  </section>
+
+  <!-- ════ S7: ALL BECAUSE — locked S2 recycled ════ -->
+  <section class="v-section" id="s7" style="z-index:7;">
+    <div class="s2-grid">
+      <div class="s2-cell cell-vision">You</div>
+      <div class="s2-connective">are into</div>
+      <div class="s2-cell">
+        <div class="s2-carousel" id="s7MediumCarousel">
+          <div class="s2-carousel-track" id="s7MediumTrack"></div>
+        </div>
+      </div>
+      <div class="s2-connective">and want to</div>
+      <div class="s2-cell">
+        <div class="s2-carousel" id="s7ActionCarousel">
+          <div class="s2-carousel-track" id="s7ActionTrack"></div>
+        </div>
+      </div>
+      <div class="s2-cell"></div>
+    </div>
+  </section>
+
+  <!-- ════ S8: BUT THERE IS A SOLUTION ════ -->
+  <section class="v-section" id="s8" style="z-index:8;">
+    <div class="s8-text">But there is a <span class="s8-gold">solution.</span></div>
+  </section>
+
+  <!-- ════ S9: "Everything is Storytelling." ════ -->
+  <section class="v-section" id="s9" style="z-index:9;">
+    <div class="s9-text">
+      <span class="s9-gold" id="s9Everything">Everything</span>
+      <span class="s9-white"> is </span>
+      <span class="s9-white" id="s9Storytelling">Storytelling</span>
+    </div>
+  </section>
+
+  <!-- ════ S10: "Storytelling is Everything." ════ -->
+  <section class="v-section" id="s10" style="z-index:10;">
+    <div class="s9-text">
+      <span class="s9-white" id="s10Storytelling">Storytelling</span>
+      <span class="s9-white"> is </span>
+      <span class="s9-gold" id="s10Everything">Everything</span>
+    </div>
+  </section>
+
+  <!-- ════ S11: "Storytelling is Everything" + Consistent output / input ════ -->
+  <section class="v-section" id="s11" style="z-index:11;">
+    <div class="s11-content">
+      <div class="s9-text">
+        <span class="s9-white">Storytelling</span>
+        <span class="s9-white"> is </span>
+        <span class="s9-gold">Everything</span>
+      </div>
+      <div class="s11-sub">
+        <div class="s11-line">Consistent <span class="s11-gold">output</span></div>
+        <div class="s11-line">requires</div>
+        <div class="s11-line">Consistent <span class="s11-gold">input</span></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ════ S12: YGGDRASIL ════ -->
+  <section class="v-section" id="s12" style="z-index:12;">
+    <div class="s12-content">
+      <div class="s12-title">Yggdrasil</div>
+      <div class="s12-sub">Your story operating system</div>
+    </div>
+  </section>
+
+  <!-- ════ S13: YGGDRASIL + explanation ════ -->
+  <section class="v-section" id="s13" style="z-index:13;">
+    <div class="s12-content">
+      <div class="s12-title">Yggdrasil</div>
+      <div class="s12-sub">Your story operating system</div>
+      <div class="s13-blurb">It is the single source of truth that all downstream execution draws from, ensuring you retain control over your story, no matter how big it gets.</div>
+    </div>
+  </section>
+
+  <!-- ════ S14: YGGDRASIL SOLUTION VIEW ════ -->
+  <section class="v-section" id="s14" style="z-index:14;">
+    <div class="s4-world" id="s14World"></div>
+    <div class="s4-panel s4-panel-left" id="s14PanelLeft"></div>
+    <div class="s4-panel s4-panel-right" id="s14PanelRight"></div>
+    <!-- Problem labels (same as S6) -->
+    <div class="section-problem-label pos-left" id="s14ProblemLabel1">
+      <div class="s4-problem-title">Idea Sprawl</div>
+      <div class="s4-problem-desc">Ideas grow wide instead of tall</div>
+    </div>
+    <div class="section-problem-label pos-center" id="s14ProblemLabel2">
+      <div class="s4-problem-title">Cohesion Collapse</div>
+      <div class="s4-problem-desc">Pieces don&rsquo;t fit together</div>
+    </div>
+    <div class="section-problem-label pos-right" id="s14ProblemLabel3">
+      <div class="s4-problem-title">Dead Ends</div>
+      <div class="s4-problem-desc">There are no next steps</div>
+    </div>
+    <!-- Solution labels beneath problems -->
+    <div class="section-solution-label pos-left" id="s14SolutionLabel1">
+      <div class="s14-solution-title">Capture</div>
+      <div class="s14-solution-desc">Every thought as it comes</div>
+    </div>
+    <div class="section-solution-label pos-center" id="s14SolutionLabel2">
+      <div class="s14-solution-title">Clarify</div>
+      <div class="s14-solution-desc">Your project for any context</div>
+    </div>
+    <div class="section-solution-label pos-right" id="s14SolutionLabel3">
+      <div class="s14-solution-title">Mobilize</div>
+      <div class="s14-solution-desc">Your vision toward success</div>
+    </div>
+  </section>
+</div>
+
+<!-- S14 Yggdrasil box overlay — positioned by JS -->
+<div class="ygg-box" id="yggBox">
+  <div class="ygg-box-label">Yggdrasil</div>
+  <div class="ygg-box-bottom-label">Consistent <span class="story-col-gold">input</span></div>
+</div>
+
+<!-- S14 story column -->
+<div class="s4-story-col story-col-centered" id="s14StoryCol">
+  <div class="story-col-text">Consistent <span class="story-col-gold">output</span></div>
+</div>
+
+<!-- S14 arrows -->
+<svg class="s4-arrows" id="s14Arrows" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <marker id="s14ArrowHead" markerWidth="6" markerHeight="5" refX="5" refY="2.5" orient="auto">
+      <polygon class="arrow-head" points="0,0 6,2.5 0,5" />
+    </marker>
+  </defs>
+</svg>
+<svg class="left-arrows" id="s14LeftArrows" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <marker id="leftArrowHead14" markerWidth="6" markerHeight="5" refX="5" refY="2.5" orient="auto">
+      <polygon class="arrow-head" points="0,0 6,2.5 0,5" />
+    </marker>
+  </defs>
+</svg>
+
+<!-- S14 "Your job is Storytelling" overlay -->
+<div class="s6-role-header" id="s14RoleHeader">
+  <span class="s6-rh-jobis">job is</span>
+  <span class="s6-rh-role">Storytelling</span>
+</div>
+
+<!-- Orbital swap overlays (positioned by JS during S9→S10 transition) -->
+<div class="orbital-word" id="orbitalEverything"></div>
+<div class="orbital-word" id="orbitalStorytelling"></div>
+
+<!-- S6 "Your job is [Role]" fixed overlay — positioned by JS -->
+<div class="s6-role-header" id="s6RoleHeader">
+  <span class="s6-rh-jobis">job is</span>
+  <span class="s6-rh-role"></span>
+</div>
+
+<div class="s6-cost-circle" id="s6CostCircle"></div>
+
+<!-- S6 converging arrows -->
+<svg class="s5-arrows s6-arrows" id="s6Arrows" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <marker id="s6ArrowHead" markerWidth="6" markerHeight="5" refX="5" refY="2.5" orient="auto">
+      <polygon class="arrow-head" points="0,0 6,2.5 0,5" />
+    </marker>
+  </defs>
+</svg>
+
+<!-- S6 Story column -->
+<div class="s4-story-col s5-story-col s6-story-col story-col-centered" id="s6StoryCol">
+  <div class="story-col-text">Expensive <span class="story-col-gold">output</span></div>
+</div>
+
+<!-- S5 straight arrows: SVG overlay -->
+<svg class="s5-arrows" id="s5Arrows" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <marker id="s5ArrowHead" markerWidth="6" markerHeight="5" refX="5" refY="2.5" orient="auto">
+      <polygon class="arrow-head" points="0,0 6,2.5 0,5" />
+    </marker>
+  </defs>
+</svg>
+
+<!-- S5 Story column -->
+<div class="s4-story-col s5-story-col story-col-centered" id="s5StoryCol">
+  <div class="story-col-text">Fragmented <span class="story-col-gold">output</span></div>
+</div>
+
+<div class="bottom-left">
+  <a href="index.html" class="back-link">&larr; Return to Website</a>
+</div>
+<div class="bottom-right">
+  <button class="nav-btn" id="btnPrev" disabled>&larr;</button>
+  <button class="nav-btn" id="btnNext">&rarr;</button>
+</div>
+
+<script>
+/* ── DEBUG GRID OVERLAY (hidden — set display to '' to restore) ── */
+(function() { /* HIDDEN */
+  return; /* uncomment to show grid */
+  var GRID_STEP = 10; /* px between lines */
+  var LABEL_EVERY = 5; /* label every 5th line (every 50px) */
+  var overlay = document.createElement("div");
+  overlay.id = "debugGrid";
+  overlay.style.cssText = "position:fixed;inset:0;z-index:99999;pointer-events:none;overflow:hidden;";
+
+  var vw = window.innerWidth, vh = window.innerHeight;
+  var svg = '<svg xmlns="http://www.w3.org/2000/svg" width="'+vw+'" height="'+vh+'" style="position:absolute;inset:0;">';
+
+  /* Vertical lines — labeled with pixel value every 50px */
+  for (var x = 0; x <= vw; x += GRID_STEP) {
+    var isMajor = (x % (GRID_STEP * LABEL_EVERY)) === 0;
+    var color = isMajor ? "rgba(0,255,255,0.25)" : "rgba(0,255,255,0.08)";
+    svg += '<line x1="'+x+'" y1="0" x2="'+x+'" y2="'+vh+'" stroke="'+color+'" stroke-width="1"/>';
+    if (isMajor) {
+      svg += '<text x="'+(x+2)+'" y="12" fill="rgba(0,255,255,0.6)" font-size="9" font-family="monospace">'+x+'</text>';
+    }
+  }
+  /* Horizontal lines — labeled with pixel value every 50px */
+  for (var y = 0; y <= vh; y += GRID_STEP) {
+    var isMajor = (y % (GRID_STEP * LABEL_EVERY)) === 0;
+    var color = isMajor ? "rgba(0,255,255,0.25)" : "rgba(0,255,255,0.08)";
+    svg += '<line x1="0" y1="'+y+'" x2="'+vw+'" y2="'+y+'" stroke="'+color+'" stroke-width="1"/>';
+    if (isMajor) {
+      svg += '<text x="2" y="'+(y-2)+'" fill="rgba(0,255,255,0.6)" font-size="9" font-family="monospace">'+y+'</text>';
+    }
+  }
+
+  svg += '</svg>';
+  overlay.innerHTML = svg;
+  document.body.appendChild(overlay);
+})();
+</script>
+
+<script>
+(function() {
+  "use strict";
+
+  /* ══════════════════════════════════════
+     DATA
+     ══════════════════════════════════════ */
+
+  /* Optimised ordering: ±1 neighbours are related roles for high-priority picks.
+     Filmmaking, Scriptwriting, Marketing, Television, Social Media, Business, Literature
+     all have BOTH neighbours in their RELATED_ROLES list. */
+  var PICKS = [
+    "Consulting",
+    "Legal",
+    "Podcasting",
+    "Scriptwriting",
+    "Television",
+    "Leadership",
+    "Marketing",
+    "Business",
+    "Sales",
+    "Social Media",
+    "Filmmaking",
+    "Fundraising",
+    "Games",
+    "Personal Branding",
+    "Literature",
+    "Academia",
+    "Education",
+    "Everything",
+    "Comics",
+    "Memoirs",
+    "Politics",
+    "Journalism",
+    "Publicity",
+    "Professional Branding",
+    "Product Branding"
+  ];
+
+  var ACTIONS = [
+    "advise on strategy",
+    "draft agreements",
+    "host conversations",
+    "write dialogue",
+    "produce shows",
+    "run a team",
+    "reach audiences",
+    "manage a company",
+    "close deals",
+    "gain followers",
+    "write and direct",
+    "raise capital",
+    "design experiences",
+    "craft your image",
+    "write books",
+    "publish research",
+    "share knowledge",
+    "do it all",
+    "create... comics",
+    "write your story",
+    "win people over",
+    "report the truth",
+    "drive attention",
+    "build brands",
+    "launch products"
+  ];
+
+  /* ── Related roles per pick (for S3 "what else you have to do") ── */
+  var RELATED_ROLES = {
+    "Everything":           PICKS.filter(function(p){ return p !== "Everything"; }),
+    "Filmmaking":           ["Scriptwriting", "Marketing", "Publicity", "Social Media", "Personal Branding", "Sales", "Fundraising", "Business", "Legal", "Leadership"],
+    "Scriptwriting":        ["Filmmaking", "Television", "Marketing", "Social Media", "Games", "Podcasting", "Comics", "Personal Branding", "Business", "Legal"],
+    "Marketing":            ["Social Media", "Personal Branding", "Professional Branding", "Sales", "Publicity", "Scriptwriting", "Business", "Legal", "Leadership"],
+    "Publicity":            ["Social Media", "Marketing", "Personal Branding", "Professional Branding", "Sales", "Journalism", "Scriptwriting", "Legal"],
+    "Television":           ["Scriptwriting", "Marketing", "Publicity", "Social Media", "Personal Branding", "Sales", "Fundraising", "Business", "Legal", "Leadership"],
+    "Literature":           ["Marketing", "Publicity", "Social Media", "Personal Branding", "Sales", "Business", "Scriptwriting", "Legal"],
+    "Personal Branding":    ["Social Media", "Marketing", "Publicity", "Sales", "Professional Branding", "Scriptwriting", "Leadership", "Legal"],
+    "Social Media":         ["Filmmaking", "Scriptwriting", "Marketing", "Personal Branding", "Publicity", "Sales", "Professional Branding", "Business", "Legal"],
+    "Comics":               ["Scriptwriting", "Marketing", "Social Media", "Personal Branding", "Sales", "Business", "Publicity", "Legal"],
+    "Professional Branding":["Marketing", "Social Media", "Publicity", "Sales", "Personal Branding", "Scriptwriting", "Leadership", "Legal", "Product Branding"],
+    "Sales":                ["Marketing", "Personal Branding", "Social Media", "Publicity", "Scriptwriting", "Business", "Leadership", "Legal"],
+    "Leadership":           ["Personal Branding", "Marketing", "Sales", "Publicity", "Social Media", "Scriptwriting", "Business", "Fundraising", "Legal"],
+    "Education":            ["Marketing", "Social Media", "Personal Branding", "Publicity", "Scriptwriting", "Sales", "Business", "Legal"],
+    "Business":             ["Marketing", "Sales", "Personal Branding", "Social Media", "Publicity", "Scriptwriting", "Leadership", "Fundraising", "Legal"],
+    "Legal":                ["Marketing", "Business", "Sales", "Personal Branding", "Social Media", "Leadership", "Consulting"],
+    "Games":                ["Scriptwriting", "Marketing", "Social Media", "Personal Branding", "Sales", "Business", "Publicity", "Fundraising", "Legal"],
+    "Journalism":           ["Social Media", "Personal Branding", "Marketing", "Publicity", "Scriptwriting", "Sales", "Business", "Legal"],
+    "Podcasting":           ["Scriptwriting", "Social Media", "Marketing", "Personal Branding", "Publicity", "Sales", "Business", "Legal"],
+    "Memoirs":              ["Literature", "Marketing", "Publicity", "Social Media", "Personal Branding", "Scriptwriting", "Sales", "Business", "Legal"],
+    "Academia":             ["Literature", "Marketing", "Publicity", "Social Media", "Personal Branding", "Sales", "Fundraising", "Legal"],
+    "Fundraising":          ["Marketing", "Sales", "Social Media", "Personal Branding", "Publicity", "Scriptwriting", "Business", "Leadership", "Legal"],
+    "Politics":             ["Memoirs", "Social Media", "Marketing", "Publicity", "Personal Branding", "Scriptwriting", "Sales", "Fundraising", "Leadership", "Legal"],
+    "Consulting":           ["Marketing", "Personal Branding", "Social Media", "Sales", "Publicity", "Scriptwriting", "Business", "Leadership", "Legal"],
+    "Product Branding":     ["Marketing", "Social Media", "Professional Branding", "Personal Branding", "Sales", "Publicity", "Scriptwriting", "Business", "Legal"]
+  };
+
+  /* ══════════════════════════════════════
+     REUSABLE CAROUSEL ENGINE
+     ══════════════════════════════════════ */
+
+  function createCarousel(opts) {
+    var trackEl = document.getElementById(opts.trackId);
+    var containerEl = document.getElementById(opts.containerId);
+    var labels = opts.labels;
+    var itemClass = opts.itemClass;
+    var count = labels.length;
+
+    var state = {
+      position: opts.initialIndex || 0,
+      velocity: 0,
+      isAnimating: false,
+      itemH: 0,
+      containerH: 0,
+      items: [],
+      trackEl: trackEl,
+      containerEl: containerEl,
+      onSnap: opts.onSnap || null,
+      linked: null  /* another carousel state to sync with */
+    };
+
+    /* Build DOM items */
+    labels.forEach(function(label, i) {
+      var item = document.createElement("div");
+      item.className = itemClass + (label === "Everything" ? " everything" : "");
+      item.textContent = label;
+      item.addEventListener("click", function() {
+        state.velocity = 0;
+        animateTo(state, i);
+        if (state.linked) {
+          state.linked.velocity = 0;
+          animateTo(state.linked, i);
+        }
+      });
+      trackEl.appendChild(item);
+      state.items.push(item);
+    });
+
+    function measure() {
+      var fs = parseFloat(getComputedStyle(containerEl).fontSize);
+      state.itemH = fs * 1.4;
+      state.containerH = containerEl.offsetHeight;
+    }
+    measure();
+    window.addEventListener("resize", measure);
+
+    function render(st) {
+      var offset = (st.containerH / 2) - (st.itemH / 2) - (st.position * st.itemH);
+      st.trackEl.style.transform = "translateY(" + offset + "px)";
+      for (var i = 0; i < st.items.length; i++) {
+        var dist = Math.abs(i - st.position);
+        var opacity = dist < 0.5 ? 1 : Math.max(0.06, Math.pow(0.42, dist));
+        var scale = dist < 0.5 ? 1 : Math.max(0.65, 1 - dist * 0.07);
+        st.items[i].style.opacity = opacity;
+        st.items[i].style.transform = "scale(" + scale + ")";
+        st.items[i].classList.toggle("selected", Math.round(st.position) === i);
+      }
+    }
+
+    function animateTo(st, idx) {
+      st.velocity = 0;
+      var start = st.position;
+      var end = idx;
+      var startTime = null;
+      var duration = 350 + Math.abs(end - start) * 40;
+      if (duration > 800) duration = 800;
+      function step(ts) {
+        if (!startTime) startTime = ts;
+        var t = Math.min((ts - startTime) / duration, 1);
+        var eased = 1 - Math.pow(1 - t, 3);
+        st.position = start + (end - start) * eased;
+        render(st);
+        if (t < 1) {
+          requestAnimationFrame(step);
+        } else {
+          st.position = end;
+          render(st);
+          st.isAnimating = false;
+          if (st.onSnap) st.onSnap(Math.round(st.position));
+        }
+      }
+      st.isAnimating = true;
+      requestAnimationFrame(step);
+    }
+
+    function momentumLoop(st) {
+      if (Math.abs(st.velocity) < 0.01) {
+        var snapIdx = Math.round(st.position);
+        snapIdx = Math.max(0, Math.min(snapIdx, count - 1));
+        if (Math.abs(st.position - snapIdx) > 0.01) {
+          animateTo(st, snapIdx);
+          if (st.linked) animateTo(st.linked, snapIdx);
+        } else {
+          st.position = snapIdx;
+          render(st);
+          st.isAnimating = false;
+          if (st.linked) {
+            st.linked.position = snapIdx;
+            render(st.linked);
+            st.linked.isAnimating = false;
+          }
+          if (st.onSnap) st.onSnap(snapIdx);
+        }
+        return;
+      }
+      st.position += st.velocity;
+      if (st.position < -0.3) { st.position = -0.3; st.velocity = Math.abs(st.velocity) * 0.3; }
+      if (st.position > count - 1 + 0.3) { st.position = count - 1 + 0.3; st.velocity = -Math.abs(st.velocity) * 0.3; }
+      st.velocity *= 0.92;
+      render(st);
+      /* Sync linked carousel */
+      if (st.linked) {
+        st.linked.position = st.position;
+        render(st.linked);
+      }
+      requestAnimationFrame(function() { momentumLoop(st); });
+    }
+
+    /* Public API */
+    state.render = function() { render(state); };
+    state.animateTo = function(idx) {
+      animateTo(state, idx);
+      if (state.linked) animateTo(state.linked, idx);
+    };
+    state.measure = measure;
+
+    state.attachWheel = function(el) {
+      var lastWheelTime = 0;
+      el.addEventListener("wheel", function(e) {
+        e.preventDefault();
+        var now = Date.now();
+        lastWheelTime = now;
+        var delta = e.deltaY;
+        if (Math.abs(delta) > 100) delta = delta > 0 ? 30 : -30;
+        state.velocity += delta * 0.008;
+        if (state.velocity > 2.5) state.velocity = 2.5;
+        if (state.velocity < -2.5) state.velocity = -2.5;
+        if (!state.isAnimating) {
+          state.isAnimating = true;
+          requestAnimationFrame(function() { momentumLoop(state); });
+        }
+        /* Notify wheel callback (used by S2 to unlock selection on scroll) */
+        if (state.onWheel) state.onWheel();
+      }, { passive: false });
+    };
+
+    state.getIndex = function() { return Math.round(state.position); };
+    render(state);
+    return state;
+  }
+
+  /* ══════════════════════════════════════
+     SECTION NAVIGATION
+     ══════════════════════════════════════ */
+
+  var sections = ["s1", "s2", "s3", "s4", "s5", "s6", "s7", "s8", "s9", "s10", "s11", "s12", "s13", "s14"];
+  var currentSection = 0;
+  var headerBar = document.getElementById("headerBar");
+  var btnPrev = document.getElementById("btnPrev");
+  var btnNext = document.getElementById("btnNext");
+
+  var s3FullyExpanded = false; /* true once user has scrolled unspool to the end */
+
+  function updateNavButtons() {
+    btnPrev.disabled = (currentSection === 0);
+    btnNext.disabled = (currentSection === sections.length - 1);
+  }
+
+  function goToSection(idx) {
+    if (idx < 0 || idx >= sections.length) return;
+    /* Auto-lock S2 selection if user tries to advance without locking */
+    if (currentSection === 1 && idx > 1 && !s2Locked) {
+      var autoIdx = s2Medium ? s2Medium.getIndex() : 0;
+      s2Locked = true;
+      s2LockedIdx = autoIdx;
+      var s2MI = document.querySelectorAll("#s2MediumTrack .s2-carousel-item");
+      var s2AI = document.querySelectorAll("#s2ActionTrack .s2-carousel-item");
+      s2MI.forEach(function(el, j) { el.classList.toggle("locked", j === autoIdx); });
+      s2AI.forEach(function(el, j) { el.classList.toggle("locked", j === autoIdx); });
+      updateNavButtons();
+      /* First click locks; user must click again to advance */
+      return;
+    }
+    /* Auto-complete S3 rollout if user tries to advance before it's done */
+    if (currentSection === 2 && idx > 2 && !s3FullyExpanded) {
+      s3Scroll = s3MaxScroll;
+      s3ScrollVel = 0;
+      s3FullyExpanded = true;
+      renderOverlay();
+      var hint = document.getElementById("s3ScrollHint");
+      if (hint) hint.classList.add("hidden");
+      updateNavButtons();
+      /* First click completes rollout; user must click again to advance */
+      return;
+    }
+
+    var prevSection = currentSection;
+    document.getElementById(sections[currentSection]).classList.remove("active");
+    currentSection = idx;
+    document.getElementById(sections[currentSection]).classList.add("active");
+
+    updateNavButtons();
+
+    /* Show header bar, dividers, and vision label on S2+ */
+    var vDividers = document.getElementById("vDividers");
+    var visionLabel = document.getElementById("visionLabel");
+    if ((currentSection >= 1 && currentSection <= 5) || currentSection === 13) {
+      /* S2–S6 and S14: show real fixed elements */
+      headerBar.classList.add("visible");
+      vDividers.classList.add("visible");
+      visionLabel.classList.add("visible");
+      visionLabel.textContent = currentSection >= 2 ? "Your" : "You";
+    } else if (currentSection >= 6) {
+      /* S7+: sparse layout — hide fixed chrome (except S14) */
+      headerBar.classList.remove("visible");
+      vDividers.classList.remove("visible");
+      visionLabel.classList.remove("visible");
+    } else {
+      headerBar.classList.remove("visible");
+      vDividers.classList.remove("visible");
+      visionLabel.classList.remove("visible");
+    }
+
+    /* ── Clean up when leaving S4 ── */
+    if (prevSection === 3 && currentSection !== 3) {
+      /* Hide panels, story column, and arrows */
+      s4PanelLeft.classList.remove("visible");
+      s4PanelRight.classList.remove("visible");
+      s4StoryCol.classList.remove("visible");
+      s4ProblemLabel.classList.remove("visible");
+      var s4Arr = document.getElementById("s4Arrows");
+      s4Arr.style.transition = "opacity 0.15s ease";
+      s4Arr.classList.remove("visible");
+      var s4LA = document.getElementById("s4LeftArrows");
+      s4LA.style.transition = "opacity 0.15s ease";
+      s4LA.classList.remove("visible");
+      /* Only reset fixed positions if going backward (S5 reuses same layout) */
+      if (currentSection < 3) {
+        if (typeof resetFixedPositions === "function") resetFixedPositions();
+      }
+      s4World.innerHTML = "";
+      s4World.classList.remove("zoomed-out");
+    }
+
+    /* ── Clean up when leaving S5 ── */
+    if (prevSection === 4 && currentSection !== 4) {
+      s5PanelLeft.classList.remove("visible");
+      s5PanelRight.classList.remove("visible");
+      s5StoryCol.classList.remove("visible");
+      s5ProblemLabel.classList.remove("visible");
+      s5ProblemLabel1.classList.remove("visible");
+      var s5Arr = document.getElementById("s5Arrows");
+      s5Arr.style.transition = "opacity 0.15s ease";
+      s5Arr.classList.remove("visible");
+      var s5LA = document.getElementById("s5LeftArrows");
+      s5LA.style.transition = "opacity 0.15s ease";
+      s5LA.classList.remove("visible");
+      s5World.innerHTML = "";
+      s5World.classList.remove("zoomed-out");
+      if (currentSection < 3) {
+        if (typeof resetFixedPositions === "function") resetFixedPositions();
+      }
+    }
+
+    /* ── Clean up when leaving S6 ── */
+    if (prevSection === 5 && currentSection !== 5) {
+      s6PanelLeft.classList.remove("visible");
+      s6PanelRight.classList.remove("visible");
+      s6StoryCol.classList.remove("visible");
+      s6ProblemLabel.classList.remove("visible");
+      s6ProblemLabel1.classList.remove("visible");
+      s6ProblemLabel2.classList.remove("visible");
+      var s6Arr = document.getElementById("s6Arrows");
+      s6Arr.style.transition = "opacity 0.15s ease";
+      s6Arr.classList.remove("visible");
+      var s6LA = document.getElementById("s6LeftArrows");
+      s6LA.style.transition = "opacity 0.15s ease";
+      s6LA.classList.remove("visible");
+      s6RoleHeader.classList.remove("visible");
+      s6CostCircle.classList.remove("visible");
+      /* Restore "Your" label position */
+      var vl = document.getElementById("visionLabel");
+      vl.style.transition = "left 0.3s var(--ease)";
+      vl.style.left = scaledX(ORIG_LABEL_X) + "px";
+      s6World.innerHTML = "";
+      s6World.classList.remove("zoomed-out");
+      if (currentSection < 3) {
+        if (typeof resetFixedPositions === "function") resetFixedPositions();
+      }
+    }
+
+    /* ── Clean up when leaving S14 ── */
+    if (prevSection === 13 && currentSection !== 13) {
+      var s14W = document.getElementById("s14World");
+      var s14PL = document.getElementById("s14PanelLeft");
+      var s14PR = document.getElementById("s14PanelRight");
+      var s14SC = document.getElementById("s14StoryCol");
+      var s14Arr = document.getElementById("s14Arrows");
+      var s14LA = document.getElementById("s14LeftArrows");
+      var s14RH = document.getElementById("s14RoleHeader");
+      var yggB = document.getElementById("yggBox");
+      if (s14PL) s14PL.classList.remove("visible");
+      if (s14PR) s14PR.classList.remove("visible");
+      if (s14SC) s14SC.classList.remove("visible");
+      if (s14Arr) { s14Arr.style.transition = "opacity 0.15s ease"; s14Arr.classList.remove("visible"); }
+      if (s14LA) { s14LA.style.transition = "opacity 0.15s ease"; s14LA.classList.remove("visible"); }
+      if (s14RH) s14RH.classList.remove("visible");
+      if (yggB) yggB.classList.remove("visible");
+      /* Hide problem & solution labels */
+      ["s14ProblemLabel1","s14ProblemLabel2","s14ProblemLabel3",
+       "s14SolutionLabel1","s14SolutionLabel2","s14SolutionLabel3"].forEach(function(id) {
+        var el = document.getElementById(id);
+        if (el) el.classList.remove("visible");
+      });
+      if (s14W) { s14W.innerHTML = ""; s14W.classList.remove("zoomed-out"); }
+      /* Restore "Your" label position */
+      var vl14 = document.getElementById("visionLabel");
+      vl14.style.transition = "left 0.3s var(--ease)";
+      vl14.style.left = scaledX(ORIG_LABEL_X) + "px";
+      if (currentSection < 3) {
+        if (typeof resetFixedPositions === "function") resetFixedPositions();
+      }
+    }
+
+    /* ── Clean up orbital animation when leaving S10 ── */
+    if (prevSection === 9 && currentSection !== 9) {
+      if (typeof orbAnimId !== "undefined" && orbAnimId) {
+        cancelAnimationFrame(orbAnimId);
+        orbAnimId = null;
+      }
+      var oE = document.getElementById("orbitalEverything");
+      var oS = document.getElementById("orbitalStorytelling");
+      if (oE) oE.classList.remove("animating");
+      if (oS) oS.classList.remove("animating");
+      /* Restore S10 text visibility */
+      var s10St = document.getElementById("s10Storytelling");
+      var s10Ev = document.getElementById("s10Everything");
+      if (s10St) s10St.style.opacity = "";
+      if (s10Ev) s10Ev.style.opacity = "";
+    }
+
+    /* Progress bar */
+    var pct = (currentSection / (sections.length - 1)) * 100;
+    document.getElementById("progressBar").style.width = pct + "%";
+
+    /* Sync S2 carousels when entering S2 */
+    if (currentSection === 1) {
+      /* Coming from any section: unlock selection so user can pick again */
+      s2Locked = false;
+      s2LockedIdx = -1;
+      var items = document.querySelectorAll("#s2MediumTrack .s2-carousel-item, #s2ActionTrack .s2-carousel-item");
+      items.forEach(function(el) { el.classList.remove("locked"); });
+      if (prevSection === 0 && s1Carousel) {
+        /* Coming from S1: sync to S1's pick */
+        var pickIdx = s1Carousel.getIndex();
+        s2Medium.animateTo(pickIdx);
+      }
+      /* Force re-render of S2 carousels to ensure they're visually correct */
+      if (s2Medium && s2Medium.render) s2Medium.render();
+      if (s2Action && s2Action.render) s2Action.render();
+      updateNavButtons();
+    }
+
+    /* Update footer subtext per section */
+    var footerSubtext = document.getElementById("footerSubtext");
+    if (currentSection === 2) {
+      footerSubtext.innerHTML = "But that&rsquo;s not your only job.<br>Scroll down to find out what else you have to do&hellip;";
+    } else {
+      footerSubtext.innerHTML = "";
+    }
+
+    /* Sync S3 content when entering S3 (single call — no duplicate) */
+    if (currentSection === 2) {
+      initS3Content();
+    }
+
+    /* S4: clone S3 and zoom out */
+    if (currentSection === 3) {
+      initS4Content(prevSection);
+    }
+
+    /* S5: clone S3, straight arrows, cost estimates */
+    if (currentSection === 4) {
+      initS5Content(prevSection);
+    }
+
+    /* S6: "Your job is [Role]" header, all rows get "and" */
+    if (currentSection === 5) {
+      initS6Content(prevSection);
+    }
+
+    /* S7: locked S2 layout — populate with user's selection */
+    if (currentSection === 6) {
+      initS7Content();
+    }
+
+    /* S9: "Everything is Storytelling." — static text, no init needed */
+    if (currentSection === 8) {
+      initS9Content();
+    }
+
+    /* S10: orbital swap from S9 */
+    if (currentSection === 9) {
+      initS10Content(prevSection);
+    }
+
+    /* S14: Yggdrasil solution view */
+    if (currentSection === 13) {
+      initS14Content(prevSection);
+    }
+  }
+
+  btnPrev.addEventListener("click", function() { goToSection(currentSection - 1); });
+  btnNext.addEventListener("click", function() { goToSection(currentSection + 1); });
+
+  /* ══════════════════════════════════════
+     S1: CAROUSEL
+     ══════════════════════════════════════ */
+
+  var everythingIdx = PICKS.indexOf("Everything");
+
+  var s1Carousel = createCarousel({
+    trackId: "s1Track",
+    containerId: "s1Carousel",
+    labels: PICKS,
+    itemClass: "s1-carousel-item",
+    initialIndex: everythingIdx
+  });
+  s1Carousel.attachWheel(document.getElementById("s1"));
+
+  /* Keyboard (active section only) */
+  document.addEventListener("keydown", function(e) {
+    if (currentSection === 0) {
+      if (e.key === "ArrowDown") { e.preventDefault(); s1Carousel.animateTo(Math.min(s1Carousel.getIndex() + 1, PICKS.length - 1)); }
+      if (e.key === "ArrowUp") { e.preventDefault(); s1Carousel.animateTo(Math.max(s1Carousel.getIndex() - 1, 0)); }
+    } else if (currentSection === 1) {
+      if (e.key === "ArrowDown") { e.preventDefault(); s2Medium.animateTo(Math.min(s2Medium.getIndex() + 1, PICKS.length - 1)); }
+      if (e.key === "ArrowUp") { e.preventDefault(); s2Medium.animateTo(Math.max(s2Medium.getIndex() - 1, 0)); }
+    }
+  });
+
+  /* S1 centering */
+  var sentence = document.querySelector(".s1-sentence");
+  var afterEl = document.querySelector(".s1-after");
+  var s1CarouselEl = document.getElementById("s1Carousel");
+  function centerGap() {
+    sentence.style.transform = "none";
+    void sentence.offsetWidth;
+    var cRect = s1CarouselEl.getBoundingClientRect();
+    var aRect = afterEl.getBoundingClientRect();
+    var gapMid = (cRect.right + aRect.left) / 2;
+    var vpMid = window.innerWidth / 2;
+    sentence.style.transform = "translateX(" + (vpMid - gapMid) + "px)";
+  }
+  requestAnimationFrame(function() { requestAnimationFrame(centerGap); });
+  window.addEventListener("resize", centerGap);
+
+  /* ══════════════════════════════════════
+     S2: LINKED CAROUSELS
+     ══════════════════════════════════════ */
+
+  var s2Medium = createCarousel({
+    trackId: "s2MediumTrack",
+    containerId: "s2MediumCarousel",
+    labels: PICKS,
+    itemClass: "s2-carousel-item",
+    initialIndex: everythingIdx
+  });
+
+  var s2Action = createCarousel({
+    trackId: "s2ActionTrack",
+    containerId: "s2ActionCarousel",
+    labels: ACTIONS,
+    itemClass: "s2-carousel-item",
+    initialIndex: everythingIdx
+  });
+
+  /* Link: scrolling medium also scrolls action */
+  s2Medium.linked = s2Action;
+
+  /* S2 selection lock: clicking an item locks it in place, bolds it, enables forward */
+  var s2Locked = false;
+  var s2LockedIdx = -1;
+
+  /* Override click behavior for S2 carousels: lock on click */
+  var s2MediumItems = document.querySelectorAll("#s2MediumTrack .s2-carousel-item");
+  s2MediumItems.forEach(function(item, i) {
+    item.addEventListener("click", function() {
+      if (s2Locked && s2LockedIdx === i) {
+        /* Re-click same item → unselect */
+        s2Locked = false;
+        s2LockedIdx = -1;
+        s2MediumItems.forEach(function(el) { el.classList.remove("locked"); });
+        var s2ActionItems = document.querySelectorAll("#s2ActionTrack .s2-carousel-item");
+        s2ActionItems.forEach(function(el) { el.classList.remove("locked"); });
+      } else {
+        /* Click new item → lock it */
+        s2Locked = true;
+        s2LockedIdx = i;
+        s2MediumItems.forEach(function(el, j) { el.classList.toggle("locked", j === i); });
+        var s2ActionItems = document.querySelectorAll("#s2ActionTrack .s2-carousel-item");
+        s2ActionItems.forEach(function(el, j) { el.classList.toggle("locked", j === i); });
+      }
+      updateNavButtons();
+    });
+  });
+
+  /* Scrolling S2 unlocks any selection (user is browsing again) */
+  s2Medium.onWheel = function() {
+    if (s2Locked) {
+      s2Locked = false;
+      s2LockedIdx = -1;
+      var allItems = document.querySelectorAll("#s2MediumTrack .s2-carousel-item, #s2ActionTrack .s2-carousel-item");
+      allItems.forEach(function(el) { el.classList.remove("locked"); });
+      updateNavButtons();
+    }
+  };
+
+  /* Attach wheel to S2 section — drives the medium carousel (action follows via link) */
+  s2Medium.attachWheel(document.getElementById("s2"));
+
+  /* ── Divider lines and header labels — hardcoded pixel positions ── */
+  document.getElementById("divLine1").style.left = "435px";
+  document.getElementById("divLine2").style.left = "975px";
+  document.getElementById("divLine3").style.left = "1300px";
+
+  var headerCols = document.querySelectorAll(".header-col");
+  headerCols[0].style.left = "10px";  headerCols[0].style.width = "425px";
+  headerCols[1].style.left = "445px"; headerCols[1].style.width = "520px";
+  headerCols[2].style.left = "985px"; headerCols[2].style.width = "305px";
+  headerCols[3].style.left = "1310px"; headerCols[3].style.width = "auto";
+  headerCols.forEach(function(el) { el.style.justifyContent = "flex-start"; });
+
+  /* Align "You" and "Your" to x=130, and match S2 connective width to S3 */
+  (function() {
+    var TARGET_X = 130;
+    var s2Vision = document.querySelector("#s2 .s2-cell.cell-vision");
+    var s3Vision = document.querySelector("#s3 .s2-cell.cell-vision");
+    var s2Conns = document.querySelectorAll("#s2 .s2-grid .s2-connective");
+    var s3Conns = document.querySelectorAll("#s3Grid .s2-connective");
+    requestAnimationFrame(function() { requestAnimationFrame(function() {
+      if (s2Vision) {
+        var s2Left = s2Vision.getBoundingClientRect().left;
+        s2Vision.style.paddingLeft = (TARGET_X - s2Left) + "px";
+      }
+      if (s3Vision) {
+        var s3Left = s3Vision.getBoundingClientRect().left;
+        s3Vision.style.paddingLeft = (TARGET_X - s3Left) + "px";
+      }
+      /* Match S2 connective width to S3 */
+      if (s2Conns.length >= 2 && s3Conns.length >= 2) {
+        var s3W = s3Conns[1].getBoundingClientRect().width;
+        s2Conns[1].style.width = s3W + "px";
+        s2Conns[1].style.textAlign = "right";
+      }
+    }); });
+  })();
+
+  /* ══════════════════════════════════════
+     S3: FROZEN CAROUSELS + CLIP-PATH UNSPOOL
+     ══════════════════════════════════════ */
+
+  var s3RoleCarousel = createCarousel({
+    trackId: "s3RoleTrack",
+    containerId: "s3RoleCarousel",
+    labels: PICKS,
+    itemClass: "s2-carousel-item",
+    initialIndex: everythingIdx
+  });
+
+  var s3ActionCarousel = createCarousel({
+    trackId: "s3ActionTrack",
+    containerId: "s3ActionCarousel",
+    labels: ACTIONS,
+    itemClass: "s2-carousel-item",
+    initialIndex: everythingIdx
+  });
+
+  /* Link: role drives action (for animateTo sync) */
+  s3RoleCarousel.linked = s3ActionCarousel;
+
+  /* NOTE: No attachWheel — S3 carousels are FROZEN */
+
+
+  /* ── S3 state ── */
+  var s3Grid = document.getElementById("s3Grid");
+  var s3Unspool = document.getElementById("s3Unspool");
+  var s3Track = document.getElementById("s3UnspoolTrack");
+  var s3Subtext = document.getElementById("s3Subtext");
+  var s3ScrollHint = document.getElementById("s3ScrollHint");
+  var s3Broken = false;
+
+  /* ── Unspool state ── */
+  var s3Scroll = 0;       /* 0→maxScroll: directional reveal position (row units) */
+  var s3ScrollVel = 0;    /* velocity in row units per frame */
+  var s3Animating = false;
+  var s3RowH = 0;         /* row height px */
+  var s3CenterY = 0;      /* carousel center Y relative to section */
+  var s3SectionH = 0;     /* section height */
+  var s3NumAbove = 0;     /* rows above center */
+  var s3NumBelow = 0;     /* rows below center */
+  var s3TotalRows = 0;
+  var s3MaxScroll = 0;    /* s3NumBelow + s3NumAbove */
+  var s3CenterIdx = 0;    /* index of selected row in overlay */
+  var s3RowEls = [];      /* per-row: { els:[], dist:number, rowIdx:number } */
+
+  var s3OverlayPickIdx = 0; /* set by initS3Content before buildOverlay is called */
+
+  function buildOverlay() {
+    s3Track.innerHTML = "";
+    s3RowEls = [];
+    s3Scroll = 0;
+    s3ScrollVel = 0;
+    s3Animating = false;
+
+    var pickIdx = s3OverlayPickIdx;
+    var selectedRole = PICKS[pickIdx];
+    var selectedAction = ACTIONS[pickIdx];
+    var related = RELATED_ROLES[selectedRole] || [];
+
+    /* Build subset: selected + related, in PICKS order */
+    var others = [];
+    var selectedItem = null;
+    PICKS.forEach(function(pick, i) {
+      if (pick === selectedRole) {
+        selectedItem = { role: pick, action: ACTIONS[i], isSelected: true };
+      } else if (related.indexOf(pick) >= 0) {
+        others.push({ role: pick, action: ACTIONS[i], isSelected: false });
+      }
+    });
+
+    /* Re-center: split related roles evenly above and below the selected role */
+    var half = Math.floor(others.length / 2);
+    var aboveItems = others.slice(0, half);
+    var belowItems = others.slice(half);
+    var subset = aboveItems.concat([selectedItem], belowItems);
+
+    s3CenterIdx = half; /* selected is always at this index */
+    s3NumAbove = s3CenterIdx;
+    s3NumBelow = subset.length - s3CenterIdx - 1;
+    s3TotalRows = subset.length;
+    s3MaxScroll = s3NumBelow + s3NumAbove;
+
+    /* Compute row height and carousel center */
+    var carouselEl = document.getElementById("s3RoleCarousel");
+    var fs = parseFloat(getComputedStyle(carouselEl).fontSize);
+    s3RowH = fs * 1.4;
+    var cRect = carouselEl.getBoundingClientRect();
+    var sRect = document.getElementById("s3").getBoundingClientRect();
+    s3CenterY = cRect.top + cRect.height / 2 - sRect.top;
+    s3SectionH = sRect.height;
+
+    /* Position track so center row aligns with carousel center */
+    var trackTop = s3CenterY - s3CenterIdx * s3RowH - s3RowH / 2;
+    s3Track.style.top = trackTop + "px";
+
+    /*
+     * Read pixel positions from S3's grid cells.
+     * This ensures overlay columns align exactly with the S3 carousels.
+     */
+    var s3GridCells = document.querySelectorAll("#s3Grid > *:not(.s2-divider)");
+    /* s3GridCells: [0]=cell-vision, [1]=connective1, [2]=role carousel cell, [3]=connective2, [4]=action carousel cell, [5]=empty */
+    var colPositions = [];
+    for (var ci = 0; ci < s3GridCells.length; ci++) {
+      var cr = s3GridCells[ci].getBoundingClientRect();
+      colPositions.push({ left: cr.left - sRect.left, width: cr.width, right: cr.right - sRect.left });
+    }
+
+    /* Build rows — each cell is absolutely positioned using grid pixel coords */
+    subset.forEach(function(rowData, i) {
+      var dist = Math.abs(i - s3CenterIdx);
+      var allEls = [];
+      var rowTop = i * s3RowH;
+
+      function makeCell(className, text, colIdx) {
+        var el = document.createElement("div");
+        el.className = "s3-ucell " + className;
+        if (text) el.textContent = text;
+        el.style.position = "absolute";
+        el.style.top = rowTop + "px";
+        el.style.height = s3RowH + "px";
+        el.style.lineHeight = s3RowH + "px";
+        if (colPositions[colIdx]) {
+          el.style.left = colPositions[colIdx].left + "px";
+          el.style.width = colPositions[colIdx].width + "px";
+        }
+        s3Track.appendChild(el);
+        allEls.push(el);
+        return el;
+      }
+
+      /* Col 1: "Your" — hidden in overlay, fixed label renders it */
+      makeCell("", "", 0);
+
+      /* Col 2: "job is" on selected row, "and" (right-justified) on others */
+      var conn1El = makeCell("s3-uconn", rowData.isSelected ? "job is" : "and", 1);
+      if (!rowData.isSelected) {
+        conn1El.style.justifyContent = "flex-end";
+        conn1El.style.textAlign = "right";
+      }
+
+      /* Col 3: role name */
+      makeCell("s3-urole" + (rowData.isSelected ? " s3-selected" : ""), rowData.role, 2);
+
+      /* Col 4: "because you want/need to" — selected role gets "want", others get "need" */
+      makeCell("s3-uconn", rowData.isSelected ? "because you want to" : "because you need to", 3);
+
+      /* Col 5: action */
+      makeCell("s3-uaction" + (rowData.isSelected ? " s3-selected" : ""), rowData.action, 4);
+
+      /* Col 6: empty spacer — extend to right edge */
+      var col6 = makeCell("", "", 5);
+      if (colPositions[5]) {
+        col6.style.width = "auto";
+        col6.style.right = "0";
+      }
+
+      s3RowEls.push({ els: allEls, dist: dist, isSelected: rowData.isSelected, rowIdx: i });
+    });
+
+    renderOverlay();
+  }
+
+  function renderOverlay() {
+    var scroll = s3Scroll;
+
+    /*
+     * Directional reveal:
+     * scroll 0 → s3NumBelow : reveals rows BELOW center
+     * scroll s3NumBelow → s3MaxScroll : reveals rows ABOVE center
+     */
+    var belowRevealed = Math.min(scroll, s3NumBelow);          /* 0..numBelow */
+    var aboveRevealed = Math.max(0, scroll - s3NumBelow);      /* 0..numAbove */
+
+    /* Clip-path: asymmetric */
+    var revealDownPx = belowRevealed * s3RowH;
+    var revealUpPx = aboveRevealed * s3RowH;
+    var topClip = s3CenterY - s3RowH / 2 - revealUpPx;
+    var botClip = s3SectionH - s3CenterY - s3RowH / 2 - revealDownPx;
+    s3Unspool.style.clipPath = "inset(" + Math.max(0, topClip) + "px 0px " + Math.max(0, botClip) + "px 0px)";
+
+    /* Global t for rolodex→flat interpolation (0 when nothing revealed, 1 when all revealed) */
+    var t = s3MaxScroll > 0 ? scroll / s3MaxScroll : 0;
+    t = Math.max(0, Math.min(1, t));
+
+    /* Unlock forward nav once all roles are fully revealed */
+    if (scroll >= s3MaxScroll - 0.05 && !s3FullyExpanded) {
+      s3FullyExpanded = true;
+      updateNavButtons();
+    }
+
+    /* Per-row styling: interpolate rolodex → flat */
+    for (var i = 0; i < s3RowEls.length; i++) {
+      var row = s3RowEls[i];
+      var d = row.dist;
+      var opacity, scale;
+
+      if (row.isSelected) {
+        opacity = 1; scale = 1;
+      } else {
+        /* Compute per-row reveal fraction based on direction */
+        var rowRevealT;
+        var ri = row.rowIdx;
+        if (ri > s3CenterIdx) {
+          /* Below center: revealed in scroll 0..numBelow phase */
+          var distFromCenter = ri - s3CenterIdx; /* 1-based */
+          rowRevealT = Math.max(0, Math.min(1, belowRevealed / distFromCenter));
+        } else {
+          /* Above center: revealed in scroll numBelow..maxScroll phase */
+          var distFromCenter = s3CenterIdx - ri; /* 1-based */
+          rowRevealT = Math.max(0, Math.min(1, aboveRevealed / distFromCenter));
+        }
+
+        /* Rolodex values (hidden/compressed) */
+        var rOpacity = Math.max(0.06, Math.pow(0.42, d));
+        var rScale = Math.max(0.65, 1 - d * 0.07);
+        /* Flat values (fully revealed) */
+        var fOpacity = Math.max(0.25, 1 - d * 0.06);
+        var fScale = 1.0;
+        /* Interpolate using per-row reveal */
+        opacity = rOpacity + (fOpacity - rOpacity) * rowRevealT;
+        scale = rScale + (fScale - rScale) * rowRevealT;
+      }
+
+      for (var j = 0; j < row.els.length; j++) {
+        row.els[j].style.opacity = opacity;
+        if (scale < 0.999) {
+          row.els[j].style.transform = "scale(" + scale + ")";
+        } else {
+          row.els[j].style.transform = "";
+        }
+      }
+    }
+  }
+
+  function unspoolMomentum() {
+    if (Math.abs(s3ScrollVel) < 0.01) {
+      s3Scroll = Math.max(0, Math.min(s3MaxScroll, s3Scroll));
+      s3Animating = false;
+      renderOverlay();
+      return;
+    }
+    s3Scroll += s3ScrollVel;
+    /* Bounce at boundaries */
+    if (s3Scroll < -0.1) { s3Scroll = -0.1; s3ScrollVel = Math.abs(s3ScrollVel) * 0.3; }
+    if (s3Scroll > s3MaxScroll + 0.1) { s3Scroll = s3MaxScroll + 0.1; s3ScrollVel = -Math.abs(s3ScrollVel) * 0.3; }
+    s3ScrollVel *= 0.92;
+    renderOverlay();
+    requestAnimationFrame(unspoolMomentum);
+  }
+
+  function initS3Content() {
+    var pickIdx = s2LockedIdx >= 0 ? s2LockedIdx : (s2Medium ? s2Medium.getIndex() : (s1Carousel ? s1Carousel.getIndex() : everythingIdx));
+    s3OverlayPickIdx = pickIdx; /* store for buildOverlay — avoids race with animateTo */
+    s3RoleCarousel.animateTo(pickIdx);
+
+    /* Bold the selected item in S3 carousels */
+    var s3RoleItems = document.querySelectorAll("#s3RoleTrack .s2-carousel-item");
+    var s3ActionItems = document.querySelectorAll("#s3ActionTrack .s2-carousel-item");
+    s3RoleItems.forEach(function(el, j) { el.classList.toggle("locked", j === pickIdx); });
+    s3ActionItems.forEach(function(el, j) { el.classList.toggle("locked", j === pickIdx); });
+
+    /* Reset */
+    s3Broken = false;
+    s3Scroll = 0;
+    s3ScrollVel = 0;
+    s3Animating = false;
+    s3FullyExpanded = false;
+    s3Unspool.classList.remove("active");
+    s3Unspool.style.clipPath = "inset(50% 0 50% 0)";
+    s3Subtext.classList.remove("hidden");
+    s3ScrollHint.classList.remove("hidden");
+    /* Dividers and headers are now hardcoded — no repositioning needed */
+
+    /* Pre-build overlay so it's ready — scroll just changes clip-path, no DOM work */
+    setTimeout(function() { buildOverlay(); }, 50);
+  }
+
+  /* ── Scroll handler: capture phase ── */
+  document.getElementById("s3").addEventListener("wheel", function(e) {
+    e.preventDefault();
+    e.stopPropagation();
+
+    if (!s3Broken) {
+      if (e.deltaY > 0) {
+        /* Scroll down → trigger unspool (overlay already pre-built) */
+        s3Broken = true;
+        s3Unspool.classList.add("active");
+        s3ScrollHint.classList.add("hidden");
+        /* Initial kick — reveal first row below */
+        s3ScrollVel = 0.06;
+        s3Animating = true;
+        requestAnimationFrame(unspoolMomentum);
+      }
+      /* Scroll up does NOT go back — use nav buttons for that */
+      return;
+    }
+
+    /* ── Post-break ── */
+
+    /* Scroll up near scroll=0 → collapse overlay back to pre-unspool state (no page change) */
+    if (e.deltaY < 0 && s3Scroll <= 0.05 && Math.abs(s3ScrollVel) < 0.05) {
+      s3Broken = false;
+      s3Scroll = 0;
+      s3ScrollVel = 0;
+      s3Animating = false;
+      s3Unspool.classList.remove("active");
+      s3Unspool.style.clipPath = "inset(50% 0 50% 0)";
+      s3Subtext.classList.remove("hidden");
+      s3ScrollHint.classList.remove("hidden");
+      return;
+    }
+
+    /* Scroll down at max — do NOT advance section via scroll.
+       Use nav buttons (or swipe) to advance. */
+
+    /* Drive scroll with momentum — same feel as carousel */
+    var delta = e.deltaY;
+    if (Math.abs(delta) > 100) delta = delta > 0 ? 30 : -30;
+    /* Scale: each scroll tick ≈ 0.015 rows, so a few scrolls reveal one row */
+    s3ScrollVel += delta * 0.002;
+    var maxVel = Math.max(0.4, s3MaxScroll * 0.08);
+    if (s3ScrollVel > maxVel) s3ScrollVel = maxVel;
+    if (s3ScrollVel < -maxVel) s3ScrollVel = -maxVel;
+    if (!s3Animating) {
+      s3Animating = true;
+      requestAnimationFrame(unspoolMomentum);
+    }
+  }, true);
+
+  /* ══════════════════════════════════════
+     S4: FEEL THE PROBLEM — CLONE & ZOOM OUT
+     ══════════════════════════════════════ */
+
+  var s4World = document.getElementById("s4World");
+  var s4PanelLeft = document.getElementById("s4PanelLeft");
+  var s4PanelRight = document.getElementById("s4PanelRight");
+  var s4StoryCol = document.getElementById("s4StoryCol");
+  var s4ProblemLabel = document.getElementById("s4ProblemLabel");
+
+  function initS4Content(prevSection) {
+    s4World.innerHTML = "";
+
+    /*
+     * Clone the ENTIRE S3 section's children into the world container.
+     * The world is position:absolute;inset:0 — same dimensions as the viewport —
+     * so every absolutely-positioned element lands at the exact same pixel coords.
+     */
+    var s3Section = document.getElementById("s3");
+    var s3Children = s3Section.children;
+    for (var i = 0; i < s3Children.length; i++) {
+      var clone = s3Children[i].cloneNode(true);
+      /* Strip IDs to avoid duplicates */
+      clone.removeAttribute("id");
+      clone.querySelectorAll("[id]").forEach(function(el) { el.removeAttribute("id"); });
+      s4World.appendChild(clone);
+    }
+
+    /* Make the unspool overlay fully visible in the clone */
+    var clonedUnspool = s4World.querySelector(".s3-unspool");
+    if (clonedUnspool) {
+      clonedUnspool.classList.add("active");
+      clonedUnspool.style.clipPath = "inset(0 0 0 0)";
+    }
+
+    /* Hide the subtext and scroll hint in S4 */
+    var clonedSubtext = s4World.querySelector(".s3-subtext");
+    var clonedHint = s4World.querySelector(".s3-scroll-hint");
+    if (clonedSubtext) clonedSubtext.style.display = "none";
+    if (clonedHint) clonedHint.style.display = "none";
+
+    /*
+     * Build sprawl arrow paths.
+     * Each non-selected unspool row gets a Bézier that:
+     *   - starts at the right edge of its action cell (in scaled coords)
+     *   - curves inward toward the selected row's Y
+     *   - bends away before converging — the "sprawl" visual
+     * The selected row gets a straight arrow that also turns away.
+     */
+    function buildSprawlArrows() {
+      var svg = document.getElementById("s4Arrows");
+      /* Clear old paths (keep <defs>) */
+      var oldPaths = svg.querySelectorAll("path");
+      oldPaths.forEach(function(p) { p.remove(); });
+
+      if (s3RowEls.length === 0) return;
+
+      var vw = window.innerWidth;
+      var vh = window.innerHeight;
+      svg.setAttribute("viewBox", "0 0 " + vw + " " + vh);
+      svg.setAttribute("width", vw);
+      svg.setAttribute("height", vh);
+
+      var trackTop = s3CenterY - s3CenterIdx * s3RowH - s3RowH / 2;
+
+      /* Convert S3-space Y to S4 viewport Y */
+      function toVpY(sy) {
+        return vh / 2 + (sy - vh / 2) * S4_SCALE;
+      }
+
+      /* Selected row center Y in viewport */
+      var selY_s3 = trackTop + s3CenterIdx * s3RowH + s3RowH / 2;
+      var selVpY = toVpY(selY_s3);
+
+      /* 3rd divider X in S4 viewport coords */
+      var div3X = scaledX(ORIG_DIV[2]);
+
+      /*
+       * Try to read startX from cloned action elements.
+       * getBoundingClientRect on transformed elements returns viewport coords.
+       */
+      var clonedActions = s4World.querySelectorAll(".s3-uaction");
+
+      /*
+       * Arrows span from just after the action text to just past the divider.
+       * Single cubic Bézier per arrow — ALL x-coords strictly increase (no zigzag).
+       *
+       * Shape: lines converge toward the selected row's Y, reach their
+       * closest point (apex/nadir) right at the dividing line, then splay
+       * apart briefly — symbolising "idea sprawl" (roles don't unify).
+       *
+       * The splay (right of divider) is SHORT — much less than the ramp.
+       */
+      var endX = div3X + 28; /* just past the divider, 80% width */
+
+      s3RowEls.forEach(function(row, i) {
+        var rowY_s3 = trackTop + row.rowIdx * s3RowH + s3RowH / 2;
+        var startY = toVpY(rowY_s3);
+
+        /* Start X: right edge of action text, or fallback well left of divider */
+        var startX;
+        if (clonedActions[i]) {
+          var aRect = clonedActions[i].getBoundingClientRect();
+          if (aRect.right > 0 && aRect.right < div3X) {
+            startX = aRect.right + 28;
+          } else {
+            startX = div3X - 60;
+          }
+        } else {
+          startX = div3X - 60;
+        }
+
+        var distFromCenter = row.rowIdx - s3CenterIdx;
+        var absDist = Math.abs(distFromCenter);
+        var sign = distFromCenter > 0 ? 1 : (distFromCenter < 0 ? -1 : 0);
+
+        /* Splay: keep it tight — arrows barely fan out past the divider */
+        var splayY = sign * absDist * s3RowH * S4_SCALE * 0.5;
+
+        var totalDx = endX - startX;
+
+        /*
+         * CP1 at 45% across: Y converging strongly toward selected row
+         * CP2 at ~divider line: Y almost at selected — this is the apex/nadir
+         * End: just past divider with modest splay
+         *
+         * This produces a smooth S-curve that always moves left→right.
+         * The tightest convergence point lands right at the dividing line.
+         */
+        var rampFraction = (div3X - startX) / totalDx; /* where divider falls in the span */
+        var cp1x = startX + totalDx * (rampFraction * 0.55);
+        var cp1y = startY + (selVpY - startY) * 0.75;
+
+        /* CP2 right at the divider — this is the apex/nadir of the curve */
+        var cp2x = div3X;
+        var cp2y = selVpY + splayY * 0.2;
+
+        var finalY = selVpY + splayY;
+
+        var d;
+        if (distFromCenter === 0) {
+          /* Selected row: straight horizontal arrow */
+          d = "M " + startX + " " + startY + " L " + endX + " " + startY;
+        } else {
+          d = "M " + startX + " " + startY +
+              " C " + cp1x + " " + cp1y +
+              " " + cp2x + " " + cp2y +
+              " " + endX + " " + finalY;
+        }
+
+        var path = document.createElementNS("http://www.w3.org/2000/svg", "path");
+        path.setAttribute("d", d);
+        path.setAttribute("marker-end", "url(#arrowHead)");
+        svg.appendChild(path);
+
+        /* Measure path length for draw-in animation */
+        var len = path.getTotalLength();
+        path.style.setProperty("--path-len", len);
+      });
+    }
+
+    /* Animate the zoom-out */
+    var s4Arrows = document.getElementById("s4Arrows");
+    var s4LeftArr = document.getElementById("s4LeftArrows");
+    s4Arrows.classList.remove("visible");
+    s4LeftArr.classList.remove("visible");
+
+    if (prevSection === 2) {
+      /* Coming from S3: start at scale(1), animate to scale(0.8) */
+      s4World.classList.remove("zoomed-out");
+      void s4World.offsetHeight;
+      requestAnimationFrame(function() {
+        s4World.classList.add("zoomed-out");
+        repositionFixedForS4(scaledX);
+        /* Start building arrows immediately — fade in overlaps with zoom */
+        s4PanelLeft.classList.add("visible");
+        s4PanelRight.classList.add("visible");
+        s4StoryCol.classList.add("visible");
+        positionStoryColText(s4StoryCol);
+        s4ProblemLabel.classList.add("visible");
+        buildSprawlArrows();
+        buildDivergingArrows(s4World, "s4LeftArrows", "leftArrowHead4");
+        s4Arrows.style.transition = "opacity 0.6s var(--ease) 0.4s";
+        s4LeftArr.style.transition = "opacity 0.6s var(--ease) 0.4s";
+        s4Arrows.classList.add("visible");
+        s4LeftArr.classList.add("visible");
+      });
+    } else {
+      s4World.classList.add("zoomed-out");
+      repositionFixedForS4(scaledX);
+      s4PanelLeft.classList.add("visible");
+      s4PanelRight.classList.add("visible");
+      s4StoryCol.classList.add("visible");
+      positionStoryColText(s4StoryCol);
+      s4ProblemLabel.classList.add("visible");
+      buildSprawlArrows();
+      buildDivergingArrows(s4World, "s4LeftArrows", "leftArrowHead4");
+      s4Arrows.classList.add("visible");
+      s4LeftArr.classList.add("visible");
+    }
+  }
+
+  /* Shared S4/S5 scale constants */
+  var S4_SCALE = 0.8;
+  var S4_OFFSET = -80;
+
+  function scaledX(origX) {
+    var centerX = window.innerWidth / 2;
+    return centerX + (origX - centerX) * S4_SCALE + S4_OFFSET;
+  }
+
+  /* Original hardcoded positions (from S2/S3) */
+  var ORIG_DIV = [435, 975, 1300];
+  var ORIG_HDR = [
+    { left: 10, width: 425 },
+    { left: 445, width: 520 },
+    { left: 985, width: 305 },
+    { left: 1310, width: "auto" }
+  ];
+  var ORIG_LABEL_X = 130;
+
+  function repositionFixedForS4(scaledX) {
+    /* Divider lines */
+    document.getElementById("divLine1").style.left = scaledX(ORIG_DIV[0]) + "px";
+    document.getElementById("divLine2").style.left = scaledX(ORIG_DIV[1]) + "px";
+    document.getElementById("divLine3").style.left = scaledX(ORIG_DIV[2]) + "px";
+
+    /* Add transitions for smooth repositioning */
+    var divLines = document.querySelectorAll(".v-divider-line");
+    divLines.forEach(function(el) { el.style.transition = "left 1.4s var(--ease)"; });
+
+    /* Header columns */
+    var headerCols = document.querySelectorAll(".header-col");
+    headerCols.forEach(function(el) { el.style.transition = "left 1.4s var(--ease), width 1.4s var(--ease)"; });
+    if (headerCols[0]) { headerCols[0].style.left = "10px"; headerCols[0].style.width = (scaledX(ORIG_DIV[0]) - 10) + "px"; }
+    if (headerCols[1]) { headerCols[1].style.left = (scaledX(ORIG_DIV[0]) + 10) + "px"; headerCols[1].style.width = (scaledX(ORIG_DIV[1]) - scaledX(ORIG_DIV[0]) - 10) + "px"; }
+    if (headerCols[2]) { headerCols[2].style.left = (scaledX(ORIG_DIV[1]) + 10) + "px"; headerCols[2].style.width = (scaledX(ORIG_DIV[2]) - scaledX(ORIG_DIV[1]) - 10) + "px"; }
+    if (headerCols[3]) { headerCols[3].style.left = (scaledX(ORIG_DIV[2]) + 10) + "px"; headerCols[3].style.width = "auto"; }
+
+    /* "Your" label */
+    var visionLabel = document.getElementById("visionLabel");
+    visionLabel.style.transition = "left 1.4s var(--ease)";
+    visionLabel.style.left = scaledX(ORIG_LABEL_X) + "px";
+
+    /* Story columns — sit to the right of the scaled 3rd divider */
+    var storyLeft = scaledX(ORIG_DIV[2]) + 10; /* 10px padding from divider */
+    s4StoryCol.style.left = storyLeft + "px";
+    s4StoryCol.style.right = "0px";
+    s4StoryCol.style.transition = "left 1.4s var(--ease), opacity 0.05s ease";
+    s5StoryCol.style.left = storyLeft + "px";
+    s5StoryCol.style.right = "0px";
+    s5StoryCol.style.transition = "left 1.4s var(--ease), opacity 0.05s ease";
+    s6StoryCol.style.left = storyLeft + "px";
+    s6StoryCol.style.right = "0px";
+    s6StoryCol.style.transition = "left 1.4s var(--ease), opacity 0.05s ease";
+    var s14SC = document.getElementById("s14StoryCol");
+    if (s14SC) {
+      s14SC.style.left = storyLeft + "px";
+      s14SC.style.right = "0px";
+      s14SC.style.transition = "left 1.4s var(--ease), opacity 0.05s ease";
+    }
+  }
+
+  /* Position story column text at the selected row's viewport Y */
+  function positionStoryColText(storyCol) {
+    var vh = window.innerHeight;
+    var trackTop = s3CenterY - s3CenterIdx * s3RowH - s3RowH / 2;
+    var selY_s3 = trackTop + s3CenterIdx * s3RowH + s3RowH / 2;
+    var selVpY = vh / 2 + (selY_s3 - vh / 2) * S4_SCALE;
+    var textEl = storyCol.querySelector(".story-col-text");
+    if (textEl) {
+      textEl.style.top = (selVpY - 48) + "px"; /* 48px = header bar height offset */
+    }
+  }
+
+  function resetFixedPositions() {
+    /* Restore original positions when leaving S4 */
+    document.getElementById("divLine1").style.left = ORIG_DIV[0] + "px";
+    document.getElementById("divLine2").style.left = ORIG_DIV[1] + "px";
+    document.getElementById("divLine3").style.left = ORIG_DIV[2] + "px";
+
+    var divLines = document.querySelectorAll(".v-divider-line");
+    divLines.forEach(function(el) { el.style.transition = ""; });
+
+    var headerCols = document.querySelectorAll(".header-col");
+    headerCols[0].style.left = "10px";  headerCols[0].style.width = "425px";
+    headerCols[1].style.left = "445px"; headerCols[1].style.width = "520px";
+    headerCols[2].style.left = "985px"; headerCols[2].style.width = "305px";
+    headerCols[3].style.left = "1310px"; headerCols[3].style.width = "auto";
+    headerCols.forEach(function(el) { el.style.transition = ""; });
+
+    var visionLabel = document.getElementById("visionLabel");
+    visionLabel.style.left = "130px";
+    visionLabel.style.transition = "";
+
+    /* Reset story columns */
+    s4StoryCol.style.left = ORIG_DIV[2] + 10 + "px";
+    s4StoryCol.style.right = "0px";
+    s4StoryCol.style.transition = "";
+    s5StoryCol.style.left = ORIG_DIV[2] + 10 + "px";
+    s5StoryCol.style.right = "0px";
+    s5StoryCol.style.transition = "";
+    s6StoryCol.style.left = ORIG_DIV[2] + 10 + "px";
+    s6StoryCol.style.right = "0px";
+    s6StoryCol.style.transition = "";
+  }
+
+  /* ══════════════════════════════════════
+     S5: COST OF OUTSOURCING
+     ══════════════════════════════════════ */
+
+  var OUTSOURCE_COSTS = {
+    "Consulting":           "$18k",
+    "Legal":                "$15k",
+    "Podcasting":           "$8k",
+    "Scriptwriting":        "$8k",
+    "Television":           "$50k",
+    "Leadership":           "$25k",
+    "Marketing":            "$12k",
+    "Business":             "$20k",
+    "Sales":                "$10k",
+    "Social Media":         "$5k",
+    "Filmmaking":           "$45k",
+    "Fundraising":          "$20k",
+    "Games":                "$35k",
+    "Personal Branding":    "$10k",
+    "Literature":           "$12k",
+    "Academia":             "$8k",
+    "Education":            "$6k",
+    "Everything":           "$200k",
+    "Comics":               "$15k",
+    "Memoirs":              "$12k",
+    "Politics":             "$25k",
+    "Journalism":           "$10k",
+    "Publicity":            "$15k",
+    "Professional Branding":"$18k",
+    "Product Branding":     "$22k"
+  };
+
+  /**
+   * Build diverging arrows from a single point near "Your" out to each row's
+   * connective-text column. Inverse of the S6 right-side converging arrows.
+   * @param {Element} world  – the cloned world container (s4World / s5World / s6World)
+   * @param {string}  svgId  – id of the left-arrow SVG element
+   * @param {string}  markerId – id of the arrowhead marker
+   * @param {number}  [startXOverride] – optional override for the starting X
+   */
+  function buildDivergingArrows(world, svgId, markerId, startXOverride) {
+    var svg = document.getElementById(svgId);
+    var oldEls = svg.querySelectorAll("path");
+    oldEls.forEach(function(p) { p.remove(); });
+
+    if (s3RowEls.length === 0) return;
+
+    var vw = window.innerWidth;
+    var vh = window.innerHeight;
+    svg.setAttribute("viewBox", "0 0 " + vw + " " + vh);
+    svg.setAttribute("width", vw);
+    svg.setAttribute("height", vh);
+
+    var trackTop = s3CenterY - s3CenterIdx * s3RowH - s3RowH / 2;
+    function toVpY(sy) {
+      return vh / 2 + (sy - vh / 2) * S4_SCALE;
+    }
+
+    /* Selected row center Y in viewport — the single origin point */
+    var selY_s3 = trackTop + s3CenterIdx * s3RowH + s3RowH / 2;
+    var selVpY = toVpY(selY_s3);
+
+    /* Start X: right edge of "Your" label + gap */
+    var vlRect = document.getElementById("visionLabel").getBoundingClientRect();
+    var startX = startXOverride || (vlRect.right + 20);
+
+    /* End X: left edge of the first connective text element */
+    var firstConn = world.querySelectorAll(".s3-uconn");
+    var endX;
+    if (firstConn.length > 0) {
+      var cRect = firstConn[0].getBoundingClientRect();
+      endX = cRect.left - 8;
+    } else {
+      endX = scaledX(ORIG_DIV[0]) - 20;
+    }
+
+    s3RowEls.forEach(function(row, i) {
+      var rowY_s3 = trackTop + row.rowIdx * s3RowH + s3RowH / 2;
+      var endY = toVpY(rowY_s3);
+
+      var distFromCenter = row.rowIdx - s3CenterIdx;
+
+      var d;
+      if (distFromCenter === 0) {
+        /* Selected row: straight horizontal arrow */
+        d = "M " + startX + " " + selVpY + " L " + endX + " " + endY;
+      } else {
+        /*
+         * Diverging: start at selected row's Y, curve outward to each row's Y.
+         * CP1 at ~45%: still close to selected Y
+         * CP2 at ~85%: mostly at target Y
+         */
+        var totalDx = endX - startX;
+        var cp1x = startX + totalDx * 0.45;
+        var cp1y = selVpY + (endY - selVpY) * 0.15;
+
+        var cp2x = startX + totalDx * 0.85;
+        var cp2y = endY - (endY - selVpY) * 0.05;
+
+        d = "M " + startX + " " + selVpY +
+            " C " + cp1x + " " + cp1y +
+            " " + cp2x + " " + cp2y +
+            " " + endX + " " + endY;
+      }
+
+      var path = document.createElementNS("http://www.w3.org/2000/svg", "path");
+      path.setAttribute("d", d);
+      path.setAttribute("marker-end", "url(#" + markerId + ")");
+      svg.appendChild(path);
+
+      var len = path.getTotalLength();
+      path.style.setProperty("--path-len", len);
+    });
+  }
+
+  var s5World = document.getElementById("s5World");
+  var s5PanelLeft = document.getElementById("s5PanelLeft");
+  var s5PanelRight = document.getElementById("s5PanelRight");
+  var s5StoryCol = document.getElementById("s5StoryCol");
+  var s5ProblemLabel = document.getElementById("s5ProblemLabel");
+  var s5ProblemLabel1 = document.getElementById("s5ProblemLabel1");
+  /* s5Costs container removed — cost text is swapped directly into connective cells */
+
+  function buildStraightArrows() {
+    var svg = document.getElementById("s5Arrows");
+    var oldPaths = svg.querySelectorAll("path, line");
+    oldPaths.forEach(function(p) { p.remove(); });
+
+    if (s3RowEls.length === 0) return;
+
+    var vw = window.innerWidth;
+    var vh = window.innerHeight;
+    svg.setAttribute("viewBox", "0 0 " + vw + " " + vh);
+    svg.setAttribute("width", vw);
+    svg.setAttribute("height", vh);
+
+    var trackTop = s3CenterY - s3CenterIdx * s3RowH - s3RowH / 2;
+
+    function toVpY(sy) {
+      return vh / 2 + (sy - vh / 2) * S4_SCALE;
+    }
+
+    var div3X = scaledX(ORIG_DIV[2]);
+    var clonedActions = s5World.querySelectorAll(".s3-uaction");
+
+    /* Same horizontal span as S4 sprawl arrows */
+    var endX = div3X + 28;
+
+    s3RowEls.forEach(function(row, i) {
+      var rowY_s3 = trackTop + row.rowIdx * s3RowH + s3RowH / 2;
+      var y = toVpY(rowY_s3);
+
+      var startX;
+      if (clonedActions[i]) {
+        var aRect = clonedActions[i].getBoundingClientRect();
+        if (aRect.right > 0 && aRect.right < div3X) {
+          startX = aRect.right + 28;
+        } else {
+          startX = div3X - 60;
+        }
+      } else {
+        startX = div3X - 60;
+      }
+
+      var line = document.createElementNS("http://www.w3.org/2000/svg", "line");
+      line.setAttribute("x1", startX);
+      line.setAttribute("y1", y);
+      line.setAttribute("x2", endX);
+      line.setAttribute("y2", y);
+      line.setAttribute("marker-end", "url(#s5ArrowHead)");
+      svg.appendChild(line);
+
+      var len = Math.abs(endX - startX);
+      line.style.setProperty("--path-len", len);
+    });
+  }
+
+  function swapConnectiveToCosts() {
+    /* Replace "and" / "job is" text with cost estimates directly in the
+       cloned connective elements — same font, same position, no overlay needed. */
+    var allConns = Array.from(s5World.querySelectorAll(".s3-uconn")).filter(function(el) {
+      var t = el.textContent.trim();
+      return t === "and" || t === "job is";
+    });
+    var clonedRoles = s5World.querySelectorAll(".s3-urole");
+
+    var connIdx = 0;
+    s3RowEls.forEach(function(row, i) {
+      if (row.rowIdx === s3CenterIdx) {
+        /* Selected row keeps "job is" unchanged */
+        connIdx++;
+        return;
+      }
+      var roleName = clonedRoles[i] ? clonedRoles[i].textContent.trim() : "";
+      var cost = OUTSOURCE_COSTS[roleName] || "$10k";
+      if (allConns[connIdx]) {
+        allConns[connIdx].textContent = cost;
+        allConns[connIdx].style.visibility = "visible";
+      }
+      connIdx++;
+    });
+  }
+
+  function initS5Content(prevSection) {
+    s5World.innerHTML = "";
+
+    /* Clone S3 content into S5 world (same as S4) */
+    var s3Section = document.getElementById("s3");
+    var s3Children = s3Section.children;
+    for (var i = 0; i < s3Children.length; i++) {
+      var clone = s3Children[i].cloneNode(true);
+      clone.removeAttribute("id");
+      clone.querySelectorAll("[id]").forEach(function(el) { el.removeAttribute("id"); });
+      s5World.appendChild(clone);
+    }
+
+    var clonedUnspool = s5World.querySelector(".s3-unspool");
+    if (clonedUnspool) {
+      clonedUnspool.classList.add("active");
+      clonedUnspool.style.clipPath = "inset(0 0 0 0)";
+    }
+
+    var clonedSubtext = s5World.querySelector(".s3-subtext");
+    var clonedHint = s5World.querySelector(".s3-scroll-hint");
+    if (clonedSubtext) clonedSubtext.style.display = "none";
+    if (clonedHint) clonedHint.style.display = "none";
+
+    /* Hide the entire base S3 grid (carousels, connectives, etc.) —
+       only the unspool overlay should be visible in S5 */
+    var baseGrid = s5World.querySelector(".s2-grid");
+    if (baseGrid) baseGrid.style.visibility = "hidden";
+
+    var s5Arrows = document.getElementById("s5Arrows");
+    var s5LeftArr = document.getElementById("s5LeftArrows");
+    s5Arrows.classList.remove("visible");
+    s5LeftArr.classList.remove("visible");
+
+    if (prevSection === 3) {
+      /* Coming from S4: already zoomed out — no zoom animation needed.
+         Disable the transform transition, snap to zoomed-out, then crossfade. */
+      s5World.style.transition = "none";
+      s5World.classList.add("zoomed-out");
+      void s5World.offsetHeight; /* force layout with no transition */
+      s5World.style.transition = ""; /* restore for future use */
+      repositionFixedForS4(scaledX);
+      s5PanelLeft.classList.add("visible");
+      s5PanelRight.classList.add("visible");
+      s5StoryCol.classList.add("visible");
+      positionStoryColText(s5StoryCol);
+      s5ProblemLabel.classList.add("visible");
+      s5ProblemLabel1.classList.add("visible");
+      /* Instant crossfade from S4 — no delays */
+      s5Arrows.style.transition = "opacity 0.15s ease";
+      s5LeftArr.style.transition = "opacity 0.15s ease";
+      buildStraightArrows();
+      swapConnectiveToCosts();
+      buildDivergingArrows(s5World, "s5LeftArrows", "leftArrowHead5");
+      var s5LeftPaths = s5LeftArr.querySelectorAll("path");
+      s5LeftPaths.forEach(function(p) { p.style.transition = "stroke-dashoffset 0.15s ease"; });
+      var arrowLines = s5Arrows.querySelectorAll("line");
+      arrowLines.forEach(function(l) {
+        l.style.transition = "stroke-dashoffset 0.15s ease";
+      });
+      s5Arrows.classList.add("visible");
+      s5LeftArr.classList.add("visible");
+    } else {
+      /* Coming from elsewhere: animate zoom-out */
+      s5World.classList.remove("zoomed-out");
+      void s5World.offsetHeight;
+      requestAnimationFrame(function() {
+        s5World.classList.add("zoomed-out");
+        repositionFixedForS4(scaledX);
+        setTimeout(function() {
+          s5PanelLeft.classList.add("visible");
+          s5PanelRight.classList.add("visible");
+          s5StoryCol.classList.add("visible");
+          positionStoryColText(s5StoryCol);
+          s5ProblemLabel.classList.add("visible");
+          s5ProblemLabel1.classList.add("visible");
+          buildStraightArrows();
+          swapConnectiveToCosts();
+          buildDivergingArrows(s5World, "s5LeftArrows", "leftArrowHead5");
+          s5Arrows.classList.add("visible");
+          s5LeftArr.classList.add("visible");
+        }, 200);
+      });
+    }
+  }
+
+  /* ══════════════════════════════════════
+     S6: YOUR JOB IS [ROLE]
+     ══════════════════════════════════════ */
+
+  var s6World = document.getElementById("s6World");
+  var s6PanelLeft = document.getElementById("s6PanelLeft");
+  var s6PanelRight = document.getElementById("s6PanelRight");
+  var s6StoryCol = document.getElementById("s6StoryCol");
+  var s6ProblemLabel = document.getElementById("s6ProblemLabel");
+  var s6ProblemLabel1 = document.getElementById("s6ProblemLabel1");
+  var s6ProblemLabel2 = document.getElementById("s6ProblemLabel2");
+  var s6RoleHeader = document.getElementById("s6RoleHeader");
+  var s6CostCircle = document.getElementById("s6CostCircle");
+
+  function buildS6ConvergingArrows() {
+    var svg = document.getElementById("s6Arrows");
+    var oldEls = svg.querySelectorAll("path, line");
+    oldEls.forEach(function(p) { p.remove(); });
+
+    if (s3RowEls.length === 0) return;
+
+    var vw = window.innerWidth;
+    var vh = window.innerHeight;
+    svg.setAttribute("viewBox", "0 0 " + vw + " " + vh);
+    svg.setAttribute("width", vw);
+    svg.setAttribute("height", vh);
+
+    var trackTop = s3CenterY - s3CenterIdx * s3RowH - s3RowH / 2;
+    function toVpY(sy) {
+      return vh / 2 + (sy - vh / 2) * S4_SCALE;
+    }
+
+    /* Selected row center Y in viewport */
+    var selY_s3 = trackTop + s3CenterIdx * s3RowH + s3RowH / 2;
+    var selVpY = toVpY(selY_s3);
+
+    var div3X = scaledX(ORIG_DIV[2]);
+    var clonedActions = s6World.querySelectorAll(".s3-uaction");
+    var endX = div3X + 28;
+
+    s3RowEls.forEach(function(row, i) {
+      var rowY_s3 = trackTop + row.rowIdx * s3RowH + s3RowH / 2;
+      var startY = toVpY(rowY_s3);
+
+      var startX;
+      if (clonedActions[i]) {
+        var aRect = clonedActions[i].getBoundingClientRect();
+        if (aRect.right > 0 && aRect.right < div3X) {
+          startX = aRect.right + 28;
+        } else {
+          startX = div3X - 60;
+        }
+      } else {
+        startX = div3X - 60;
+      }
+
+      var distFromCenter = row.rowIdx - s3CenterIdx;
+      var absDist = Math.abs(distFromCenter);
+
+      var d;
+      if (distFromCenter === 0) {
+        /* Selected row: straight horizontal arrow */
+        d = "M " + startX + " " + startY + " L " + endX + " " + startY;
+      } else {
+        /*
+         * Converging arrows: inverse of S4's sprawl.
+         * Start at each row's own Y, curve inward to converge at selected row's Y.
+         * CP1 at ~45% across: begin pulling toward selected row
+         * CP2 at divider: almost fully converged
+         * End: at selected row's Y (all arrows meet at one point)
+         */
+        var totalDx = endX - startX;
+        var rampFraction = (div3X - startX) / totalDx;
+
+        var cp1x = startX + totalDx * (rampFraction * 0.55);
+        var cp1y = startY + (selVpY - startY) * 0.3;
+
+        var cp2x = div3X;
+        var cp2y = selVpY + (startY - selVpY) * 0.05;
+
+        var finalY = selVpY;
+
+        d = "M " + startX + " " + startY +
+            " C " + cp1x + " " + cp1y +
+            " " + cp2x + " " + cp2y +
+            " " + endX + " " + finalY;
+      }
+
+      var path = document.createElementNS("http://www.w3.org/2000/svg", "path");
+      path.setAttribute("d", d);
+      path.setAttribute("marker-end", "url(#s6ArrowHead)");
+      svg.appendChild(path);
+
+      var len = path.getTotalLength();
+      path.style.setProperty("--path-len", len);
+    });
+
+    /* Position cost circle at arrow convergence point */
+    s6CostCircle.style.left = endX + "px";
+    s6CostCircle.style.top = selVpY + "px";
+  }
+
+  function initS6Content(prevSection) {
+    s6World.innerHTML = "";
+
+    /* Clone S3 content */
+    var s3Section = document.getElementById("s3");
+    var s3Children = s3Section.children;
+    for (var i = 0; i < s3Children.length; i++) {
+      var clone = s3Children[i].cloneNode(true);
+      clone.removeAttribute("id");
+      clone.querySelectorAll("[id]").forEach(function(el) { el.removeAttribute("id"); });
+      s6World.appendChild(clone);
+    }
+
+    var clonedUnspool = s6World.querySelector(".s3-unspool");
+    if (clonedUnspool) {
+      clonedUnspool.classList.add("active");
+      clonedUnspool.style.clipPath = "inset(0 0 0 0)";
+    }
+    var clonedSubtext = s6World.querySelector(".s3-subtext");
+    var clonedHint = s6World.querySelector(".s3-scroll-hint");
+    if (clonedSubtext) clonedSubtext.style.display = "none";
+    if (clonedHint) clonedHint.style.display = "none";
+
+    /* Hide base grid */
+    var baseGrid = s6World.querySelector(".s2-grid");
+    if (baseGrid) baseGrid.style.visibility = "hidden";
+
+    /* Swap ALL first connectives to cost estimates.
+       The selected row's "job is" becomes "and" since we're pulling
+       "Your job is [Role]" out as a separate header above the list. */
+    var allConns = Array.from(s6World.querySelectorAll(".s3-uconn")).filter(function(el) {
+      var t = el.textContent.trim();
+      return t === "and" || t === "job is";
+    });
+    var clonedRoles = s6World.querySelectorAll(".s3-urole");
+
+    var connIdx = 0;
+    var selectedRoleName = "";
+    s3RowEls.forEach(function(row, i) {
+      var roleName = clonedRoles[i] ? clonedRoles[i].textContent.trim() : "";
+      if (row.rowIdx === s3CenterIdx) {
+        selectedRoleName = roleName;
+        /* Selected row: change "job is" → "and", right-justified to align with cost figures */
+        if (allConns[connIdx]) {
+          allConns[connIdx].textContent = "and";
+          allConns[connIdx].style.textAlign = "right";
+          allConns[connIdx].style.display = "flex";
+          allConns[connIdx].style.justifyContent = "flex-end";
+        }
+        /* Also change "because you want to" → "because you need to" */
+        var allRowConns = Array.from(s6World.querySelectorAll(".s3-uconn"));
+        /* Find the second connective for this row (the "because" one) */
+        allRowConns.forEach(function(c) {
+          if (c.textContent.trim() === "because you want to") {
+            c.textContent = "because you need to";
+          }
+        });
+        connIdx++;
+        return;
+      }
+      var cost = OUTSOURCE_COSTS[roleName] || "$10k";
+      if (allConns[connIdx]) {
+        allConns[connIdx].textContent = cost;
+        allConns[connIdx].style.textAlign = "right";
+        allConns[connIdx].style.display = "flex";
+        allConns[connIdx].style.justifyContent = "flex-end";
+      }
+      connIdx++;
+    });
+
+    /* Calculate aggregate cost of all non-selected roles */
+    var totalCost = 0;
+    s3RowEls.forEach(function(row, i) {
+      if (row.rowIdx === s3CenterIdx) return;
+      var roleName = clonedRoles[i] ? clonedRoles[i].textContent.trim() : "";
+      var costStr = OUTSOURCE_COSTS[roleName] || "$10k";
+      var num = parseInt(costStr.replace(/[^0-9]/g, ""), 10) || 10;
+      totalCost += num;
+    });
+    var totalLabel = "$" + totalCost + "k";
+    s6CostCircle.textContent = totalLabel;
+    s6CostCircle.classList.remove("visible");
+
+    /* Position "job is [Role]" on the same line as the selected row,
+       right after "Your" — same Y as the vision label, same X as the
+       connective column where "and"/"job is" normally sits. */
+    var s6RhRole = s6RoleHeader.querySelector(".s6-rh-role");
+    s6RhRole.textContent = "Leadership";
+
+    /* The selected row's connective sits in column 1 (between divider 0 and role column).
+       Read its position from the cloned selected-row connective element. */
+    var selConn = s6World.querySelector(".s3-selected");
+    var div1X = scaledX(ORIG_DIV[0]);
+
+    /* Position: same Y as "Your" label, shifted left 180px and up 5px from connective col */
+    s6RoleHeader.style.left = (div1X + 10 - 300) + "px";
+    s6RoleHeader.style.top = "50%";
+    s6RoleHeader.style.transform = "translateY(calc(-50% - 9px))";
+
+    var s6Arrows = document.getElementById("s6Arrows");
+    var s6LeftArr = document.getElementById("s6LeftArrows");
+    s6Arrows.classList.remove("visible");
+    s6LeftArr.classList.remove("visible");
+    s6RoleHeader.classList.remove("visible");
+    s6CostCircle.classList.remove("visible");
+
+    if (prevSection === 4) {
+      /* Coming from S5: instant snap, crossfade */
+      s6World.style.transition = "none";
+      s6World.classList.add("zoomed-out");
+      void s6World.offsetHeight;
+      s6World.style.transition = "";
+      repositionFixedForS4(scaledX);
+      /* Slide "Your" left AFTER repositionFixedForS4 so it doesn't get overwritten */
+      var visionLabel = document.getElementById("visionLabel");
+      visionLabel.style.transition = "left 0.3s var(--ease)";
+      visionLabel.style.left = (scaledX(ORIG_LABEL_X) - 140) + "px";
+      s6PanelLeft.classList.add("visible");
+      s6PanelRight.classList.add("visible");
+      s6StoryCol.classList.add("visible");
+      positionStoryColText(s6StoryCol);
+      s6ProblemLabel.classList.add("visible");
+      s6ProblemLabel1.classList.add("visible");
+      s6ProblemLabel2.classList.add("visible");
+      s6Arrows.style.transition = "opacity 0.15s ease";
+      s6LeftArr.style.transition = "opacity 0.15s ease";
+      buildS6ConvergingArrows();
+      buildDivergingArrows(s6World, "s6LeftArrows", "leftArrowHead6");
+      var s6LeftPaths = s6LeftArr.querySelectorAll("path");
+      s6LeftPaths.forEach(function(p) { p.style.transition = "stroke-dashoffset 0.15s ease"; });
+      var arrowPaths = s6Arrows.querySelectorAll("path");
+      arrowPaths.forEach(function(p) {
+        p.style.transition = "stroke-dashoffset 0.15s ease";
+      });
+      s6Arrows.classList.add("visible");
+      s6LeftArr.classList.add("visible");
+      s6RoleHeader.classList.add("visible");
+      s6CostCircle.classList.add("visible");
+    } else {
+      /* Coming from elsewhere */
+      s6World.classList.remove("zoomed-out");
+      void s6World.offsetHeight;
+      requestAnimationFrame(function() {
+        s6World.classList.add("zoomed-out");
+        repositionFixedForS4(scaledX);
+        /* Slide "Your" left AFTER repositionFixedForS4 */
+        var visionLabel = document.getElementById("visionLabel");
+        visionLabel.style.transition = "left 0.3s var(--ease)";
+        visionLabel.style.left = (scaledX(ORIG_LABEL_X) - 140) + "px";
+        setTimeout(function() {
+          s6PanelLeft.classList.add("visible");
+          s6PanelRight.classList.add("visible");
+          s6StoryCol.classList.add("visible");
+          positionStoryColText(s6StoryCol);
+          s6ProblemLabel.classList.add("visible");
+          s6ProblemLabel1.classList.add("visible");
+          s6ProblemLabel2.classList.add("visible");
+          buildS6ConvergingArrows();
+          buildDivergingArrows(s6World, "s6LeftArrows", "leftArrowHead6");
+          s6Arrows.classList.add("visible");
+          s6LeftArr.classList.add("visible");
+          s6RoleHeader.classList.add("visible");
+          s6CostCircle.classList.add("visible");
+        }, 200);
+      });
+    }
+  }
+
+  /* ══════════════════════════════════════
+     S14: YGGDRASIL SOLUTION VIEW
+     ══════════════════════════════════════ */
+
+  var s14World = document.getElementById("s14World");
+  var s14PanelLeft = document.getElementById("s14PanelLeft");
+  var s14PanelRight = document.getElementById("s14PanelRight");
+  var s14StoryCol = document.getElementById("s14StoryCol");
+  var s14RoleHeader = document.getElementById("s14RoleHeader");
+  var yggBox = document.getElementById("yggBox");
+
+  function buildS14Arrows() {
+    /* S6 converging arrows that converge to a single point (like S6's cost circle),
+       then ONE arrow from that convergence point to the story column text. */
+    var svg = document.getElementById("s14Arrows");
+    var oldEls = svg.querySelectorAll("path, line");
+    oldEls.forEach(function(p) { p.remove(); });
+
+    if (s3RowEls.length === 0) return;
+
+    var vw = window.innerWidth;
+    var vh = window.innerHeight;
+    svg.setAttribute("viewBox", "0 0 " + vw + " " + vh);
+    svg.setAttribute("width", vw);
+    svg.setAttribute("height", vh);
+
+    var trackTop = s3CenterY - s3CenterIdx * s3RowH - s3RowH / 2;
+    function toVpY(sy) {
+      return vh / 2 + (sy - vh / 2) * S4_SCALE;
+    }
+
+    var selY_s3 = trackTop + s3CenterIdx * s3RowH + s3RowH / 2;
+    var selVpY = toVpY(selY_s3);
+
+    var div3X = scaledX(ORIG_DIV[2]);
+    var clonedActions = s14World.querySelectorAll(".s3-uaction");
+
+    /* Convergence point: same as S6's cost circle (div3X + 28) */
+    var convergeX = div3X + 28;
+
+    /* Story column text position */
+    var storyColEl = document.getElementById("s14StoryCol");
+    var storyTextEl = storyColEl ? storyColEl.querySelector(".story-col-text") : null;
+    var storyRect = storyTextEl ? storyTextEl.getBoundingClientRect() : null;
+    var storyX = storyRect ? storyRect.left - 16 : (vw - 200);
+
+    /* Step 1: Draw converging arrows from each row to the convergence point
+       (identical to buildS6ConvergingArrows — no arrowheads on these) */
+    s3RowEls.forEach(function(row, i) {
+      var rowY_s3 = trackTop + row.rowIdx * s3RowH + s3RowH / 2;
+      var startY = toVpY(rowY_s3);
+
+      var startX;
+      if (clonedActions[i]) {
+        var aRect = clonedActions[i].getBoundingClientRect();
+        if (aRect.right > 0 && aRect.right < div3X) {
+          startX = aRect.right + 28;
+        } else {
+          startX = div3X - 60;
+        }
+      } else {
+        startX = div3X - 60;
+      }
+
+      var distFromCenter = row.rowIdx - s3CenterIdx;
+
+      var d;
+      if (distFromCenter === 0) {
+        /* Selected row: straight horizontal line to convergence point */
+        d = "M " + startX + " " + startY + " L " + convergeX + " " + startY;
+      } else {
+        /* Converging Bézier — same as S6 */
+        var totalDx = convergeX - startX;
+        var rampFraction = (div3X - startX) / totalDx;
+
+        var cp1x = startX + totalDx * (rampFraction * 0.55);
+        var cp1y = startY + (selVpY - startY) * 0.3;
+
+        var cp2x = div3X;
+        var cp2y = selVpY + (startY - selVpY) * 0.05;
+
+        d = "M " + startX + " " + startY +
+            " C " + cp1x + " " + cp1y +
+            " " + cp2x + " " + cp2y +
+            " " + convergeX + " " + selVpY;
+      }
+
+      var path = document.createElementNS("http://www.w3.org/2000/svg", "path");
+      path.setAttribute("d", d);
+      /* No arrowhead on converging lines */
+      svg.appendChild(path);
+
+      var len = path.getTotalLength();
+      path.style.setProperty("--path-len", len);
+    });
+
+    /* Step 2: One single arrow from convergence point to story column */
+    var finalPath = document.createElementNS("http://www.w3.org/2000/svg", "path");
+    var finalD = "M " + convergeX + " " + selVpY + " L " + storyX + " " + selVpY;
+    finalPath.setAttribute("d", finalD);
+    finalPath.setAttribute("marker-end", "url(#s14ArrowHead)");
+    svg.appendChild(finalPath);
+    var fLen = finalPath.getTotalLength();
+    finalPath.style.setProperty("--path-len", fLen);
+  }
+
+  function positionYggBox() {
+    /* The Yggdrasil box wraps around the Vision column area.
+       Left edge: just before "Your" label
+       Top: just below header bar
+       Bottom: just above the problem labels row
+       Right edge: runs through the role names in the MEDIUM column —
+         the role text has a black gradient bg so the border is hidden behind it. */
+    var visionLabel = document.getElementById("visionLabel");
+    var vlRect = visionLabel.getBoundingClientRect();
+    var div1X = scaledX(ORIG_DIV[0]);
+    var vh = window.innerHeight;
+
+    var boxLeft = vlRect.left - 16;
+    var boxTop = 48 + 65; /* header bar + 65px inset from top */
+    /* Right border sits ~50px past the first divider, running through role names */
+    var boxRight = div1X + 50;
+    /* Bottom: problem labels sit at bottom: 22vh, box stops above them with 45px extra inset */
+    var boxBottom = vh - vh * 0.24 - 45;
+
+    yggBox.style.left = boxLeft + "px";
+    yggBox.style.top = boxTop + "px";
+    yggBox.style.width = (boxRight - boxLeft) + "px";
+    yggBox.style.height = (boxBottom - boxTop) + "px";
+  }
+
+  function initS14Content(prevSection) {
+    s14World.innerHTML = "";
+
+    /* Clone S3 content */
+    var s3Section = document.getElementById("s3");
+    var s3Children = s3Section.children;
+    for (var i = 0; i < s3Children.length; i++) {
+      var clone = s3Children[i].cloneNode(true);
+      clone.removeAttribute("id");
+      clone.querySelectorAll("[id]").forEach(function(el) { el.removeAttribute("id"); });
+      s14World.appendChild(clone);
+    }
+
+    var clonedUnspool = s14World.querySelector(".s3-unspool");
+    if (clonedUnspool) {
+      clonedUnspool.classList.add("active");
+      clonedUnspool.style.clipPath = "inset(0 0 0 0)";
+    }
+    var clonedSubtext = s14World.querySelector(".s3-subtext");
+    var clonedHint = s14World.querySelector(".s3-scroll-hint");
+    if (clonedSubtext) clonedSubtext.style.display = "none";
+    if (clonedHint) clonedHint.style.display = "none";
+
+    /* Hide base grid */
+    var baseGrid = s14World.querySelector(".s2-grid");
+    if (baseGrid) baseGrid.style.visibility = "hidden";
+
+    /* Swap connectives: selected row gets "and", others get "streamlines" */
+    var allConns = Array.from(s14World.querySelectorAll(".s3-uconn")).filter(function(el) {
+      var t = el.textContent.trim();
+      return t === "and" || t === "job is";
+    });
+    var clonedRoles = s14World.querySelectorAll(".s3-urole");
+
+    var connIdx = 0;
+    s3RowEls.forEach(function(row, i) {
+      if (row.rowIdx === s3CenterIdx) {
+        /* Selected row: "job is" → "and" */
+        if (allConns[connIdx]) {
+          allConns[connIdx].textContent = "and";
+          allConns[connIdx].style.textAlign = "right";
+          allConns[connIdx].style.display = "flex";
+          allConns[connIdx].style.justifyContent = "flex-end";
+        }
+        /* Also change "because you want to" → "because you need to" */
+        var allRowConns = Array.from(s14World.querySelectorAll(".s3-uconn"));
+        allRowConns.forEach(function(c) {
+          if (c.textContent.trim() === "because you want to") {
+            c.textContent = "because you need to";
+          }
+        });
+        connIdx++;
+        return;
+      }
+      /* Non-selected rows: keep "and" as connector (no costs in S14) */
+      if (allConns[connIdx]) {
+        allConns[connIdx].textContent = "and";
+        allConns[connIdx].style.textAlign = "right";
+        allConns[connIdx].style.display = "flex";
+        allConns[connIdx].style.justifyContent = "flex-end";
+      }
+      connIdx++;
+    });
+
+    /* Position "job is Storytelling" header */
+    var div1X = scaledX(ORIG_DIV[0]);
+    s14RoleHeader.style.left = (div1X + 10 - 300) + "px";
+    s14RoleHeader.style.top = "50%";
+    s14RoleHeader.style.transform = "translateY(calc(-50% - 9px))";
+
+    var s14Arr = document.getElementById("s14Arrows");
+    var s14LA = document.getElementById("s14LeftArrows");
+    var s14PL1 = document.getElementById("s14ProblemLabel1");
+    var s14PL2 = document.getElementById("s14ProblemLabel2");
+    var s14PL3 = document.getElementById("s14ProblemLabel3");
+    var s14SL1 = document.getElementById("s14SolutionLabel1");
+    var s14SL2 = document.getElementById("s14SolutionLabel2");
+    var s14SL3 = document.getElementById("s14SolutionLabel3");
+    s14Arr.classList.remove("visible");
+    s14LA.classList.remove("visible");
+    s14RoleHeader.classList.remove("visible");
+    s14StoryCol.classList.remove("visible");
+    yggBox.classList.remove("visible");
+    s14PL1.classList.remove("visible");
+    s14PL2.classList.remove("visible");
+    s14PL3.classList.remove("visible");
+    s14SL1.classList.remove("visible");
+    s14SL2.classList.remove("visible");
+    s14SL3.classList.remove("visible");
+
+    if (prevSection === 12) {
+      /* Coming from S13: instant snap crossfade */
+      s14World.style.transition = "none";
+      s14World.classList.add("zoomed-out");
+      void s14World.offsetHeight;
+      s14World.style.transition = "";
+      repositionFixedForS4(scaledX);
+      /* Slide "Your" left */
+      var visionLabel = document.getElementById("visionLabel");
+      visionLabel.style.transition = "left 0.3s var(--ease)";
+      visionLabel.style.left = (scaledX(ORIG_LABEL_X) - 140) + "px";
+      s14PanelLeft.classList.add("visible");
+      s14PanelRight.classList.add("visible");
+      s14StoryCol.classList.add("visible");
+      positionStoryColText(s14StoryCol);
+      s14Arr.style.transition = "opacity 0.15s ease";
+      s14LA.style.transition = "opacity 0.15s ease";
+      buildS14Arrows();
+      buildDivergingArrows(s14World, "s14LeftArrows", "leftArrowHead14");
+      var s14LeftPaths = s14LA.querySelectorAll("path");
+      s14LeftPaths.forEach(function(p) { p.style.transition = "stroke-dashoffset 0.15s ease"; });
+      var arrowPaths = s14Arr.querySelectorAll("path");
+      arrowPaths.forEach(function(p) { p.style.transition = "stroke-dashoffset 0.15s ease"; });
+      s14Arr.classList.add("visible");
+      s14LA.classList.add("visible");
+      s14RoleHeader.classList.add("visible");
+      positionYggBox();
+      yggBox.classList.add("visible");
+      s14PL1.classList.add("visible");
+      s14PL2.classList.add("visible");
+      s14PL3.classList.add("visible");
+      s14SL1.classList.add("visible");
+      s14SL2.classList.add("visible");
+      s14SL3.classList.add("visible");
+    } else {
+      /* Coming from elsewhere — animate zoom-out */
+      s14World.classList.remove("zoomed-out");
+      void s14World.offsetHeight;
+      requestAnimationFrame(function() {
+        s14World.classList.add("zoomed-out");
+        repositionFixedForS4(scaledX);
+        var visionLabel = document.getElementById("visionLabel");
+        visionLabel.style.transition = "left 0.3s var(--ease)";
+        visionLabel.style.left = (scaledX(ORIG_LABEL_X) - 140) + "px";
+        setTimeout(function() {
+          s14PanelLeft.classList.add("visible");
+          s14PanelRight.classList.add("visible");
+          s14StoryCol.classList.add("visible");
+          positionStoryColText(s14StoryCol);
+          buildS14Arrows();
+          buildDivergingArrows(s14World, "s14LeftArrows", "leftArrowHead14");
+          s14Arr.classList.add("visible");
+          s14LA.classList.add("visible");
+          s14RoleHeader.classList.add("visible");
+          positionYggBox();
+          yggBox.classList.add("visible");
+          s14PL1.classList.add("visible");
+          s14PL2.classList.add("visible");
+          s14PL3.classList.add("visible");
+          s14SL1.classList.add("visible");
+          s14SL2.classList.add("visible");
+          s14SL3.classList.add("visible");
+        }, 200);
+      });
+    }
+  }
+
+  /* ══════════════════════════════════════
+     S7: ALL BECAUSE — locked S2 recycled
+     ══════════════════════════════════════ */
+
+  var s7Medium = null;
+  var s7Action = null;
+
+  function initS7Content() {
+    /* Read the locked selection index */
+    var idx = s2LockedIdx >= 0 ? s2LockedIdx : (s2Medium ? s2Medium.getIndex() : 0);
+
+    /* Clear previous carousel DOM */
+    document.getElementById("s7MediumTrack").innerHTML = "";
+    document.getElementById("s7ActionTrack").innerHTML = "";
+
+    /* Create real carousels at the locked position */
+    s7Medium = createCarousel({
+      trackId: "s7MediumTrack",
+      containerId: "s7MediumCarousel",
+      labels: PICKS,
+      itemClass: "s2-carousel-item",
+      initialIndex: idx
+    });
+
+    s7Action = createCarousel({
+      trackId: "s7ActionTrack",
+      containerId: "s7ActionCarousel",
+      labels: ACTIONS,
+      itemClass: "s2-carousel-item",
+      initialIndex: idx
+    });
+
+    /* Bold the selected item to match the locked look */
+    var s7MediumItems = document.querySelectorAll("#s7MediumTrack .s2-carousel-item");
+    var s7ActionItems = document.querySelectorAll("#s7ActionTrack .s2-carousel-item");
+    s7MediumItems.forEach(function(el, i) { el.classList.toggle("locked", i === idx); });
+    s7ActionItems.forEach(function(el, i) { el.classList.toggle("locked", i === idx); });
+
+    /* Reset any S4-S6 fixed positioning so elements return to their default state */
+    if (typeof resetFixedPositions === "function") resetFixedPositions();
+  }
+
+  /* ══════════════════════════════════════
+     S9: "Everything is Storytelling." — static centered text (no init needed)
+     ══════════════════════════════════════ */
+
+  function initS9Content() {
+    /* S9 is static text — nothing to init */
+  }
+
+  /* ══════════════════════════════════════
+     S10: "Storytelling is Everything." — orbital swap animation
+     ══════════════════════════════════════ */
+
+  var orbEverything = document.getElementById("orbitalEverything");
+  var orbStorytelling = document.getElementById("orbitalStorytelling");
+  var orbAnimId = null; /* track rAF so we can cancel */
+
+  function initS10Content(prevSection) {
+    if (prevSection !== 8) return; /* orbital only from S9→S10 */
+
+    /* Cancel any running orbital animation */
+    if (orbAnimId) { cancelAnimationFrame(orbAnimId); orbAnimId = null; }
+
+    /* Source elements in S9 */
+    var s9Ev = document.getElementById("s9Everything");
+    var s9St = document.getElementById("s9Storytelling");
+
+    /* Destination elements in S10 */
+    var s10St = document.getElementById("s10Storytelling");
+    var s10Ev = document.getElementById("s10Everything");
+
+    if (!s9Ev || !s9St || !s10St || !s10Ev) return;
+
+    /* Read source positions BEFORE S9 fades out */
+    var srcEvRect = s9Ev.getBoundingClientRect();
+    var srcStRect = s9St.getBoundingClientRect();
+
+    /* Set overlay text and style to match source words */
+    orbEverything.textContent = "Everything";
+    orbEverything.style.color = "var(--gold)";
+    orbEverything.style.fontWeight = "500";
+
+    orbStorytelling.textContent = "Storytelling";
+    orbStorytelling.style.color = "#fff";
+    orbStorytelling.style.fontWeight = "300";
+
+    /* Position overlays at S9 source positions */
+    orbEverything.style.left = srcEvRect.left + "px";
+    orbEverything.style.top = srcEvRect.top + "px";
+    orbStorytelling.style.left = srcStRect.left + "px";
+    orbStorytelling.style.top = srcStRect.top + "px";
+
+    /* Show overlays */
+    orbEverything.classList.add("animating");
+    orbStorytelling.classList.add("animating");
+
+    /* Hide S10 swapping words during animation (but keep "is" visible) */
+    s10St.style.opacity = "0";
+    s10Ev.style.opacity = "0";
+
+    /* Wait two frames so S10 layout is active, then read destinations */
+    requestAnimationFrame(function() {
+      requestAnimationFrame(function() {
+        var dstEvRect = s10Ev.getBoundingClientRect();
+        var dstStRect = s10St.getBoundingClientRect();
+
+        /* Source and destination coordinates for each word */
+        var evStartX = srcEvRect.left;
+        var evStartY = srcEvRect.top;
+        var evEndX = dstEvRect.left;
+        var evEndY = dstEvRect.top;
+
+        var stStartX = srcStRect.left;
+        var stStartY = srcStRect.top;
+        var stEndX = dstStRect.left;
+        var stEndY = dstStRect.top;
+
+        /*
+         * Orbital arc parameters:
+         * "Everything" curves UNDERNEATH (positive Y arc = downward bulge)
+         * "Storytelling." curves OVER THE TOP (negative Y arc = upward bulge)
+         * Arc height proportional to horizontal distance for natural elliptical feel.
+         */
+        var arcHeight = 60; /* px — vertical bulge of the orbital path */
+
+        /* Smooth ease-in-out: cubic bezier approximated via sin */
+        var DURATION = 2200; /* ms — slow, deliberate reveal */
+        var startTime = null;
+
+        function easeInOutSine(t) {
+          return -(Math.cos(Math.PI * t) - 1) / 2;
+        }
+
+        function animate(timestamp) {
+          if (!startTime) startTime = timestamp;
+          var elapsed = timestamp - startTime;
+          var rawT = Math.min(elapsed / DURATION, 1);
+          var t = easeInOutSine(rawT);
+
+          /*
+           * Parametric path: linear interpolation + sinusoidal arc.
+           * At t=0, sin(0)=0 → start position.
+           * At t=0.5, sin(π)=0 → no vertical offset at midpoint (words cross center).
+           * Actually we want max arc at midpoint: use sin(π*t) for arc.
+           * "Everything" arcs downward: +arcHeight * sin(π*t)
+           * "Storytelling" arcs upward: -arcHeight * sin(π*t)
+           */
+          var arcOffset = Math.sin(Math.PI * t) * arcHeight;
+
+          /* "Everything": gold word moves from left to right, curves down */
+          var evX = evStartX + (evEndX - evStartX) * t;
+          var evY = evStartY + (evEndY - evStartY) * t + arcOffset;
+          orbEverything.style.left = evX + "px";
+          orbEverything.style.top = evY + "px";
+
+          /* "Storytelling.": white word moves from right to left, curves up */
+          var stX = stStartX + (stEndX - stStartX) * t;
+          var stY = stStartY + (stEndY - stStartY) * t - arcOffset;
+          orbStorytelling.style.left = stX + "px";
+          orbStorytelling.style.top = stY + "px";
+
+          if (rawT < 1) {
+            orbAnimId = requestAnimationFrame(animate);
+          } else {
+            /* Animation complete — reveal S10 text, hide overlays */
+            s10St.style.opacity = "";
+            s10Ev.style.opacity = "";
+            orbEverything.classList.remove("animating");
+            orbStorytelling.classList.remove("animating");
+            orbAnimId = null;
+          }
+        }
+
+        orbAnimId = requestAnimationFrame(animate);
+      });
+    });
+  }
+
+  /* Initialize nav state */
+  goToSection(0);
+
+})();
+</script>
+</body>
+</html>
