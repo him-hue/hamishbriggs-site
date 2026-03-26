@@ -80,7 +80,10 @@ button { font: inherit; color: inherit; border: none; background: none; cursor: 
 
 /* ── Bottom nav ── */
 .bottom-left {
-  position: fixed; bottom: 28px; left: 36px; z-index: 850;
+  position: fixed; bottom: 28px; left: calc(50vw - 756px + 36px); z-index: 850;
+}
+@media (max-width: 1512px) {
+  .bottom-left { left: 36px; }
 }
 .bottom-left .back-link {
   font-size: 11px; letter-spacing: 0.06em; color: var(--gold);
@@ -88,8 +91,11 @@ button { font: inherit; color: inherit; border: none; background: none; cursor: 
 }
 .bottom-left .back-link:hover { color: var(--gold-light); }
 .bottom-right {
-  position: fixed; bottom: 28px; right: max(36px, calc(100vw - 1512px + 36px));
+  position: fixed; bottom: 28px; right: calc(50vw - 756px + 36px);
   display: flex; align-items: center; gap: 10px; z-index: 850;
+}
+@media (max-width: 1512px) {
+  .bottom-right { right: 36px; }
 }
 .nav-btn {
   width: 36px; height: 36px; border-radius: 50%;
@@ -1018,7 +1024,16 @@ button { font: inherit; color: inherit; border: none; background: none; cursor: 
 /* ── S14 solution labels (beneath problem labels) ── */
 /* On S14, nudge problem labels higher so they don't crowd solution labels */
 #s14 .section-problem-label {
-  bottom: calc(12vh + 30px);
+  bottom: calc(12vh + 50px);
+}
+#s14 .section-problem-label.pos-left {
+  transform: scale(0.75);
+}
+#s14 .section-problem-label.pos-center {
+  transform: translateX(-50%) scale(0.75);
+}
+#s14 .section-problem-label.pos-right {
+  transform: translateX(50%) scale(0.75);
 }
 
 .section-solution-label {
@@ -2234,10 +2249,22 @@ button { font: inherit; color: inherit; border: none; background: none; cursor: 
   /* Attach wheel to S2 section — drives the medium carousel (action follows via link) */
   s2Medium.attachWheel(document.getElementById("s2"));
 
-  /* ── Lock layout to initial viewport width so narrowing the window clips instead of reflowing ── */
-  var lockW = window.innerWidth + "px";
-  document.querySelector(".sections-viewport").style.minWidth = lockW;
-  document.querySelector(".header-bar").style.minWidth = lockW;
+  /* ── Lock layout to fixed design width so it looks identical on any screen ── */
+  var DESIGN_W = Math.min(window.innerWidth, 1512);
+  var lockW = DESIGN_W + "px";
+  var vp = document.querySelector(".sections-viewport");
+  var hb = document.querySelector(".header-bar");
+  vp.style.width = lockW;
+  vp.style.minWidth = lockW;
+  vp.style.maxWidth = lockW;
+  vp.style.left = "50%";
+  vp.style.transform = "translateX(-50%)";
+  hb.style.width = lockW;
+  hb.style.minWidth = lockW;
+  hb.style.maxWidth = lockW;
+  hb.style.left = "50%";
+  hb.style.right = "auto";
+  hb.style.transform = "translateX(-50%)";
 
   /* ── Divider lines and header labels — hardcoded pixel positions ── */
   document.getElementById("divLine1").style.left = "435px";
