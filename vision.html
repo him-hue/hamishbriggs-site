@@ -2252,16 +2252,16 @@ button { font: inherit; color: inherit; border: none; background: none; cursor: 
   /* ── Lock layout to fixed design width so it looks identical on any screen ── */
   var DESIGN_W = Math.min(window.innerWidth, 1512);
   var lockW = DESIGN_W + "px";
-  var designLeft = Math.max(0, (window.innerWidth - DESIGN_W) / 2);
 
-  /* Helper: lock a position:fixed element to the design-width strip */
+  /* Helper: lock a position:fixed element to the design-width strip.
+     Uses left:0; right:0; max-width + margin:auto — works dynamically with resize. */
   function lockToDesign(el) {
     if (!el) return;
-    el.style.width = lockW;
-    el.style.minWidth = lockW;
     el.style.maxWidth = lockW;
-    el.style.left = designLeft + "px";
-    el.style.right = "auto";
+    el.style.left = "0";
+    el.style.right = "0";
+    el.style.marginLeft = "auto";
+    el.style.marginRight = "auto";
   }
 
   lockToDesign(document.querySelector(".sections-viewport"));
@@ -2269,10 +2269,10 @@ button { font: inherit; color: inherit; border: none; background: none; cursor: 
   lockToDesign(document.getElementById("vDividers"));
   lockToDesign(document.getElementById("footerBar"));
 
-  /* Lock vision label ("You"/"Your") — offset from left edge of design area */
+  /* Lock vision label ("You"/"Your") — use CSS calc so it tracks with resize */
   var vl = document.getElementById("visionLabel");
   if (vl) {
-    vl.style.left = (designLeft + 130) + "px";
+    vl.style.left = "calc(max(0px, (100vw - " + lockW + ") / 2) + 130px)";
   }
 
   /* ── Divider lines and header labels — hardcoded pixel positions ── */
