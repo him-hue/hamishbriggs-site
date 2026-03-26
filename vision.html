@@ -23,6 +23,10 @@
   --muted: #8A8880;
   --body: #E8E6E1;
 }
+html {
+  /* Scale entire page to fit viewport — design width is 1512px */
+  zoom: 1; /* updated by JS on load + resize */
+}
 html, body {
   height: 100%; overflow: hidden;
   font-family: var(--font-sans);
@@ -585,7 +589,7 @@ button { font: inherit; color: inherit; border: none; background: none; cursor: 
 .s4-arrows {
   position: fixed;
   inset: 0;
-  z-index: 9; /* below dividers (10), above scaled world */
+  z-index: 20; /* above section content on all devices */
   pointer-events: none;
   opacity: 0;
   transition: opacity 0.15s ease; /* fast fade by default; JS overrides for initial entry */
@@ -699,7 +703,7 @@ button { font: inherit; color: inherit; border: none; background: none; cursor: 
 .left-arrows {
   position: fixed;
   inset: 0;
-  z-index: 9;
+  z-index: 20;
   pointer-events: none;
   opacity: 0;
   transition: opacity 0.15s ease;
@@ -895,14 +899,11 @@ button { font: inherit; color: inherit; border: none; background: none; cursor: 
   z-index: 12; /* above the box border */
 }
 
-/* S14: black gradient behind role names AND connectives so box border disappears behind them */
-#s14World .s3-urole,
-#s14World .s3-uconn {
-  position: relative;
-  z-index: 12;
-  background: linear-gradient(to right, #000 60%, transparent);
+/* S14: black gradient behind role names only — narrow strip to hide box border
+   without covering the arrows. No z-index elevation so arrows stay on top. */
+#s14World .s3-urole {
+  background: linear-gradient(to right, #000 30%, transparent 90%);
   padding-left: 0.8em;
-  padding-right: 0.8em;
 }
 
 /* S14: grey out problem descriptions — they are solved by Yggdrasil */
@@ -1363,6 +1364,21 @@ button { font: inherit; color: inherit; border: none; background: none; cursor: 
   <button class="nav-btn" id="btnPrev" disabled>&larr;</button>
   <button class="nav-btn" id="btnNext">&rarr;</button>
 </div>
+
+<script>
+/* ── VIEWPORT ZOOM — scales entire page from 1512px design width ── */
+(function() {
+  var DESIGN_WIDTH = 1512;
+  function updateZoom() {
+    /* innerWidth is divided by current zoom — multiply back to get physical pixels */
+    var currentZoom = parseFloat(document.documentElement.style.zoom) || 1;
+    var physicalWidth = Math.round(window.innerWidth * currentZoom);
+    document.documentElement.style.zoom = physicalWidth / DESIGN_WIDTH;
+  }
+  updateZoom();
+  window.addEventListener("resize", updateZoom);
+})();
+</script>
 
 <script>
 /* ── DEBUG GRID OVERLAY (hidden — set display to '' to restore) ── */
@@ -3494,15 +3510,10 @@ button { font: inherit; color: inherit; border: none; background: none; cursor: 
       s14StoryCol.classList.add("visible");
       positionStoryColText(s14StoryCol);
       s14Arr.style.transition = "opacity 0.15s ease";
-      s14LA.style.transition = "opacity 0.15s ease";
       buildS14Arrows();
-      buildDivergingArrows(s14World, "s14LeftArrows", "leftArrowHead14");
-      var s14LeftPaths = s14LA.querySelectorAll("path");
-      s14LeftPaths.forEach(function(p) { p.style.transition = "stroke-dashoffset 0.15s ease"; });
       var arrowPaths = s14Arr.querySelectorAll("path");
       arrowPaths.forEach(function(p) { p.style.transition = "stroke-dashoffset 0.15s ease"; });
       s14Arr.classList.add("visible");
-      s14LA.classList.add("visible");
       s14RoleHeader.classList.add("visible");
       positionYggBox();
       yggBox.classList.add("visible");
@@ -3528,9 +3539,7 @@ button { font: inherit; color: inherit; border: none; background: none; cursor: 
           s14StoryCol.classList.add("visible");
           positionStoryColText(s14StoryCol);
           buildS14Arrows();
-          buildDivergingArrows(s14World, "s14LeftArrows", "leftArrowHead14");
           s14Arr.classList.add("visible");
-          s14LA.classList.add("visible");
           s14RoleHeader.classList.add("visible");
           positionYggBox();
           yggBox.classList.add("visible");
