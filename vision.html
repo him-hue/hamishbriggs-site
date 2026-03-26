@@ -23,10 +23,6 @@
   --muted: #8A8880;
   --body: #E8E6E1;
 }
-html {
-  /* Scale entire page to fit viewport — design width is 1512px */
-  zoom: 1; /* updated by JS on load + resize */
-}
 html, body {
   height: 100%; overflow: hidden;
   font-family: var(--font-sans);
@@ -75,7 +71,7 @@ button { font: inherit; color: inherit; border: none; background: none; cursor: 
   bottom: 5vh;
   left: 0; right: 0;
   text-align: center;
-  font-size: clamp(16px, 1.6vw, 20px);
+  font-size: 20px;
   color: rgba(255,255,255,0.55);
   letter-spacing: 0.01em;
   line-height: 1.6;
@@ -92,7 +88,7 @@ button { font: inherit; color: inherit; border: none; background: none; cursor: 
 }
 .bottom-left .back-link:hover { color: var(--gold-light); }
 .bottom-right {
-  position: fixed; bottom: 28px; right: 36px;
+  position: fixed; bottom: 28px; right: max(36px, calc(100vw - 1512px + 36px));
   display: flex; align-items: center; gap: 10px; z-index: 850;
 }
 .nav-btn {
@@ -167,7 +163,7 @@ button { font: inherit; color: inherit; border: none; background: none; cursor: 
 }
 .s1-sentence {
   display: flex; align-items: center; justify-content: center;
-  font-size: clamp(16px, 2vw, 24px);
+  font-size: 24px;
   font-weight: 300; line-height: 1;
   /* Position so the gap between carousel and "is Storytelling" sits at center frame */
 }
@@ -227,7 +223,7 @@ button { font: inherit; color: inherit; border: none; background: none; cursor: 
   transform: translateY(calc(-50% - 10px));
   z-index: 2;
   pointer-events: none;
-  font-size: clamp(13px, 1.6vw, 19px);
+  font-size: 19px;
   font-weight: 300;
   color: #fff;
   opacity: 0; transition: opacity 0.6s;
@@ -278,14 +274,14 @@ button { font: inherit; color: inherit; border: none; background: none; cursor: 
 .s2-cell {
   position: relative; z-index: 1;
   display: flex; align-items: center;
-  font-size: clamp(16px, 2vw, 24px);
+  font-size: 24px;
   font-weight: 300;
 }
 
 /* Connective text — inline grid cells with gradient to fade divider */
 .s2-connective {
   position: relative; z-index: 1;
-  font-size: clamp(16px, 2vw, 24px);
+  font-size: 24px;
   font-weight: 300;
   color: var(--muted);
   white-space: nowrap;
@@ -357,14 +353,14 @@ button { font: inherit; color: inherit; border: none; background: none; cursor: 
   display: flex; align-items: center;
 }
 .s3-uconn {
-  font-size: clamp(16px, 2vw, 24px);
+  font-size: 24px;
   font-weight: 400;
   color: rgba(255,255,255,0.6);
   white-space: nowrap;
   padding: 0 0.8em;
 }
 .s3-urole, .s3-uaction {
-  font-size: clamp(16px, 2vw, 24px);
+  font-size: 24px;
   font-weight: 500;
   color: var(--gold);
   white-space: nowrap;
@@ -373,7 +369,7 @@ button { font: inherit; color: inherit; border: none; background: none; cursor: 
   font-weight: 700;
 }
 .s3-uyour {
-  font-size: clamp(16px, 2vw, 24px);
+  font-size: 24px;
   font-weight: 300;
   color: #fff;
   justify-content: flex-end;
@@ -396,7 +392,7 @@ button { font: inherit; color: inherit; border: none; background: none; cursor: 
   bottom: 4vh;
   left: 0; right: 0;
   text-align: center;
-  font-size: clamp(16px, 1.6vw, 20px);
+  font-size: 20px;
   color: rgba(255,255,255,0.55);
   letter-spacing: 0.01em;
   line-height: 1.6;
@@ -488,10 +484,25 @@ button { font: inherit; color: inherit; border: none; background: none; cursor: 
   visibility: hidden;
 }
 
+/* S14 inherits S4's grid nudges for the cloned grid */
+#s14World .s2-grid { transform: translateX(0px); }
+#s14World .s2-grid > :nth-child(2),
+#s14World .s2-grid > :nth-child(3) {
+  transform: translateX(100px);
+}
+#s14World .s2-grid > :nth-child(4),
+#s14World .s2-grid > :nth-child(5) {
+  transform: translateX(50px);
+}
+/* Cell-vision hidden in clone — "Your" handled by cloned label */
+#s14World .s2-cell.cell-vision {
+  visibility: hidden;
+}
+
 /* ── Section problem labels — below the scaled world ── */
 .section-problem-label {
   position: absolute;
-  bottom: 22vh;
+  bottom: 12vh;
   z-index: 12;
   pointer-events: none;
   opacity: 0;
@@ -521,7 +532,7 @@ button { font: inherit; color: inherit; border: none; background: none; cursor: 
 }
 .story-col-text {
   font-family: var(--font-serif);
-  font-size: clamp(18px, 1.8vw, 26px);
+  font-size: 26px;
   font-weight: 600;
   color: #fff;
   text-align: center;
@@ -570,7 +581,7 @@ button { font: inherit; color: inherit; border: none; background: none; cursor: 
 /* Problem title */
 .s4-problem-title {
   font-family: var(--font-serif);
-  font-size: clamp(18px, 1.8vw, 26px);
+  font-size: 26px;
   font-weight: 600;
   color: #fff;
   line-height: 1.2;
@@ -579,7 +590,7 @@ button { font: inherit; color: inherit; border: none; background: none; cursor: 
 
 /* Problem description — subtle, smaller */
 .s4-problem-desc {
-  font-size: clamp(11px, 1vw, 14px);
+  font-size: 14px;
   color: rgba(255,255,255,0.45);
   line-height: 1.5;
   font-weight: 300;
@@ -589,7 +600,7 @@ button { font: inherit; color: inherit; border: none; background: none; cursor: 
 .s4-arrows {
   position: fixed;
   inset: 0;
-  z-index: 20; /* above section content on all devices */
+  z-index: 20; /* above dividers (10), above scaled world */
   pointer-events: none;
   opacity: 0;
   transition: opacity 0.15s ease; /* fast fade by default; JS overrides for initial entry */
@@ -682,13 +693,13 @@ button { font: inherit; color: inherit; border: none; background: none; cursor: 
 .s6-role-header.visible { opacity: 1; }
 
 .s6-rh-jobis {
-  font-size: clamp(12px, 1.5vw, 18px);
+  font-size: 18px;
   font-weight: 400;
   color: rgba(255,255,255,0.6);
   margin-right: 0.4em;
 }
 .s6-rh-role {
-  font-size: clamp(12px, 1.5vw, 18px);
+  font-size: 18px;
   font-weight: 700;
   color: var(--gold);
 }
@@ -747,15 +758,7 @@ button { font: inherit; color: inherit; border: none; background: none; cursor: 
 /* ════════════════════════════════════════════
    S7: ALL BECAUSE — locked S2 recycled
    ════════════════════════════════════════════ */
-/* Same nudges as S2 */
-#s7 .s2-grid > :nth-child(2),
-#s7 .s2-grid > :nth-child(3) {
-  transform: translateX(86px);
-}
-#s7 .s2-grid > :nth-child(4),
-#s7 .s2-grid > :nth-child(5) {
-  transform: translateX(57px);
-}
+/* S2 nudges removed — animation handles start positioning via translateX offsets */
 /* Show "You" text (normally hidden since fixed label renders it) */
 #s7 .s2-cell.cell-vision {
   visibility: visible;
@@ -768,13 +771,99 @@ button { font: inherit; color: inherit; border: none; background: none; cursor: 
 }
 #s7 .s2-carousel-item:not(.locked) {
   opacity: 0 !important;
+  max-width: 0 !important;
+  overflow: hidden !important;
+  padding: 0 !important;
+}
+
+/* Shared slide header — centered narration text with fade-in */
+.slide-header {
+  position: absolute;
+  top: 98px; left: 0; right: 0;
+  font-size: 22px;
+  font-weight: 300;
+  letter-spacing: 0.02em;
+  color: rgba(255,255,255,0.8);
+  z-index: 10;
+  line-height: 1.6;
+  text-align: center;
+  opacity: 0;
+  transition: opacity 0.8s ease-out;
+}
+.v-section.active .slide-header {
+  opacity: 1;
+}
+.slide-header strong {
+  color: #fff;
+  font-weight: 600;
+}
+/* Instantly hide header when section is not active (prevents bleed-through) */
+.v-section:not(.active) .slide-header { display: none; }
+
+/* S7 "All because" header — centered, fades in before sentence */
+.s7-header {
+  position: absolute;
+  top: 98px; left: 0; right: 0;
+  font-size: 22px;
+  font-weight: 300;
+  letter-spacing: 0.02em;
+  color: rgba(255,255,255,0.8);
+  z-index: 10;
+  text-align: center;
+  opacity: 0;
+  transition: opacity 0.8s ease-out;
+}
+#s7.active .s7-header {
+  opacity: 1;
+}
+
+/* S7 grid collapses into single centered line with drift-in animation */
+#s7Grid {
+  display: flex !important;
+  flex-direction: row;
+  flex-wrap: nowrap;
+  align-items: center;
+  justify-content: center;
+  width: auto !important;
+  margin: 30px auto 0;
+  gap: 0.35em;
+  opacity: 0;
+  transition: opacity 0.5s ease-out 0s; /* no delay when fading out */
+}
+
+/* When section is active, fade in after header (1s delay) */
+#s7.active #s7Grid {
+  opacity: 1;
+}
+
+/* Override the grid cell widths — let them size to content */
+#s7 .s2-cell,
+#s7 .s2-connective,
+#s7 .s2-carousel {
+  width: auto !important;
+  flex: 0 0 auto;
+}
+/* Connective padding creates extra gaps — remove for sentence feel */
+#s7 .s2-connective {
+  padding: 0;
+}
+/* Hide the empty 6th grid child (only needed for S2 column layout) */
+#s7Grid > :last-child:empty {
+  display: none;
+}
+
+/* Shrink carousels to minimal height for single-line layout */
+#s7 .s2-carousel {
+  height: 1.5em !important;
+  mask-image: none !important;
+  -webkit-mask-image: none !important;
 }
 
 /* ════════════════════════════════════════════
    S8: BUT THERE IS A SOLUTION
    ════════════════════════════════════════════ */
 .s8-text {
-  font-size: clamp(24px, 3vw, 40px);
+  font-size: 40px;
   font-weight: 300;
   color: #fff;
   letter-spacing: 0.01em;
@@ -783,12 +872,29 @@ button { font: inherit; color: inherit; border: none; background: none; cursor: 
   color: var(--gold);
   font-weight: 500;
 }
+.s8b-anchor {
+  position: relative;
+}
+.s8b-blurb {
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  margin-top: 1.2em;
+  font-size: 22px;
+  font-weight: 300;
+  color: rgba(255,255,255,0.55);
+  letter-spacing: 0.02em;
+  line-height: 1.6;
+  text-align: center;
+  white-space: nowrap;
+}
 
 /* ════════════════════════════════════════════
    S9 / S10: "Everything is Storytelling" / swapped
    ════════════════════════════════════════════ */
 .s9-text {
-  font-size: clamp(24px, 3vw, 40px);
+  font-size: 40px;
   font-weight: 300;
   letter-spacing: 0.01em;
   white-space: nowrap;
@@ -799,23 +905,22 @@ button { font: inherit; color: inherit; border: none; background: none; cursor: 
 /* ════════════════════════════════════════════
    S11: CONSISTENT OUTPUT / INPUT
    ════════════════════════════════════════════ */
-.s11-content {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 3em;
+/* S11 anchor — keeps title centered at same position as S10 */
+.s11-anchor {
+  position: relative;
 }
-.s11-sub {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 0.3em;
-}
-.s11-line {
-  font-size: clamp(18px, 2.2vw, 28px);
+.s11-blurb {
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  margin-top: 2em;
+  font-size: 22px;
   font-weight: 300;
-  color: #fff;
-  letter-spacing: 0.01em;
+  color: rgba(255,255,255,0.55);
+  letter-spacing: 0.02em;
+  line-height: 1.7;
+  text-align: center;
   white-space: nowrap;
 }
 .s11-gold {
@@ -835,13 +940,13 @@ button { font: inherit; color: inherit; border: none; background: none; cursor: 
 }
 .s12-title {
   font-family: var(--font-serif);
-  font-size: clamp(36px, 5vw, 64px);
+  font-size: 64px;
   font-weight: 600;
   color: var(--gold);
   letter-spacing: 0.02em;
 }
 .s12-sub {
-  font-size: clamp(16px, 1.8vw, 22px);
+  font-size: 22px;
   font-weight: 300;
   color: rgba(255,255,255,0.6);
   letter-spacing: 0.02em;
@@ -855,7 +960,7 @@ button { font: inherit; color: inherit; border: none; background: none; cursor: 
   transform: translateX(-50%);
   max-width: 520px;
   width: max-content;
-  font-size: clamp(14px, 1.4vw, 18px);
+  font-size: 18px;
   font-weight: 300;
   color: rgba(255,255,255,0.55);
   line-height: 1.7;
@@ -878,7 +983,7 @@ button { font: inherit; color: inherit; border: none; background: none; cursor: 
 .ygg-box.visible { opacity: 1; }
 .ygg-box-label {
   position: absolute;
-  top: -1px; left: 12px;
+  top: 24px; left: 12px;
   transform: translateY(-100%);
   font-size: 11px;
   letter-spacing: 0.14em;
@@ -892,29 +997,30 @@ button { font: inherit; color: inherit; border: none; background: none; cursor: 
   position: absolute;
   bottom: 16px; left: 16px;
   font-family: var(--font-serif);
-  font-size: clamp(13px, 1.2vw, 18px);
+  font-size: 18px;
   font-weight: 600;
   color: #fff;
   white-space: nowrap;
   z-index: 12; /* above the box border */
 }
 
-/* S14: black gradient behind role names only — narrow strip to hide box border
-   without covering the arrows. No z-index elevation so arrows stay on top. */
-#s14World .s3-urole {
-  background: linear-gradient(to right, #000 30%, transparent 90%);
-  padding-left: 0.8em;
-}
 
-/* S14: grey out problem descriptions — they are solved by Yggdrasil */
+/* S14: grey out and blur problem descriptions — they are solved by Yggdrasil */
 #s14 .s4-problem-title {
   color: rgba(255,255,255,0.3);
+  filter: blur(2px);
 }
 #s14 .s4-problem-desc {
   color: rgba(255,255,255,0.15);
+  filter: blur(2px);
 }
 
 /* ── S14 solution labels (beneath problem labels) ── */
+/* On S14, nudge problem labels higher so they don't crowd solution labels */
+#s14 .section-problem-label {
+  bottom: calc(12vh + 30px);
+}
+
 .section-solution-label {
   position: absolute;
   bottom: 12vh;
@@ -926,7 +1032,8 @@ button { font: inherit; color: inherit; border: none; background: none; cursor: 
 .section-solution-label.visible { opacity: 1; }
 .section-solution-label.pos-left {
   left: 15%;
-  text-align: left;
+  transform: translateX(-50%);
+  text-align: center;
 }
 .section-solution-label.pos-center {
   left: 50%;
@@ -935,18 +1042,19 @@ button { font: inherit; color: inherit; border: none; background: none; cursor: 
 }
 .section-solution-label.pos-right {
   right: 15%;
-  text-align: right;
+  transform: translateX(50%);
+  text-align: center;
 }
 .s14-solution-title {
   font-family: var(--font-serif);
-  font-size: clamp(18px, 1.8vw, 26px);
+  font-size: 26px;
   font-weight: 600;
   color: #fff;
   line-height: 1.2;
   margin-bottom: 6px;
 }
 .s14-solution-desc {
-  font-size: clamp(11px, 1vw, 14px);
+  font-size: 14px;
   color: rgba(255,255,255,0.45);
   line-height: 1.5;
   font-weight: 300;
@@ -958,7 +1066,7 @@ button { font: inherit; color: inherit; border: none; background: none; cursor: 
   z-index: 2000;
   pointer-events: none;
   font-family: var(--font-sans);
-  font-size: clamp(24px, 3vw, 40px);
+  font-size: 40px;
   letter-spacing: 0.01em;
   line-height: 1;
   white-space: nowrap;
@@ -1075,6 +1183,7 @@ button { font: inherit; color: inherit; border: none; background: none; cursor: 
 
   <!-- ════ S2: PROVE THE PREMISE ════ -->
   <section class="v-section" id="s2" style="z-index:2;">
+    <div class="slide-header">What&rsquo;s your passion?</div>
     <!-- Inline grid: You | are into | [MEDIUM] | and want to | [ACTION] | (empty) -->
     <div class="s2-grid">
       <div class="s2-cell cell-vision">You</div>
@@ -1096,6 +1205,7 @@ button { font: inherit; color: inherit; border: none; background: none; cursor: 
 
   <!-- ════ S3: YOUR JOB IS [ROLE] — CAROUSEL UNSPOOL ════ -->
   <section class="v-section" id="s3" style="z-index:3;">
+    <div class="slide-header">So that&rsquo;s what you do, right? Wrong. Scroll down to see<br><strong>what you really do.</strong></div>
     <!-- Grid: Your | job is | [ROLE CAROUSEL] | because you need to | [ACTION CAROUSEL] | (empty) -->
     <div class="s2-grid" id="s3Grid">
       <div class="s2-cell cell-vision">Your</div>
@@ -1127,6 +1237,7 @@ button { font: inherit; color: inherit; border: none; background: none; cursor: 
 
   <!-- ════ S4: FEEL THE PROBLEM — IDEA SPRAWL ════ -->
   <section class="v-section" id="s4" style="z-index:4;">
+    <div class="slide-header">All of these are full-time jobs. No one person can do them all.<br><strong>Your story loses focus.</strong></div>
     <div class="s4-world" id="s4World">
       <!-- JS clones S3 section content + header + dividers + label here -->
     </div>
@@ -1139,6 +1250,7 @@ button { font: inherit; color: inherit; border: none; background: none; cursor: 
   </section>
 
   <section class="v-section" id="s5" style="z-index:5;">
+    <div class="slide-header">You can pay people. But that has its own downsides.<br><strong>They tell different stories&hellip;</strong></div>
     <div class="s4-world" id="s5World">
       <!-- JS clones S3 content here, same zoom-out as S4 -->
     </div>
@@ -1155,6 +1267,7 @@ button { font: inherit; color: inherit; border: none; background: none; cursor: 
   </section>
 
   <section class="v-section" id="s6" style="z-index:6;">
+    <div class="slide-header">Or, if you manage them well, they tell your story, but now<br><strong>your job is managing a team. And the output is expensive.</strong></div>
     <div class="s4-world" id="s6World">
       <!-- JS clones S3 content here -->
     </div>
@@ -1176,7 +1289,8 @@ button { font: inherit; color: inherit; border: none; background: none; cursor: 
 
   <!-- ════ S7: ALL BECAUSE — locked S2 recycled ════ -->
   <section class="v-section" id="s7" style="z-index:7;">
-    <div class="s2-grid">
+    <div class="s7-header">All because</div>
+    <div class="s2-grid" id="s7Grid">
       <div class="s2-cell cell-vision">You</div>
       <div class="s2-connective">are into</div>
       <div class="s2-cell">
@@ -1199,8 +1313,17 @@ button { font: inherit; color: inherit; border: none; background: none; cursor: 
     <div class="s8-text">But there is a <span class="s8-gold">solution.</span></div>
   </section>
 
+  <!-- ════ S8b: SOLUTION + BLURB ════ -->
+  <section class="v-section" id="s8b" style="z-index:8;">
+    <div class="s8b-anchor">
+      <div class="s8-text">But there is a <span class="s8-gold">solution.</span></div>
+      <div class="s8b-blurb">it just requires looking at<br>the problem differently</div>
+    </div>
+  </section>
+
   <!-- ════ S9: "Everything is Storytelling." ════ -->
   <section class="v-section" id="s9" style="z-index:9;">
+    <div class="slide-header">Complex problem&hellip;</div>
     <div class="s9-text">
       <span class="s9-gold" id="s9Everything">Everything</span>
       <span class="s9-white"> is </span>
@@ -1210,6 +1333,7 @@ button { font: inherit; color: inherit; border: none; background: none; cursor: 
 
   <!-- ════ S10: "Storytelling is Everything." ════ -->
   <section class="v-section" id="s10" style="z-index:10;">
+    <div class="slide-header" id="s10Header">Simple solution&hellip;</div>
     <div class="s9-text">
       <span class="s9-white" id="s10Storytelling">Storytelling</span>
       <span class="s9-white"> is </span>
@@ -1219,22 +1343,23 @@ button { font: inherit; color: inherit; border: none; background: none; cursor: 
 
   <!-- ════ S11: "Storytelling is Everything" + Consistent output / input ════ -->
   <section class="v-section" id="s11" style="z-index:11;">
-    <div class="s11-content">
+    <div class="s11-anchor">
       <div class="s9-text">
         <span class="s9-white">Storytelling</span>
         <span class="s9-white"> is </span>
         <span class="s9-gold">Everything</span>
       </div>
-      <div class="s11-sub">
-        <div class="s11-line">Consistent <span class="s11-gold">output</span></div>
-        <div class="s11-line">requires</div>
-        <div class="s11-line">Consistent <span class="s11-gold">input</span></div>
+      <div class="s11-blurb">
+        Consistent <span class="s11-gold">output</span><br>
+        requires<br>
+        Consistent <span class="s11-gold">input</span>
       </div>
     </div>
   </section>
 
   <!-- ════ S12: YGGDRASIL ════ -->
   <section class="v-section" id="s12" style="z-index:12;">
+    <div class="slide-header">Introducing&hellip;</div>
     <div class="s12-content">
       <div class="s12-title">Yggdrasil</div>
       <div class="s12-sub">Your story operating system</div>
@@ -1252,6 +1377,7 @@ button { font: inherit; color: inherit; border: none; background: none; cursor: 
 
   <!-- ════ S14: YGGDRASIL SOLUTION VIEW ════ -->
   <section class="v-section" id="s14" style="z-index:14;">
+    <div class="slide-header">One system.<br><strong>One story.</strong></div>
     <div class="s4-world" id="s14World"></div>
     <div class="s4-panel s4-panel-left" id="s14PanelLeft"></div>
     <div class="s4-panel s4-panel-right" id="s14PanelRight"></div>
@@ -1364,21 +1490,6 @@ button { font: inherit; color: inherit; border: none; background: none; cursor: 
   <button class="nav-btn" id="btnPrev" disabled>&larr;</button>
   <button class="nav-btn" id="btnNext">&rarr;</button>
 </div>
-
-<script>
-/* ── VIEWPORT ZOOM — scales entire page from 1512px design width ── */
-(function() {
-  var DESIGN_WIDTH = 1512;
-  function updateZoom() {
-    /* innerWidth is divided by current zoom — multiply back to get physical pixels */
-    var currentZoom = parseFloat(document.documentElement.style.zoom) || 1;
-    var physicalWidth = Math.round(window.innerWidth * currentZoom);
-    document.documentElement.style.zoom = physicalWidth / DESIGN_WIDTH;
-  }
-  updateZoom();
-  window.addEventListener("resize", updateZoom);
-})();
-</script>
 
 <script>
 /* ── DEBUG GRID OVERLAY (hidden — set display to '' to restore) ── */
@@ -1672,7 +1783,7 @@ button { font: inherit; color: inherit; border: none; background: none; cursor: 
      SECTION NAVIGATION
      ══════════════════════════════════════ */
 
-  var sections = ["s1", "s2", "s3", "s4", "s5", "s6", "s7", "s8", "s9", "s10", "s11", "s12", "s13", "s14"];
+  var sections = ["s1", "s2", "s3", "s4", "s5", "s6", "s7", "s8", "s8b", "s9", "s10", "s11", "s12", "s13", "s14"];
   var currentSection = 0;
   var headerBar = document.getElementById("headerBar");
   var btnPrev = document.getElementById("btnPrev");
@@ -1723,7 +1834,7 @@ button { font: inherit; color: inherit; border: none; background: none; cursor: 
     /* Show header bar, dividers, and vision label on S2+ */
     var vDividers = document.getElementById("vDividers");
     var visionLabel = document.getElementById("visionLabel");
-    if ((currentSection >= 1 && currentSection <= 5) || currentSection === 13) {
+    if ((currentSection >= 1 && currentSection <= 5) || currentSection === 14) {
       /* S2–S6 and S14: show real fixed elements */
       headerBar.classList.add("visible");
       vDividers.classList.add("visible");
@@ -1808,8 +1919,20 @@ button { font: inherit; color: inherit; border: none; background: none; cursor: 
       }
     }
 
+    /* ── Clean up when leaving S7 — reset drift animation so it replays on re-entry ── */
+    if (prevSection === 6 && currentSection !== 6) {
+      var s7Grid = document.getElementById("s7Grid");
+      if (s7Grid) {
+        Array.from(s7Grid.children).forEach(function(child) {
+          child.style.animation = '';
+        });
+      }
+      var s7Style = document.getElementById('s7-animation-keyframes');
+      if (s7Style) s7Style.remove();
+    }
+
     /* ── Clean up when leaving S14 ── */
-    if (prevSection === 13 && currentSection !== 13) {
+    if (prevSection === 14 && currentSection !== 14) {
       var s14W = document.getElementById("s14World");
       var s14PL = document.getElementById("s14PanelLeft");
       var s14PR = document.getElementById("s14PanelRight");
@@ -1842,7 +1965,7 @@ button { font: inherit; color: inherit; border: none; background: none; cursor: 
     }
 
     /* ── Clean up orbital animation when leaving S10 ── */
-    if (prevSection === 9 && currentSection !== 9) {
+    if (prevSection === 10 && currentSection !== 10) {
       if (typeof orbAnimId !== "undefined" && orbAnimId) {
         cancelAnimationFrame(orbAnimId);
         orbAnimId = null;
@@ -1888,6 +2011,26 @@ button { font: inherit; color: inherit; border: none; background: none; cursor: 
       footerSubtext.innerHTML = "";
     }
 
+    /* Measure S2 grid when S2 is active (store for use in S7) */
+    if (currentSection === 1) {
+      var s2Grid = document.querySelector("#s2 .s2-grid");
+      if (s2Grid) {
+        var s2GridRect = s2Grid.getBoundingClientRect();
+        var s2GridCenterX = s2GridRect.left + s2GridRect.width / 2;
+        var s2Children = Array.from(s2Grid.children);
+        var s2Offsets = s2Children.map(function(child) {
+          var rect = child.getBoundingClientRect();
+          var childCenterX = rect.left + rect.width / 2;
+          return childCenterX - s2GridCenterX;
+        });
+        s2GridMeasurements = {
+          centerX: s2GridCenterX,
+          offsets: s2Offsets
+        };
+        console.log('S2 grid measured:', s2GridMeasurements);
+      }
+    }
+
     /* Sync S3 content when entering S3 (single call — no duplicate) */
     if (currentSection === 2) {
       initS3Content();
@@ -1914,23 +2057,35 @@ button { font: inherit; color: inherit; border: none; background: none; cursor: 
     }
 
     /* S9: "Everything is Storytelling." — static text, no init needed */
-    if (currentSection === 8) {
+    if (currentSection === 9) {
       initS9Content();
     }
 
     /* S10: orbital swap from S9 */
-    if (currentSection === 9) {
+    if (currentSection === 10) {
       initS10Content(prevSection);
     }
 
     /* S14: Yggdrasil solution view */
-    if (currentSection === 13) {
+    if (currentSection === 14) {
       initS14Content(prevSection);
     }
   }
 
   btnPrev.addEventListener("click", function() { goToSection(currentSection - 1); });
   btnNext.addEventListener("click", function() { goToSection(currentSection + 1); });
+
+  /* Keyboard arrow navigation */
+  document.addEventListener("keydown", function(e) {
+    /* Up/Down arrows drive carousel on S1 and S2; Left/Right always navigate slides */
+    if (e.key === "ArrowRight") {
+      e.preventDefault();
+      if (currentSection < sections.length - 1) goToSection(currentSection + 1);
+    } else if (e.key === "ArrowLeft") {
+      e.preventDefault();
+      if (currentSection > 0) goToSection(currentSection - 1);
+    }
+  });
 
   /* ══════════════════════════════════════
      S1: CAROUSEL
@@ -1947,14 +2102,55 @@ button { font: inherit; color: inherit; border: none; background: none; cursor: 
   });
   s1Carousel.attachWheel(document.getElementById("s1"));
 
-  /* Keyboard (active section only) */
+  /* Keyboard (active section only): Up/Down cycle carousel, Enter locks selection */
   document.addEventListener("keydown", function(e) {
     if (currentSection === 0) {
       if (e.key === "ArrowDown") { e.preventDefault(); s1Carousel.animateTo(Math.min(s1Carousel.getIndex() + 1, PICKS.length - 1)); }
       if (e.key === "ArrowUp") { e.preventDefault(); s1Carousel.animateTo(Math.max(s1Carousel.getIndex() - 1, 0)); }
     } else if (currentSection === 1) {
-      if (e.key === "ArrowDown") { e.preventDefault(); s2Medium.animateTo(Math.min(s2Medium.getIndex() + 1, PICKS.length - 1)); }
-      if (e.key === "ArrowUp") { e.preventDefault(); s2Medium.animateTo(Math.max(s2Medium.getIndex() - 1, 0)); }
+      if (e.key === "ArrowDown") {
+        e.preventDefault();
+        /* Unlock if locked, so user can browse again */
+        if (s2Locked) {
+          s2Locked = false;
+          s2LockedIdx = -1;
+          var allItems = document.querySelectorAll("#s2MediumTrack .s2-carousel-item, #s2ActionTrack .s2-carousel-item");
+          allItems.forEach(function(el) { el.classList.remove("locked"); });
+          updateNavButtons();
+        }
+        s2Medium.animateTo(Math.min(s2Medium.getIndex() + 1, PICKS.length - 1));
+      }
+      if (e.key === "ArrowUp") {
+        e.preventDefault();
+        if (s2Locked) {
+          s2Locked = false;
+          s2LockedIdx = -1;
+          var allItems = document.querySelectorAll("#s2MediumTrack .s2-carousel-item, #s2ActionTrack .s2-carousel-item");
+          allItems.forEach(function(el) { el.classList.remove("locked"); });
+          updateNavButtons();
+        }
+        s2Medium.animateTo(Math.max(s2Medium.getIndex() - 1, 0));
+      }
+      if (e.key === "Enter") {
+        e.preventDefault();
+        var idx = s2Medium.getIndex();
+        if (s2Locked && s2LockedIdx === idx) {
+          /* Already locked on this item → unlock */
+          s2Locked = false;
+          s2LockedIdx = -1;
+          s2MediumItems.forEach(function(el) { el.classList.remove("locked"); });
+          var s2AI = document.querySelectorAll("#s2ActionTrack .s2-carousel-item");
+          s2AI.forEach(function(el) { el.classList.remove("locked"); });
+        } else {
+          /* Lock current item */
+          s2Locked = true;
+          s2LockedIdx = idx;
+          s2MediumItems.forEach(function(el, j) { el.classList.toggle("locked", j === idx); });
+          var s2AI = document.querySelectorAll("#s2ActionTrack .s2-carousel-item");
+          s2AI.forEach(function(el, j) { el.classList.toggle("locked", j === idx); });
+        }
+        updateNavButtons();
+      }
     }
   });
 
@@ -2037,6 +2233,11 @@ button { font: inherit; color: inherit; border: none; background: none; cursor: 
 
   /* Attach wheel to S2 section — drives the medium carousel (action follows via link) */
   s2Medium.attachWheel(document.getElementById("s2"));
+
+  /* ── Lock layout to initial viewport width so narrowing the window clips instead of reflowing ── */
+  var lockW = window.innerWidth + "px";
+  document.querySelector(".sections-viewport").style.minWidth = lockW;
+  document.querySelector(".header-bar").style.minWidth = lockW;
 
   /* ── Divider lines and header labels — hardcoded pixel positions ── */
   document.getElementById("divLine1").style.left = "435px";
@@ -2442,6 +2643,10 @@ button { font: inherit; color: inherit; border: none; background: none; cursor: 
       clonedUnspool.style.clipPath = "inset(0 0 0 0)";
     }
 
+    /* Remove cloned slide-header (S4 has its own) */
+    var clonedHeader = s4World.querySelector(".slide-header");
+    if (clonedHeader) clonedHeader.remove();
+
     /* Hide the subtext and scroll hint in S4 */
     var clonedSubtext = s4World.querySelector(".s3-subtext");
     var clonedHint = s4World.querySelector(".s3-scroll-hint");
@@ -2668,6 +2873,37 @@ button { font: inherit; color: inherit; border: none; background: none; cursor: 
       s14SC.style.right = "0px";
       s14SC.style.transition = "left 1.4s var(--ease), opacity 0.05s ease";
     }
+  }
+
+  /* S14-specific divider nudges — the zoomed-out grid columns don't scale
+     linearly with scaledX, so dividers need extra rightward shift to land
+     in the visual gaps between S14 text columns. */
+  function adjustS14Dividers() {
+    var d1 = document.getElementById("divLine1");
+    var d2 = document.getElementById("divLine2");
+    var d3 = document.getElementById("divLine3");
+    /* Base positions from repositionFixedForS4 are scaledX(435)≈419, scaledX(975)≈851, scaledX(1300)≈1111.
+       Nudge each rightward to land in the actual visual gap. */
+    var nudge1 = 30;  /* gap between connective text & roles */
+    var nudge2 = 30;  /* gap between roles & actions */
+    var nudge3 = 30;  /* gap between actions & story */
+    d1.style.left = (scaledX(ORIG_DIV[0]) + nudge1) + "px";
+    d2.style.left = (scaledX(ORIG_DIV[1]) + nudge2) + "px";
+    d3.style.left = (scaledX(ORIG_DIV[2]) + nudge3) + "px";
+
+    /* Also adjust header columns to match */
+    var headerCols = document.querySelectorAll(".header-col");
+    var sd1 = scaledX(ORIG_DIV[0]) + nudge1;
+    var sd2 = scaledX(ORIG_DIV[1]) + nudge2;
+    var sd3 = scaledX(ORIG_DIV[2]) + nudge3;
+    if (headerCols[0]) { headerCols[0].style.width = (sd1 - 10) + "px"; }
+    if (headerCols[1]) { headerCols[1].style.left = (sd1 + 10) + "px"; headerCols[1].style.width = (sd2 - sd1 - 10) + "px"; }
+    if (headerCols[2]) { headerCols[2].style.left = (sd2 + 10) + "px"; headerCols[2].style.width = (sd3 - sd2 - 10) + "px"; }
+    if (headerCols[3]) { headerCols[3].style.left = (sd3 + 10) + "px"; }
+
+    /* Also adjust story column left to match new divider 3 */
+    var s14SC = document.getElementById("s14StoryCol");
+    if (s14SC) { s14SC.style.left = (sd3 + 10) + "px"; }
   }
 
   /* Position story column text at the selected row's viewport Y */
@@ -2936,6 +3172,9 @@ button { font: inherit; color: inherit; border: none; background: none; cursor: 
       clonedUnspool.style.clipPath = "inset(0 0 0 0)";
     }
 
+    var clonedHeader5 = s5World.querySelector(".slide-header");
+    if (clonedHeader5) clonedHeader5.remove();
+
     var clonedSubtext = s5World.querySelector(".s3-subtext");
     var clonedHint = s5World.querySelector(".s3-scroll-hint");
     if (clonedSubtext) clonedSubtext.style.display = "none";
@@ -3123,6 +3362,9 @@ button { font: inherit; color: inherit; border: none; background: none; cursor: 
       clonedUnspool.classList.add("active");
       clonedUnspool.style.clipPath = "inset(0 0 0 0)";
     }
+    var clonedHeader6 = s6World.querySelector(".slide-header");
+    if (clonedHeader6) clonedHeader6.remove();
+
     var clonedSubtext = s6World.querySelector(".s3-subtext");
     var clonedHint = s6World.querySelector(".s3-scroll-hint");
     if (clonedSubtext) clonedSubtext.style.display = "none";
@@ -3285,8 +3527,8 @@ button { font: inherit; color: inherit; border: none; background: none; cursor: 
   var yggBox = document.getElementById("yggBox");
 
   function buildS14Arrows() {
-    /* S6 converging arrows that converge to a single point (like S6's cost circle),
-       then ONE arrow from that convergence point to the story column text. */
+    /* Converging arrows: all rows converge to a single point with the arrowhead
+       right AT the convergence — no separate line beyond it. */
     var svg = document.getElementById("s14Arrows");
     var oldEls = svg.querySelectorAll("path, line");
     oldEls.forEach(function(p) { p.remove(); });
@@ -3310,41 +3552,35 @@ button { font: inherit; color: inherit; border: none; background: none; cursor: 
     var div3X = scaledX(ORIG_DIV[2]);
     var clonedActions = s14World.querySelectorAll(".s3-uaction");
 
-    /* Convergence point: same as S6's cost circle (div3X + 28) */
-    var convergeX = div3X + 28;
+    /* Convergence point: arrowhead sits right here, no line beyond */
+    var convergeX = div3X + 50;
 
-    /* Story column text position */
-    var storyColEl = document.getElementById("s14StoryCol");
-    var storyTextEl = storyColEl ? storyColEl.querySelector(".story-col-text") : null;
-    var storyRect = storyTextEl ? storyTextEl.getBoundingClientRect() : null;
-    var storyX = storyRect ? storyRect.left - 16 : (vw - 200);
-
-    /* Step 1: Draw converging arrows from each row to the convergence point
-       (identical to buildS6ConvergingArrows — no arrowheads on these) */
+    /* Step 1: Draw converging lines — selected row gets the arrowhead */
     s3RowEls.forEach(function(row, i) {
       var rowY_s3 = trackTop + row.rowIdx * s3RowH + s3RowH / 2;
       var startY = toVpY(rowY_s3);
 
+      /* Shift start positions right (+50px) to clear the action text */
       var startX;
       if (clonedActions[i]) {
         var aRect = clonedActions[i].getBoundingClientRect();
         if (aRect.right > 0 && aRect.right < div3X) {
-          startX = aRect.right + 28;
+          startX = aRect.right + 50;
         } else {
-          startX = div3X - 60;
+          startX = div3X - 30;
         }
       } else {
-        startX = div3X - 60;
+        startX = div3X - 30;
       }
 
       var distFromCenter = row.rowIdx - s3CenterIdx;
 
       var d;
       if (distFromCenter === 0) {
-        /* Selected row: straight horizontal line to convergence point */
+        /* Selected row: straight horizontal line to convergence — gets arrowhead */
         d = "M " + startX + " " + startY + " L " + convergeX + " " + startY;
       } else {
-        /* Converging Bézier — same as S6 */
+        /* Converging Bézier */
         var totalDx = convergeX - startX;
         var rampFraction = (div3X - startX) / totalDx;
 
@@ -3362,21 +3598,15 @@ button { font: inherit; color: inherit; border: none; background: none; cursor: 
 
       var path = document.createElementNS("http://www.w3.org/2000/svg", "path");
       path.setAttribute("d", d);
-      /* No arrowhead on converging lines */
+      /* Only the selected (center) row gets an arrowhead */
+      if (distFromCenter === 0) {
+        path.setAttribute("marker-end", "url(#s14ArrowHead)");
+      }
       svg.appendChild(path);
 
       var len = path.getTotalLength();
       path.style.setProperty("--path-len", len);
     });
-
-    /* Step 2: One single arrow from convergence point to story column */
-    var finalPath = document.createElementNS("http://www.w3.org/2000/svg", "path");
-    var finalD = "M " + convergeX + " " + selVpY + " L " + storyX + " " + selVpY;
-    finalPath.setAttribute("d", finalD);
-    finalPath.setAttribute("marker-end", "url(#s14ArrowHead)");
-    svg.appendChild(finalPath);
-    var fLen = finalPath.getTotalLength();
-    finalPath.style.setProperty("--path-len", fLen);
   }
 
   function positionYggBox() {
@@ -3392,9 +3622,9 @@ button { font: inherit; color: inherit; border: none; background: none; cursor: 
     var vh = window.innerHeight;
 
     var boxLeft = vlRect.left - 16;
-    var boxTop = 48 + 65; /* header bar + 65px inset from top */
-    /* Right border sits ~50px past the first divider, running through role names */
-    var boxRight = div1X + 50;
+    var boxTop = 48 + 110; /* header bar + 110px inset from top */
+    /* Right border extends into the role carousel — the black gradient on .s3-urole hides it */
+    var boxRight = div1X + 32;
     /* Bottom: problem labels sit at bottom: 22vh, box stops above them with 45px extra inset */
     var boxBottom = vh - vh * 0.24 - 45;
 
@@ -3402,6 +3632,41 @@ button { font: inherit; color: inherit; border: none; background: none; cursor: 
     yggBox.style.top = boxTop + "px";
     yggBox.style.width = (boxRight - boxLeft) + "px";
     yggBox.style.height = (boxBottom - boxTop) + "px";
+
+    /* Clip the right border to avoid the carousel rows.
+       Find where the carousel is and cut a notch in the right border. */
+    var roles = s14World.querySelectorAll(".s3-urole");
+    if (roles.length > 0) {
+      var firstRoleRect = roles[0].getBoundingClientRect();
+      var lastRoleRect = roles[roles.length - 1].getBoundingClientRect();
+
+      var carouselTopAbs = firstRoleRect.top;
+      var carouselBottomAbs = lastRoleRect.bottom;
+
+      /* Convert to percentages relative to ygg-box */
+      var carouselTopPercent = ((carouselTopAbs - boxTop) / (boxBottom - boxTop)) * 100;
+      var carouselBottomPercent = ((carouselBottomAbs - boxTop) / (boxBottom - boxTop)) * 100;
+
+      /* Clamp to box bounds */
+      carouselTopPercent = Math.max(0, Math.min(100, carouselTopPercent));
+      carouselBottomPercent = Math.max(0, Math.min(100, carouselBottomPercent));
+
+      /* Polygon: normal box, but right edge recesses inward at carousel */
+      var clipPath = "polygon(" +
+        "0% 0%, " +
+        "100% 0%, " +
+        "100% " + carouselTopPercent + "%, " +
+        "99% " + carouselTopPercent + "%, " +
+        "99% " + carouselBottomPercent + "%, " +
+        "100% " + carouselBottomPercent + "%, " +
+        "100% 100%, " +
+        "0% 100%" +
+        ")";
+      yggBox.style.clipPath = clipPath;
+    } else {
+      /* No carousel — full border */
+      yggBox.style.clipPath = "none";
+    }
   }
 
   function initS14Content(prevSection) {
@@ -3422,6 +3687,9 @@ button { font: inherit; color: inherit; border: none; background: none; cursor: 
       clonedUnspool.classList.add("active");
       clonedUnspool.style.clipPath = "inset(0 0 0 0)";
     }
+    var clonedHeader14 = s14World.querySelector(".slide-header");
+    if (clonedHeader14) clonedHeader14.remove();
+
     var clonedSubtext = s14World.querySelector(".s3-subtext");
     var clonedHint = s14World.querySelector(".s3-scroll-hint");
     if (clonedSubtext) clonedSubtext.style.display = "none";
@@ -3458,9 +3726,9 @@ button { font: inherit; color: inherit; border: none; background: none; cursor: 
         connIdx++;
         return;
       }
-      /* Non-selected rows: keep "and" as connector (no costs in S14) */
+      /* Non-selected rows: "its job is" — Yggdrasil handles these */
       if (allConns[connIdx]) {
-        allConns[connIdx].textContent = "and";
+        allConns[connIdx].textContent = "its job is";
         allConns[connIdx].style.textAlign = "right";
         allConns[connIdx].style.display = "flex";
         allConns[connIdx].style.justifyContent = "flex-end";
@@ -3494,7 +3762,7 @@ button { font: inherit; color: inherit; border: none; background: none; cursor: 
     s14SL2.classList.remove("visible");
     s14SL3.classList.remove("visible");
 
-    if (prevSection === 12) {
+    if (prevSection === 13) {
       /* Coming from S13: instant snap crossfade */
       s14World.style.transition = "none";
       s14World.classList.add("zoomed-out");
@@ -3560,6 +3828,7 @@ button { font: inherit; color: inherit; border: none; background: none; cursor: 
 
   var s7Medium = null;
   var s7Action = null;
+  var s2GridMeasurements = null; /* Store S2 grid measurements for use in S7 */
 
   function initS7Content() {
     /* Read the locked selection index */
@@ -3594,6 +3863,70 @@ button { font: inherit; color: inherit; border: none; background: none; cursor: 
 
     /* Reset any S4-S6 fixed positioning so elements return to their default state */
     if (typeof resetFixedPositions === "function") resetFixedPositions();
+
+    /* Schedule animation setup for next frame (allows layout to settle) */
+    requestAnimationFrame(initS7Animation);
+  }
+
+  function initS7Animation() {
+    var s7Grid = document.getElementById("s7Grid");
+    if (!s7Grid) return;
+
+    /* Use pre-measured S2 offsets from when S2 was active */
+    if (!s2GridMeasurements) {
+      console.warn('S2 grid measurements not available');
+      return;
+    }
+
+    var s7Children = Array.from(s7Grid.children);
+    var s2Offsets = s2GridMeasurements.offsets;
+
+    /* Measure S7 grid bounds */
+    var s7GridRect = s7Grid.getBoundingClientRect();
+    var s7GridCenterX = s7GridRect.left + s7GridRect.width / 2;
+
+    /* Calculate S7 item offsets relative to S7 grid center */
+    var s7Offsets = s7Children.map(function(child) {
+      var rect = child.getBoundingClientRect();
+      var childCenterX = rect.left + rect.width / 2;
+      return childCenterX - s7GridCenterX;
+    });
+
+    /* Calculate animation offsets (distance each item needs to drift) */
+    var animationOffsets = s2Offsets.map(function(s2Offset, idx) {
+      return s2Offset - (s7Offsets[idx] || 0);
+    });
+
+    console.log('S7 Animation Init:', { s2Offsets: s2Offsets, s7Offsets: s7Offsets, animationOffsets: animationOffsets });
+
+    /* Create keyframes and apply animations */
+    var keyframeStyles = '';
+    var animationDuration = 3.6; /* seconds */
+    var staggerDelay = 0.09; /* seconds between items */
+    var animationTiming = 'cubic-bezier(0.25, 0.46, 0.45, 0.94)'; /* fallback timing */
+
+    s7Children.forEach(function(child, idx) {
+      var offset = animationOffsets[idx] || 0;
+      var animationName = 's7-drift-' + idx;
+      var delay = idx * staggerDelay;
+
+      /* Create keyframe animation */
+      keyframeStyles += '@keyframes ' + animationName + ' {\n';
+      keyframeStyles += '  0% { transform: translateX(' + offset + 'px); }\n';
+      keyframeStyles += '  100% { transform: translateX(0); }\n';
+      keyframeStyles += '}\n';
+
+      /* Apply animation to child — use 'both' fill mode so items start at S2 offset position */
+      child.style.animation = animationName + ' ' + animationDuration + 's ' + animationTiming + ' ' + delay + 's both';
+    });
+
+    /* Inject keyframes into document (remove previous if re-entering S7) */
+    var existing = document.getElementById('s7-animation-keyframes');
+    if (existing) existing.remove();
+    var styleTag = document.createElement('style');
+    styleTag.id = 's7-animation-keyframes';
+    styleTag.textContent = keyframeStyles;
+    document.head.appendChild(styleTag);
   }
 
   /* ══════════════════════════════════════
@@ -3613,10 +3946,14 @@ button { font: inherit; color: inherit; border: none; background: none; cursor: 
   var orbAnimId = null; /* track rAF so we can cancel */
 
   function initS10Content(prevSection) {
-    if (prevSection !== 8) return; /* orbital only from S9→S10 */
+    if (prevSection !== 9) return; /* orbital only from S9→S10 */
 
     /* Cancel any running orbital animation */
     if (orbAnimId) { cancelAnimationFrame(orbAnimId); orbAnimId = null; }
+
+    /* Hide S10 header — will reveal after orbital completes */
+    var s10Header = document.getElementById("s10Header");
+    if (s10Header) { s10Header.style.opacity = "0"; s10Header.style.transition = "none"; }
 
     /* Source elements in S9 */
     var s9Ev = document.getElementById("s9Everything");
@@ -3725,6 +4062,13 @@ button { font: inherit; color: inherit; border: none; background: none; cursor: 
             orbEverything.classList.remove("animating");
             orbStorytelling.classList.remove("animating");
             orbAnimId = null;
+
+            /* Fade in S10 header after orbital completes */
+            var s10Header = document.getElementById("s10Header");
+            if (s10Header) {
+              s10Header.style.transition = "opacity 0.8s ease-out";
+              s10Header.style.opacity = "1";
+            }
           }
         }
 
