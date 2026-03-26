@@ -2252,19 +2252,27 @@ button { font: inherit; color: inherit; border: none; background: none; cursor: 
   /* ── Lock layout to fixed design width so it looks identical on any screen ── */
   var DESIGN_W = Math.min(window.innerWidth, 1512);
   var lockW = DESIGN_W + "px";
-  var vp = document.querySelector(".sections-viewport");
-  var hb = document.querySelector(".header-bar");
-  vp.style.width = lockW;
-  vp.style.minWidth = lockW;
-  vp.style.maxWidth = lockW;
-  vp.style.left = "50%";
-  vp.style.transform = "translateX(-50%)";
-  hb.style.width = lockW;
-  hb.style.minWidth = lockW;
-  hb.style.maxWidth = lockW;
-  hb.style.left = "50%";
-  hb.style.right = "auto";
-  hb.style.transform = "translateX(-50%)";
+  var designLeft = Math.max(0, (window.innerWidth - DESIGN_W) / 2);
+
+  /* Helper: lock a position:fixed element to the design-width strip */
+  function lockToDesign(el) {
+    if (!el) return;
+    el.style.width = lockW;
+    el.style.minWidth = lockW;
+    el.style.maxWidth = lockW;
+    el.style.left = designLeft + "px";
+    el.style.right = "auto";
+  }
+
+  lockToDesign(document.querySelector(".sections-viewport"));
+  lockToDesign(document.querySelector(".header-bar"));
+  lockToDesign(document.getElementById("vDividers"));
+
+  /* Lock vision label ("You"/"Your") — offset from left edge of design area */
+  var vl = document.getElementById("visionLabel");
+  if (vl) {
+    vl.style.left = (designLeft + 130) + "px";
+  }
 
   /* ── Divider lines and header labels — hardcoded pixel positions ── */
   document.getElementById("divLine1").style.left = "435px";
