@@ -2243,44 +2243,10 @@ button { font: inherit; color: inherit; border: none; background: none; cursor: 
   /* Attach wheel to S2 section — drives the medium carousel (action follows via link) */
   s2Medium.attachWheel(document.getElementById("s2"));
 
-  /* ── Lock layout to fixed design width so it looks identical on any screen ── */
-  var DESIGN_W = Math.min(window.innerWidth, 1512);
-  var lockW = DESIGN_W + "px";
-  var designLeft = Math.max(0, Math.floor((window.innerWidth - DESIGN_W) / 2));
-
-  /* Helper: lock a position:fixed element to the design-width strip.
-     Uses a fixed pixel offset — frozen at load time so JS-positioned overlays stay aligned. */
-  function lockToDesign(el) {
-    if (!el) return;
-    el.style.width = lockW;
-    el.style.maxWidth = lockW;
-    el.style.left = designLeft + "px";
-    el.style.right = "auto";
-  }
-
-  /* Lock the main container elements to the design strip */
-  lockToDesign(document.querySelector(".sections-viewport"));
-  lockToDesign(document.querySelector(".header-bar"));
-  lockToDesign(document.getElementById("vDividers"));
-  lockToDesign(document.getElementById("footerBar"));
-  lockToDesign(document.getElementById("progressBar"));
-
-  /* Lock vision label */
-  var vl = document.getElementById("visionLabel");
-  if (vl) {
-    vl.style.left = (designLeft + 130) + "px";
-  }
-
-  /* Lock bottom nav */
-  var bl = document.querySelector(".bottom-left");
-  var br = document.querySelector(".bottom-right");
-  if (bl) bl.style.left = (designLeft + 36) + "px";
-  if (br) br.style.right = (designLeft + 36) + "px";
-
-  /* Prevent window resize from breaking layout — freeze the body width */
-  document.body.style.width = window.innerWidth + "px";
-  document.body.style.minWidth = window.innerWidth + "px";
-  document.body.style.overflow = "hidden";
+  /* ── Lock layout to initial viewport width so narrowing the window clips instead of reflowing ── */
+  var lockW = window.innerWidth + "px";
+  document.querySelector(".sections-viewport").style.minWidth = lockW;
+  document.querySelector(".header-bar").style.minWidth = lockW;
 
   /* ── Divider lines and header labels — hardcoded pixel positions ── */
   document.getElementById("divLine1").style.left = "435px";
