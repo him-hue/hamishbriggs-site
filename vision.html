@@ -80,10 +80,7 @@ button { font: inherit; color: inherit; border: none; background: none; cursor: 
 
 /* ── Bottom nav ── */
 .bottom-left {
-  position: fixed; bottom: 28px; left: calc(50vw - 756px + 36px); z-index: 850;
-}
-@media (max-width: 1512px) {
-  .bottom-left { left: 36px; }
+  position: fixed; bottom: 28px; left: 36px; z-index: 850;
 }
 .bottom-left .back-link {
   font-size: 11px; letter-spacing: 0.06em; color: var(--gold);
@@ -91,11 +88,8 @@ button { font: inherit; color: inherit; border: none; background: none; cursor: 
 }
 .bottom-left .back-link:hover { color: var(--gold-light); }
 .bottom-right {
-  position: fixed; bottom: 28px; right: calc(50vw - 756px + 36px);
+  position: fixed; bottom: 28px; right: 36px;
   display: flex; align-items: center; gap: 10px; z-index: 850;
-}
-@media (max-width: 1512px) {
-  .bottom-right { right: 36px; }
 }
 .nav-btn {
   width: 36px; height: 36px; border-radius: 50%;
@@ -2254,26 +2248,34 @@ button { font: inherit; color: inherit; border: none; background: none; cursor: 
   var lockW = DESIGN_W + "px";
 
   /* Helper: lock a position:fixed element to the design-width strip.
-     Uses left:0; right:0; max-width + margin:auto — works dynamically with resize. */
+     Uses left calc to center — universally supported for position:fixed. */
   function lockToDesign(el) {
     if (!el) return;
+    el.style.width = lockW;
     el.style.maxWidth = lockW;
-    el.style.left = "0";
-    el.style.right = "0";
-    el.style.marginLeft = "auto";
-    el.style.marginRight = "auto";
+    el.style.left = "calc((100vw - " + lockW + ") / 2)";
+    el.style.right = "auto";
   }
 
+  /* Lock ONLY the main container elements to the design strip.
+     Do NOT lock JS-positioned elements (story cols, arrows, cost circle, ygg-box, etc.) */
   lockToDesign(document.querySelector(".sections-viewport"));
   lockToDesign(document.querySelector(".header-bar"));
   lockToDesign(document.getElementById("vDividers"));
   lockToDesign(document.getElementById("footerBar"));
+  lockToDesign(document.getElementById("progressBar"));
 
   /* Lock vision label ("You"/"Your") — use CSS calc so it tracks with resize */
   var vl = document.getElementById("visionLabel");
   if (vl) {
     vl.style.left = "calc(max(0px, (100vw - " + lockW + ") / 2) + 130px)";
   }
+
+  /* Lock bottom nav — recalc positions relative to design strip */
+  var bl = document.querySelector(".bottom-left");
+  var br = document.querySelector(".bottom-right");
+  if (bl) bl.style.left = "calc(max(0px, (100vw - " + lockW + ") / 2) + 36px)";
+  if (br) br.style.right = "calc(max(0px, (100vw - " + lockW + ") / 2) + 36px)";
 
   /* ── Divider lines and header labels — hardcoded pixel positions ── */
   document.getElementById("divLine1").style.left = "435px";
