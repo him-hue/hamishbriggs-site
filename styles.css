@@ -8,9 +8,10 @@
   --header-h: 60px;
   --ease: cubic-bezier(0.16, 1, 0.3, 1);
   --duration: 1200ms;
-  --gold: #C8A24D;
-  --gold-light: #D4B060;
-  --gold-dark: #A67C2E;
+  /* Harmonized with Yggdrasil brand gold — bright on dark, deep as the shadow */
+  --gold: #E9A93C;
+  --gold-light: #F0BD63;
+  --gold-dark: #C2841C;
 }
 
 html, body {
@@ -75,6 +76,8 @@ button { font: inherit; color: inherit; border: none; background: none; cursor: 
   z-index: 0;
 }
 
+/* Desktop: landscape video, scrubbed as you scroll (camera rotation).
+   Needs a server with byte-range support — Wrangler / Cloudflare / Live Server. */
 .bg-video {
   width: 100%;
   height: 100%;
@@ -83,7 +86,7 @@ button { font: inherit; color: inherit; border: none; background: none; cursor: 
   display: block;
 }
 
-/* Mobile frames: hidden on desktop */
+/* Portrait camera-rotation stills — used only on mobile (see media query). */
 .bg-frames { display: none; }
 
 .bg-frame {
@@ -336,6 +339,14 @@ button { font: inherit; color: inherit; border: none; background: none; cursor: 
   padding: 2rem 0 8rem;
 }
 
+/* Text-heavy sections: center vertically + trim bottom padding so long
+   copy fits inside the full-height panel without hiding behind the header. */
+.section-content.dense {
+  justify-content: center;
+  padding: 5rem 0 3rem;
+  overflow-y: auto;
+}
+
 .section-left {
   max-width: 24rem;
   padding-left: 3rem;
@@ -410,6 +421,150 @@ button { font: inherit; color: inherit; border: none; background: none; cursor: 
 }
 @media (min-width: 768px) { .tagline-thesis { font-size: 1.4rem; } }
 
+/* ── Hero (Yggdrasil-led) ────────────────────────── */
+.hero {
+  width: 100%;
+  max-width: 46rem;
+  padding: 0 1.5rem;
+}
+.hero-eyebrow {
+  font-family: var(--font-sans);
+  font-size: 0.72rem;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--gold);
+  margin-bottom: 1.25rem;
+}
+.hero-headline {
+  font-family: var(--font-serif);
+  font-weight: 600;
+  font-size: clamp(2.6rem, 7vw, 5rem);
+  line-height: 0.98;
+  letter-spacing: -0.015em;
+  color: #fff;
+}
+.hero-sub {
+  margin-top: 1.5rem;
+  max-width: 34rem;
+  font-size: 1rem;
+  line-height: 1.7;
+  color: rgba(255,255,255,0.68);
+}
+@media (min-width: 768px) { .hero-sub { font-size: 1.1rem; } }
+.hero-sub strong { font-weight: 500; color: rgba(255,255,255,0.92); }
+.hero-sub em { font-style: italic; color: var(--gold-light); }
+.hero-tagline {
+  margin-top: 1.25rem;
+  font-family: var(--font-serif);
+  font-style: italic;
+  font-size: 1.35rem;
+  color: var(--gold);
+}
+@media (min-width: 768px) { .hero-tagline { font-size: 1.6rem; } }
+.hero-cta {
+  margin-top: 2rem;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.85rem;
+}
+
+/* ── Shared buttons (harmonized) ─────────────────── */
+.btn-gold {
+  display: inline-block;
+  border-radius: 9999px;
+  border: 1px solid var(--gold);
+  background: linear-gradient(135deg, var(--gold-light), var(--gold-dark));
+  padding: 0.6rem 1.5rem;
+  font-size: 0.8rem;
+  font-weight: 500;
+  letter-spacing: 0.06em;
+  color: #111;
+  transition: filter 0.2s, transform 0.2s, box-shadow 0.2s;
+}
+.btn-gold:hover {
+  filter: brightness(1.1);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 22px rgba(233,169,60,0.22);
+}
+.btn-ghost {
+  display: inline-block;
+  border-radius: 9999px;
+  border: 1px solid rgba(255,255,255,0.22);
+  padding: 0.6rem 1.4rem;
+  font-size: 0.8rem;
+  letter-spacing: 0.06em;
+  color: rgba(255,255,255,0.82);
+  transition: border-color 0.2s, color 0.2s, background 0.2s;
+}
+.btn-ghost:hover {
+  border-color: rgba(255,255,255,0.45);
+  color: #fff;
+  background: rgba(255,255,255,0.05);
+}
+
+/* Yggdrasil brand lockup (section 2 heading) */
+.ygg-lockup {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  margin-bottom: 1.5rem;
+}
+.ygg-lockup-mark { width: 34px; height: 34px; color: var(--gold); flex-shrink: 0; }
+.ygg-lockup-name {
+  font-family: var(--font-serif);
+  font-size: 1.7rem;
+  color: #fff;
+  letter-spacing: 0.01em;
+}
+
+/* ── Yggdrasil teaser (section 1) ────────────────── */
+.teaser {
+  width: 100%;
+  padding: 0 1.5rem;
+}
+.teaser-eyebrow {
+  font-family: var(--font-sans);
+  font-size: 0.72rem;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: rgba(255,255,255,0.5);
+  margin-bottom: 1.75rem;
+}
+.teaser-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1.5rem;
+  max-width: 60rem;
+}
+@media (min-width: 768px) {
+  .teaser-grid { grid-template-columns: repeat(3, 1fr); gap: 2.5rem; }
+}
+.teaser-item {
+  border-top: 1px solid rgba(255,255,255,0.14);
+  padding-top: 1rem;
+}
+.teaser-num {
+  font-family: var(--font-serif);
+  font-size: 0.8rem;
+  letter-spacing: 0.1em;
+  color: var(--gold);
+}
+.teaser-item h3 {
+  font-family: var(--font-serif);
+  font-weight: 500;
+  font-size: 1.35rem;
+  color: #fff;
+  margin: 0.35rem 0 0.6rem;
+}
+.teaser-item p {
+  font-size: 0.92rem;
+  line-height: 1.65;
+  color: rgba(255,255,255,0.6);
+}
+.teaser-item em { font-style: italic; color: rgba(255,255,255,0.85); }
+.teaser .btn-gold { margin-top: 2.25rem; }
+
 /* ── Two-column layout (far left + far right) ──── */
 .two-col {
   display: flex;
@@ -423,6 +578,9 @@ button { font: inherit; color: inherit; border: none; background: none; cursor: 
   max-width: 22rem;
   flex-shrink: 0;
 }
+
+/* Wider column for text-heavy story sections */
+.col-wide { max-width: 38rem; }
 
 .col-secondary {
   max-width: 22rem;
@@ -596,22 +754,22 @@ button { font: inherit; color: inherit; border: none; background: none; cursor: 
 .about-body {
   display: flex;
   flex-direction: column;
-  gap: 0.65rem;
-  font-size: 1rem;
-  line-height: 1.7;
+  gap: 0.6rem;
+  font-size: 0.95rem;
+  line-height: 1.6;
   color: rgba(255,255,255,0.70);
 }
-@media (min-width: 768px) { .about-body { font-size: 1.075rem; } }
+@media (min-width: 768px) { .about-body { font-size: 1rem; } }
 
 .about-punchline {
   font-family: var(--font-serif);
   font-weight: 500;
-  font-size: 1.5rem;
+  font-size: 1.35rem;
   color: rgba(255,255,255,0.95);
-  margin-top: 0.15rem;
-  margin-bottom: 0.5rem;
+  margin-top: 0.35rem;
+  margin-bottom: 0.25rem;
 }
-@media (min-width: 768px) { .about-punchline { font-size: 1.75rem; } }
+@media (min-width: 768px) { .about-punchline { font-size: 1.55rem; } }
 
 .about-body strong {
   font-weight: 500;

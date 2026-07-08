@@ -53,6 +53,7 @@
   }
 
   function scrubToSection(sectionIndex) {
+    // Mobile: crossfade the portrait stills (no video seeking needed).
     if (isMobile) {
       const frameIndex = (bgFrames.length - 1) - sectionIndex;
       bgFrames.forEach((f, i) => {
@@ -60,11 +61,10 @@
       });
       return;
     }
-
+    // Desktop: scrub the landscape video (camera rotation).
     if (scrubRaf) {
       cancelAnimationFrame(scrubRaf);
     }
-
     scrubFrom = bgVideo.currentTime;
     scrubTo = sectionToTime(sectionIndex);
     scrubStart = 0;
@@ -242,7 +242,7 @@
   /* Fade-to-black navigation helper */
   const blackout = document.getElementById("page-blackout");
   /* Pages with transition videos — skip fade-to-black, navigate immediately */
-  const TRANSITION_PAGES = ["index-app.html", "storymap.html", "productionmap.html", "brandmap.html", "domaindatamine.html", "yggdrasil.html"];
+  const TRANSITION_PAGES = [];
 
   function fadeNavigate(url) {
     /* If the target has a transition video, fade only the foreground content
@@ -325,7 +325,7 @@
   });
 
   /* Handle hash-based deep links (e.g. index.html#products) */
-  var hashMap = { "#home": 0, "#products": 1, "#about": 2, "#contact": 3 };
+  var hashMap = { "#home": 0, "#about": 1, "#yggdrasil": 2, "#products": 2, "#contact": 3 };
   var hash = window.location.hash;
   if (hash && hashMap[hash] !== undefined) {
     var target = hashMap[hash];

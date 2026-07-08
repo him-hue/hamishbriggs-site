@@ -3,8 +3,8 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Hamish Briggs</title>
-  <meta name="description" content="Storyteller building tools for the next era of creativity." />
+  <title>Hamish Briggs · Founder of Yggdrasil</title>
+  <meta name="description" content="Hamish Briggs is building Yggdrasil, the World Tree: AI at the root of a project, keeping every tool, teammate, and model coherent as you grow." />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600&family=Inter:wght@300;400;500&display=swap" rel="stylesheet" />
@@ -12,12 +12,12 @@
   <link rel="icon" href="favicon.ico" type="image/x-icon" />
   <link rel="apple-touch-icon" href="apple-touch-icon.png" />
   <meta property="og:type" content="website" />
-  <meta property="og:title" content="Hamish Briggs" />
-  <meta property="og:description" content="Tools for storytellers to turn creative ambition into practical execution." />
+  <meta property="og:title" content="Hamish Briggs · Founder of Yggdrasil" />
+  <meta property="og:description" content="One root, many worlds. Yggdrasil deploys AI at the root of a project so every tool, teammate, and model stays coherent as you scale." />
   <meta property="og:image" content="https://hamishbriggs.com/images/hero.jpg" />
   <meta name="twitter:card" content="summary_large_image" />
-  <meta name="twitter:title" content="Hamish Briggs" />
-  <meta name="twitter:description" content="Tools for storytellers to turn creative ambition into practical execution." />
+  <meta name="twitter:title" content="Hamish Briggs · Founder of Yggdrasil" />
+  <meta name="twitter:description" content="One root, many worlds. Yggdrasil deploys AI at the root of a project so every tool, teammate, and model stays coherent as you scale." />
   <meta name="twitter:image" content="https://hamishbriggs.com/images/hero.jpg" />
 </head>
 <body>
@@ -28,7 +28,7 @@
     <video class="bg-video" id="bg-video"
            src="images/bg-video.mp4"
            poster="images/hero.jpg"
-           muted playsinline preload="metadata"
+           muted playsinline preload="auto"
            disablepictureinpicture></video>
     <!-- Mobile: crossfade frames (one per section, reversed: wide shot first) -->
     <div class="bg-frames" id="bg-frames">
@@ -48,17 +48,15 @@
       <div class="header-left">
         <a href="#home" class="logo" data-nav="0">Hamish Briggs</a>
         <nav class="header-sections">
-          <a href="#products" class="section-link" data-nav="1">Products</a>
+          <a href="#about" class="section-link" data-nav="1">About</a>
           <span class="section-divider">|</span>
-          <a href="#about" class="section-link" data-nav="2">About</a>
+          <a href="#yggdrasil" class="section-link" data-nav="2">Yggdrasil</a>
           <span class="section-divider">|</span>
           <a href="#contact" class="section-link" data-nav="3">Contact</a>
         </nav>
       </div>
       <nav class="header-nav">
-        <a href="design-partner.html" class="nav-pill">Design Partners</a>
-        <a href="https://storymap.hamishbriggs.com" class="nav-pill" target="_blank" rel="noopener">StoryMap</a>
-        <a href="https://index.hamishbriggs.com" class="nav-pill" target="_blank" rel="noopener">Index</a>
+        <a href="yggdrasil.html" class="nav-pill">Enter Yggdrasil →</a>
       </nav>
       <button class="burger-btn" aria-label="Menu" onclick="document.getElementById('mobile-nav').classList.add('open')">
         <svg viewBox="0 0 24 24" fill="none" stroke-width="1.8"><path d="M4 7h16M4 12h16M4 17h16"/></svg>
@@ -72,85 +70,86 @@
       <svg viewBox="0 0 24 24" fill="none" stroke-width="1.8"><path d="M18 6L6 18M6 6l12 12"/></svg>
     </button>
     <a href="#home" class="mobile-nav-link" data-nav="0" onclick="document.getElementById('mobile-nav').classList.remove('open')">Home</a>
-    <a href="#products" class="mobile-nav-link" data-nav="1" onclick="document.getElementById('mobile-nav').classList.remove('open')">Products</a>
-    <a href="#about" class="mobile-nav-link" data-nav="2" onclick="document.getElementById('mobile-nav').classList.remove('open')">About</a>
+    <a href="#about" class="mobile-nav-link" data-nav="1" onclick="document.getElementById('mobile-nav').classList.remove('open')">About</a>
+    <a href="#yggdrasil" class="mobile-nav-link" data-nav="2" onclick="document.getElementById('mobile-nav').classList.remove('open')">Yggdrasil</a>
     <a href="#contact" class="mobile-nav-link" data-nav="3" onclick="document.getElementById('mobile-nav').classList.remove('open')">Contact</a>
     <div class="mobile-nav-divider"></div>
-    <a href="design-partner.html" class="mobile-nav-link">Design Partners</a>
-    <a href="https://storymap.hamishbriggs.com" class="mobile-nav-link" target="_blank" rel="noopener">StoryMap</a>
-    <a href="https://index.hamishbriggs.com" class="mobile-nav-link" target="_blank" rel="noopener">Index</a>
+    <a href="yggdrasil.html" class="mobile-nav-link">Enter Yggdrasil →</a>
   </div>
 
   <!-- ── Page indicators (right edge dots) ── -->
   <div class="page-dots" id="page-dots">
     <button class="dot active" data-nav="0" aria-label="Home"></button>
-    <button class="dot" data-nav="1" aria-label="Products"></button>
-    <button class="dot" data-nav="2" aria-label="About"></button>
+    <button class="dot" data-nav="1" aria-label="About"></button>
+    <button class="dot" data-nav="2" aria-label="Yggdrasil"></button>
     <button class="dot" data-nav="3" aria-label="Contact"></button>
   </div>
 
   <!-- ── Sections viewport ── -->
   <div class="sections-viewport" id="viewport">
 
-    <!-- Section 0: Home -->
+    <!-- Section 0: Home / Identity hero -->
     <section class="section active" data-index="0" id="section-home">
       <div class="section-content section-full home-layout">
-        <div class="two-col">
-          <div class="col-primary">
-            <p class="home-line">Human creativity is <strong>infinite</strong>.</p>
-            <p class="home-line">Human capacity is <strong>limited</strong>.</p>
-          </div>
-          <div class="col-secondary">
-            <p class="home-mirror">AI creativity is <strong>limited</strong>.</p>
-            <p class="home-mirror">AI capacity is <strong>infinite</strong>.</p>
-          </div>
-        </div>
-        <div class="home-tagline">
-          <p class="tagline-setup">My goal is to reconcile the two.</p>
-          <p class="tagline-thesis">Human creativity empowered by AI capacity.</p>
-        </div>
-      </div>
-    </section>
-
-    <!-- Section 1: Products -->
-    <section class="section" data-index="1" id="section-products">
-      <div class="section-content section-full">
-        <div class="two-col">
-          <div class="col-primary">
-            <div class="product-list-flat">
-              <a href="index-app.html" class="product-btn" data-status="beta" data-blurb="A structured metadata layer for your projects. Point it at a folder and everything within is understood — by you, and by any AI agent you bring to the work. Now in closed beta."><img src="images/icons-nav/icon-index.png" alt="" class="product-btn-icon" />Index</a>
-              <a href="storymap.html" class="product-btn" data-status="dev" data-blurb="Structural story development. Build narrative architecture beneath your writing so the story stays in focus. Entering closed beta with 30 design partners."><img src="images/icons-nav/icon-storymap.png" alt="" class="product-btn-icon" />StoryMap</a>
-              <a href="productionmap.html" class="product-btn planned" data-status="planned" data-blurb="Production planning. A structured system to map out budgets, logistics, and timelines before you're juggling them on set."><img src="images/icons-nav/icon-productionmap.png" alt="" class="product-btn-icon" />ProductionMap</a>
-              <a href="brandmap.html" class="product-btn planned" data-status="planned" data-blurb="Your project's public face, built from the story itself. Positioning, press kits, and campaign strategy rooted in the creative work, not bolted on after."><img src="images/icons-nav/icon-brandmap.png" alt="" class="product-btn-icon" />BrandMap</a>
-              <a href="domaindatamine.html" class="product-btn planned" data-status="planned" data-blurb="Real-world industry intelligence on demand. Sourced, current, and specific to your creative field."><img src="images/icons-nav/icon-domaindatamine.png" alt="" class="product-btn-icon" />DomainDataMine</a>
-              <a href="yggdrasil.html" class="product-btn planned" data-status="planned" data-blurb="More than the sum of its parts. One universe, one coherent conception, from first idea to first release to the full franchise."><img src="images/icons-nav/icon-yggdrasil.png" alt="" class="product-btn-icon" />Yggdrasil</a>
-            </div>
-          </div>
-          <div class="col-secondary" id="product-detail">
-            <div class="detail-default">
-              <p class="secondary-text">Tools for storytellers to turn creative ambition into practical execution.</p>
-              <p class="secondary-text" style="margin-top: 0.25rem;">Select a name to explore.</p>
-            </div>
+        <div class="hero">
+          <p class="hero-eyebrow">Actor · Writer · Director · Comic-book creator</p>
+          <h1 class="hero-headline">Hamish Briggs.<br />A storyteller.</h1>
+          <p class="hero-sub">For twenty years I've lived in the gap between a vision and the work it takes to make it real. On stage, on set, and on the page. At acting school I was taught something that's stuck with me ever since: <em>you take care of structure, and content will take care of itself.</em></p>
+          <p class="hero-tagline">Every story is a system.</p>
+          <div class="hero-cta">
+            <a href="#about" class="btn-gold" data-nav="1">Where this leads →</a>
+            <a href="#contact" class="btn-ghost" data-nav="3">Get in touch</a>
           </div>
         </div>
       </div>
     </section>
 
-    <!-- Section 2: About -->
-    <section class="section" data-index="2" id="section-about">
-      <div class="section-content section-full">
+    <!-- Section 1: About — the turn -->
+    <section class="section" data-index="1" id="section-about">
+      <div class="section-content section-full dense">
         <div class="two-col">
-          <div class="col-primary">
+          <div class="col-primary col-wide">
             <div class="about-body">
-              <p>I'm an actor, writer, director, and a comic book creator.</p>
-              <p class="about-punchline">A storyteller.</p>
-              <p>I know what creative professionals need because I am one. I've spent twenty years navigating the gap between a story that works and a production that falls apart, between creative ambition and the workflows that can't keep up.</p>
-              <p>Now I'm building the tools I wish I'd had all along. Designed by a creator, for creators. Tools where the human makes every creative decision and the system handles the infrastructure around it.</p>
+              <p>I know what storytellers need, because I am one. And I've spent two decades watching good stories get buried, not for lack of ideas, but because the thousands of interdependent components (plotlines, characters, locations, arcs) you need to build to bring any story to life can be overwhelming.</p>
+              <p>Recently AI has heralded an age of creative necromancy; we can animate our creations instantaneously, but generative AI art isn't really alive. It feels slightly off. Slightly undead.</p>
+              <p>The problem isn't AI. The problem is we're trying to turn the thousands of small-but-vital acts of inspiration that go into telling a story into a monolithic act of creation. It's the same problem that human storytellers have struggled with forever: a vision lacking the discipline and craft to breathe life into it at an atomic level.</p>
+              <p>The solution is AI. Deployed differently. Instead of asking AI to execute our creative visions for us, we need an AI platform that helps us build structure. We need to employ Curative AI upstream instead of Generative AI downstream.</p>
+              <p class="about-punchline">So I'm building exactly that.</p>
             </div>
           </div>
           <div class="col-secondary">
-            <p class="secondary-text">Human creativity is infinite.</p>
-            <p class="secondary-text">It's time workflows <em>caught up</em>.</p>
+            <p class="secondary-text">Not a story.</p>
+            <p class="secondary-text">A storytelling <em>platform</em>.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Section 2: Yggdrasil — the discovery -->
+    <section class="section" data-index="2" id="section-yggdrasil">
+      <div class="section-content section-full dense">
+        <div class="two-col">
+          <div class="col-primary col-wide">
+            <div class="ygg-lockup">
+              <svg class="ygg-lockup-mark" viewBox="0 0 256 256" fill="none" aria-hidden="true">
+                <path d="M128 112C155.614 112 178 89.6142 178 62C178 34.3858 155.614 12 128 12C100.386 12 78 34.3858 78 62C78 89.6142 100.386 112 128 112Z" stroke="currentColor" stroke-width="10"/>
+                <path d="M83 143C107.853 143 128 122.853 128 98C128 73.1472 107.853 53 83 53C58.1472 53 38 73.1472 38 98C38 122.853 58.1472 143 83 143Z" stroke="currentColor" stroke-width="10"/>
+                <path d="M173 143C197.853 143 218 122.853 218 98C218 73.1472 197.853 53 173 53C148.147 53 128 73.1472 128 98C128 122.853 148.147 143 173 143Z" stroke="currentColor" stroke-width="10"/>
+                <path d="M128 235V146.5M128 146.5L86 124.5M128 146.5L170 124.5" stroke="currentColor" stroke-width="10" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+              <span class="ygg-lockup-name">Yggdrasil</span>
+            </div>
+            <div class="about-body">
+              <p class="about-punchline">This is bigger than I thought.</p>
+              <p>While building, I discovered the wall storytellers keep hitting isn't ours alone. As <em>any</em> vision grows (a story, a company, a campaign), it drifts. And the larger it gets, the harder it is to keep everyone, and now also every AI agent, telling the same story.</p>
+              <p>The tool I built to solve it for myself turns out to solve it for anyone. That tool is <strong>Yggdrasil</strong>, the World Tree in Norse mythology: AI at the <em>root</em> of a project, keeping every tool, teammate, and model coherent as the project grows.</p>
+              <p>If any of this resonates, I'd love to talk. About Yggdrasil, or just about keeping creativity human.</p>
+            </div>
+            <a href="yggdrasil.html" class="btn-gold" style="margin-top:1.5rem;">Explore Yggdrasil →</a>
+          </div>
+          <div class="col-secondary">
+            <p class="secondary-text">One root, many worlds.</p>
+            <p class="secondary-text">Keep creativity <em>human</em>.</p>
           </div>
         </div>
       </div>
@@ -172,8 +171,8 @@
             <p class="contact-cta">Follow on Instagram for development updates, or reach out directly with inquiries.</p>
           </div>
           <div class="col-secondary">
-            <p class="secondary-text">Storytelling is human. Let's keep it that way.</p>
-            <a href="design-partner.html" class="design-partner-btn">Become a Design Partner</a>
+            <p class="secondary-text">Yggdrasil is in advanced testing, ahead of a closed beta.</p>
+            <a href="yggdrasil.html" class="btn-ghost" style="margin-top:1.5rem;">Enter Yggdrasil →</a>
           </div>
         </div>
       </div>

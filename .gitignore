@@ -1,2 +1,11 @@
 .DS_Store
 Thumbs.db
+
+# Local tooling / previews — never deploy these
+node_modules/
+.wrangler/
+*.bak
+
+# Internal copy reference (delete this line if you want it tracked — note it
+# would then be publicly reachable at /SITE_COPY.md)
+SITE_COPY.md

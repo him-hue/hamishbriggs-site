@@ -3,162 +3,157 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Become a Design Partner · Hamish Briggs</title>
-  <meta name="description" content="Join the World Tree Design Partner program. Get early access and help shape the future of storytelling tools." />
+  <title>Become a Design Partner · Yggdrasil</title>
+  <meta name="description" content="Help shape Yggdrasil, the World Tree. Design partners get early access and a direct line into what gets built." />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600&family=Inter:wght@300;400;500&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="styles.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600;700&family=Inter:wght@300;400;500&display=swap" rel="stylesheet" />
   <link rel="icon" href="favicon.ico" type="image/x-icon" />
   <link rel="apple-touch-icon" href="apple-touch-icon.png" />
   <meta property="og:type" content="website" />
-  <meta property="og:title" content="Become a Design Partner · Hamish Briggs" />
-  <meta property="og:description" content="Join the World Tree Design Partner program. Help shape the future of storytelling tools." />
+  <meta property="og:title" content="Become a Design Partner · Yggdrasil" />
+  <meta property="og:description" content="Help shape Yggdrasil, the World Tree. Early access and a direct line into what gets built." />
   <meta property="og:image" content="https://hamishbriggs.com/images/hero.jpg" />
-  <meta name="twitter:card" content="summary_large_image" />
-  <meta name="twitter:title" content="Become a Design Partner · Hamish Briggs" />
-  <meta name="twitter:description" content="Join the World Tree Design Partner program. Help shape the future of storytelling tools." />
-  <meta name="twitter:image" content="https://hamishbriggs.com/images/hero.jpg" />
+
+  <style>
+    :root {
+      --ygg-bg-page: #f5f5f0;
+      --ygg-surface: #ffffff;
+      --ygg-sunken: #efefe8;
+      --ygg-border: #e1e1d8;
+      --ygg-border-strong: #c8c8bd;
+      --ygg-green: #4a7c3a;
+      --ygg-green-dark: #365829;
+      --ygg-green-tint: #e8f1e1;
+      --ygg-gold-deep: #c2841c;
+      --ygg-text: #1f1f1c;
+      --ygg-text-muted: #5a5a52;
+      --ygg-text-faint: #8a8a82;
+      --font-heading: 'Cormorant Garamond', Georgia, 'Iowan Old Style', Palatino, serif;
+      --font-body: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    }
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: var(--font-body); background: var(--ygg-bg-page);
+      color: var(--ygg-text); line-height: 1.6;
+      -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale;
+    }
+    a { color: inherit; text-decoration: none; }
+    ::selection { background: var(--ygg-green-tint); }
+
+    .topbar { position: sticky; top: 0; z-index: 30; border-bottom: 1px solid var(--ygg-border); background: color-mix(in oklab, var(--ygg-bg-page) 90%, transparent); backdrop-filter: blur(10px); }
+    .topbar-inner { max-width: 48rem; margin: 0 auto; height: 52px; display: flex; align-items: center; justify-content: space-between; padding: 0 1.5rem; }
+    .brand { display: flex; align-items: center; gap: 0.55rem; }
+    .brand-mark { width: 22px; height: 22px; display: block; color: var(--ygg-gold-deep); }
+    .brand-name { font-family: var(--font-heading); font-weight: 600; font-size: 1.1rem; }
+    .topbar-back { font-size: 0.72rem; letter-spacing: 0.08em; color: var(--ygg-text-muted); transition: color 0.2s; }
+    .topbar-back:hover { color: var(--ygg-green-dark); }
+
+    main { max-width: 44rem; margin: 0 auto; padding: 3.5rem 1.5rem 4rem; }
+    .eyebrow { font-size: 0.7rem; letter-spacing: 0.24em; text-transform: uppercase; color: var(--ygg-gold-deep); margin-bottom: 1rem; }
+    h1 { font-family: var(--font-heading); font-weight: 600; font-size: clamp(2.4rem, 6vw, 3.4rem); line-height: 1.05; letter-spacing: -0.01em; margin-bottom: 1.25rem; }
+    .intro { font-size: 1.08rem; line-height: 1.7; color: var(--ygg-text-muted); max-width: 34rem; }
+    .intro strong { color: var(--ygg-text); font-weight: 600; }
+    .intro + .intro { margin-top: 0.9rem; }
+
+    .rule { border: none; border-top: 1px solid var(--ygg-border); margin: 2.5rem 0; }
+
+    .form { display: flex; flex-direction: column; gap: 1.5rem; }
+    .field { display: flex; flex-direction: column; gap: 0.5rem; }
+    .label { font-size: 0.72rem; letter-spacing: 0.14em; text-transform: uppercase; color: var(--ygg-text-muted); }
+    .hint { font-size: 0.82rem; color: var(--ygg-text-faint); margin-top: -0.15rem; }
+    .input, .textarea {
+      width: 100%; font-family: var(--font-body); font-size: 1rem; color: var(--ygg-text);
+      background: var(--ygg-surface); border: 1px solid var(--ygg-border-strong);
+      border-radius: 8px; padding: 0.7rem 0.85rem; transition: border-color 0.2s, box-shadow 0.2s;
+    }
+    .input:focus, .textarea:focus { outline: none; border-color: var(--ygg-green); box-shadow: 0 0 0 3px var(--ygg-green-tint); }
+    .textarea { min-height: 120px; resize: vertical; }
+    .radio-group { display: flex; flex-wrap: wrap; gap: 0.6rem; }
+    .radio { display: inline-flex; align-items: center; gap: 0.45rem; border: 1px solid var(--ygg-border-strong); border-radius: 999px; padding: 0.4rem 0.95rem; font-size: 0.9rem; color: var(--ygg-text-muted); cursor: pointer; transition: border-color 0.2s, background 0.2s; }
+    .radio:hover { border-color: var(--ygg-green); }
+    .radio input { accent-color: var(--ygg-green); }
+
+    .submit {
+      align-self: flex-start; border-radius: 999px; background: var(--ygg-green-dark); color: #fff;
+      padding: 0.75rem 2rem; font-size: 0.85rem; font-weight: 500; letter-spacing: 0.06em;
+      cursor: pointer; border: none; transition: opacity 0.2s, transform 0.2s;
+    }
+    .submit:hover { opacity: 0.92; transform: translateY(-1px); }
+
+    .success { display: none; text-align: center; padding: 2rem 0; }
+    .success-title { font-family: var(--font-heading); font-size: 1.8rem; color: var(--ygg-green-dark); }
+    .success-text { margin-top: 0.5rem; color: var(--ygg-text-muted); }
+
+    .footnote { font-size: 0.85rem; color: var(--ygg-text-faint); }
+    .footnote a { color: var(--ygg-green-dark); text-decoration: underline; }
+  </style>
 </head>
-<body data-page="design-partner.html">
+<body>
 
-  <!-- Background -->
-  <div class="bg-layer">
-    <img class="bg-static" src="images/hero.jpg" alt="" />
-    <div class="bg-darken"></div>
-    <div class="bg-vignette"></div>
-  </div>
-  <div class="bg-grain" aria-hidden="true"></div>
-
-  <!-- Header -->
-  <header class="header">
-    <div class="header-inner">
-      <div class="header-left">
-        <a href="index.html" class="logo">Hamish Briggs</a>
-        <nav class="header-sections">
-          <a href="index.html#products" class="section-link">Products</a>
-          <span class="section-divider">|</span>
-          <a href="index.html#about" class="section-link">About</a>
-          <span class="section-divider">|</span>
-          <a href="index.html#contact" class="section-link">Contact</a>
-        </nav>
-      </div>
-      <nav class="header-nav">
-        <a href="design-partner.html" class="nav-pill">Design Partners</a>
-        <a href="https://storymap.hamishbriggs.com" class="nav-pill" target="_blank" rel="noopener">StoryMap</a>
-        <a href="https://index.hamishbriggs.com" class="nav-pill" target="_blank" rel="noopener">Index</a>
-      </nav>
-      <button class="burger-btn" aria-label="Menu" onclick="document.getElementById('mobile-nav').classList.add('open')">
-        <svg viewBox="0 0 24 24" fill="none" stroke-width="1.8"><path d="M4 7h16M4 12h16M4 17h16"/></svg>
-      </button>
+  <header class="topbar">
+    <div class="topbar-inner">
+      <a href="index.html" class="brand">
+        <svg class="brand-mark" viewBox="0 0 256 256" fill="none" aria-label="Yggdrasil">
+          <path d="M128 112C155.614 112 178 89.6142 178 62C178 34.3858 155.614 12 128 12C100.386 12 78 34.3858 78 62C78 89.6142 100.386 112 128 112Z" stroke="currentColor" stroke-width="10"/>
+          <path d="M83 143C107.853 143 128 122.853 128 98C128 73.1472 107.853 53 83 53C58.1472 53 38 73.1472 38 98C38 122.853 58.1472 143 83 143Z" stroke="currentColor" stroke-width="10"/>
+          <path d="M173 143C197.853 143 218 122.853 218 98C218 73.1472 197.853 53 173 53C148.147 53 128 73.1472 128 98C128 122.853 148.147 143 173 143Z" stroke="currentColor" stroke-width="10"/>
+          <path d="M128 235V146.5M128 146.5L86 124.5M128 146.5L170 124.5" stroke="currentColor" stroke-width="10" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+        <span class="brand-name">Yggdrasil</span>
+      </a>
+      <a href="yggdrasil.html" class="topbar-back">← About Yggdrasil</a>
     </div>
   </header>
 
-  <!-- Mobile navigation overlay -->
-  <div class="mobile-nav-overlay" id="mobile-nav" onclick="if(event.target===this)this.classList.remove('open')">
-    <button class="mobile-nav-close" aria-label="Close" onclick="this.parentElement.classList.remove('open')">
-      <svg viewBox="0 0 24 24" fill="none" stroke-width="1.8"><path d="M18 6L6 18M6 6l12 12"/></svg>
-    </button>
-    <a href="index.html" class="mobile-nav-link">Home</a>
-    <a href="index.html#products" class="mobile-nav-link">Products</a>
-    <a href="index.html#about" class="mobile-nav-link">About</a>
-    <a href="index.html#contact" class="mobile-nav-link">Contact</a>
-    <div class="mobile-nav-divider"></div>
-    <a href="design-partner.html" class="mobile-nav-link">Design Partners</a>
-    <a href="https://storymap.hamishbriggs.com" class="mobile-nav-link" target="_blank" rel="noopener">StoryMap</a>
-    <a href="https://index.hamishbriggs.com" class="mobile-nav-link" target="_blank" rel="noopener">Index</a>
-  </div>
+  <main>
+    <p class="eyebrow">Design Partner Program</p>
+    <h1>Help shape the World Tree.</h1>
+    <p class="intro">Yggdrasil is being built alongside the people who'll use it. Design partners get <strong>early access</strong> as it enters closed beta, and a direct line into what gets built next.</p>
+    <p class="intro"><strong>What we ask:</strong> put it to work on something real, and tell us what holds and what drifts. That's it.</p>
 
-  <!-- Content -->
-  <main class="subpage">
-    <div class="subpage-inner">
-      <a href="index.html" class="subpage-back">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
-        Back
-      </a>
+    <hr class="rule" />
 
-      <h1 class="subpage-title">Become a Design Partner</h1>
-
-      <div class="subpage-cols">
-        <div class="subpage-col-primary">
-          <div class="subpage-body">
-            <p>World Tree is being built with the people who'll use it. Design Partners get early access to each tool as it enters beta, starting with StoryMap.</p>
-            <p><strong>What you get:</strong> Beta access before public release, and a direct line to shape what gets built. Your feedback goes straight into development.</p>
-            <p><strong>What we ask:</strong> Try the tools. Share what works and what doesn't. That's it.</p>
-          </div>
-        </div>
-        <div class="subpage-col-secondary">
-          <p class="secondary-text">Whether you're a novelist, a filmmaker, a hobbyist worldbuilder, or someone with a story they want to tell but have never quite known where to begin — if these tools sound useful to you, we'd love to have you involved.</p>
+    <form class="form" id="dp-form">
+      <div class="field">
+        <label class="label" for="dp-name">Name</label>
+        <input class="input" type="text" id="dp-name" name="name" required placeholder="Your name" />
+      </div>
+      <div class="field">
+        <label class="label" for="dp-email">Email</label>
+        <input class="input" type="email" id="dp-email" name="email" required placeholder="you@example.com" />
+      </div>
+      <div class="field">
+        <label class="label" for="dp-about">What are you working on?</label>
+        <p class="hint">A project, an organization, a vision you're trying to keep coherent as it grows.</p>
+        <textarea class="textarea" id="dp-about" name="about" required placeholder="Tell us a little about the work and where it gets hard to hold together."></textarea>
+      </div>
+      <div class="field">
+        <label class="label">Join the design-partner updates list?</label>
+        <p class="hint">Used sparingly (occasional announcements, no noise).</p>
+        <div class="radio-group">
+          <label class="radio"><input type="radio" name="updates" value="Yes" /><span>Yes</span></label>
+          <label class="radio"><input type="radio" name="updates" value="No" /><span>No</span></label>
+          <label class="radio"><input type="radio" name="updates" value="Maybe later" checked /><span>Maybe later</span></label>
         </div>
       </div>
+      <button type="submit" class="submit">Request access</button>
+    </form>
 
-      <hr class="subpage-divider" />
-
-      <div class="dp-form-section">
-        <form class="dp-form" id="dp-form">
-          <div class="dp-field">
-            <label class="dp-label" for="dp-name">Name</label>
-            <input class="dp-input" type="text" id="dp-name" name="name" required placeholder="Your name" />
-          </div>
-
-          <div class="dp-field">
-            <label class="dp-label" for="dp-email">Email</label>
-            <input class="dp-input" type="email" id="dp-email" name="email" required placeholder="you@example.com" />
-          </div>
-
-          <div class="dp-field">
-            <label class="dp-label" for="dp-about">Tell us a bit about yourself</label>
-            <textarea class="dp-textarea" id="dp-about" name="about" required placeholder="What do you make? What are you working on? What draws you to these tools?"></textarea>
-          </div>
-
-          <div class="dp-field">
-            <label class="dp-label">Which products interest you?</label>
-            <p class="dp-field-hint">Select any that catch your eye.</p>
-            <div class="dp-checkbox-group">
-              <label class="dp-checkbox"><input type="checkbox" name="interest" value="Index" /><span>Index</span></label>
-              <label class="dp-checkbox"><input type="checkbox" name="interest" value="StoryMap" /><span>StoryMap</span></label>
-              <label class="dp-checkbox"><input type="checkbox" name="interest" value="ProductionMap" /><span>ProductionMap</span></label>
-              <label class="dp-checkbox"><input type="checkbox" name="interest" value="BrandMap" /><span>BrandMap</span></label>
-              <label class="dp-checkbox"><input type="checkbox" name="interest" value="DomainDataMine" /><span>DomainDataMine</span></label>
-              <label class="dp-checkbox"><input type="checkbox" name="interest" value="Yggdrasil" /><span>Yggdrasil</span></label>
-            </div>
-          </div>
-
-          <div class="dp-field">
-            <label class="dp-label">Would you like to join our Design Partners WhatsApp group?</label>
-            <p class="dp-field-hint">Used sparingly — announcements and the occasional social media nudge. No spam, no group chat noise.</p>
-            <div class="dp-checkbox-group">
-              <label class="dp-checkbox"><input type="radio" name="whatsapp" value="Yes" /><span>Yes</span></label>
-              <label class="dp-checkbox"><input type="radio" name="whatsapp" value="No" /><span>No</span></label>
-              <label class="dp-checkbox"><input type="radio" name="whatsapp" value="Maybe later" checked /><span>Maybe later</span></label>
-            </div>
-          </div>
-
-          <button type="submit" class="dp-submit">Sign Up</button>
-        </form>
-
-        <div class="dp-success" id="dp-success" style="display: none;">
-          <p class="dp-success-title">Thank you.</p>
-          <p class="dp-success-text">We'll be in touch soon.</p>
-        </div>
-      </div>
-
-      <hr class="subpage-divider" />
-      <div class="dp-form-section">
-        <p class="dp-form-intro" style="margin-bottom: 0;">Already a design partner and want to opt out? Email <a href="mailto:contact@hamishbriggs.com" style="color: rgba(255,255,255,0.70); text-decoration: underline;">contact@hamishbriggs.com</a>.</p>
-      </div>
+    <div class="success" id="dp-success">
+      <p class="success-title">Thank you.</p>
+      <p class="success-text">We'll be in touch soon.</p>
     </div>
+
+    <hr class="rule" />
+    <p class="footnote">Already a design partner and want to opt out? Email <a href="mailto:contact@hamishbriggs.com">contact@hamishbriggs.com</a>.</p>
   </main>
 
   <script>
   (function () {
-    /* ── Formspree backend ──
-       To activate: sign up at https://formspree.io (free tier),
-       create a form, and replace xbdaewyw below with the ID.
-       Until then, falls back to mailto. */
+    /* Formspree backend (unchanged) */
     var FORMSPREE_ID = "xbdaewyw";
     var FORMSPREE_URL = "https://formspree.io/f/" + FORMSPREE_ID;
-
     var form = document.getElementById("dp-form");
     var success = document.getElementById("dp-success");
     if (!form) return;
@@ -166,66 +161,27 @@
     form.addEventListener("submit", function (e) {
       e.preventDefault();
       var data = new FormData(form);
-
       if (FORMSPREE_ID !== "YOUR_FORM_ID") {
-        /* Formspree AJAX submission */
-        fetch(FORMSPREE_URL, {
-          method: "POST",
-          body: data,
-          headers: { "Accept": "application/json" }
-        }).then(function (res) {
-          if (res.ok) {
-            form.style.display = "none";
-            success.style.display = "block";
-          } else {
-            alert("Something went wrong. Please try again or email contact@hamishbriggs.com directly.");
-          }
-        }).catch(function () {
-          alert("Something went wrong. Please try again or email contact@hamishbriggs.com directly.");
-        });
+        fetch(FORMSPREE_URL, { method: "POST", body: data, headers: { "Accept": "application/json" } })
+          .then(function (res) {
+            if (res.ok) { form.style.display = "none"; success.style.display = "block"; }
+            else { alert("Something went wrong. Please try again or email contact@hamishbriggs.com directly."); }
+          })
+          .catch(function () { alert("Something went wrong. Please try again or email contact@hamishbriggs.com directly."); });
       } else {
-        /* Mailto fallback until Formspree is configured */
         var name = form.elements.name.value.trim();
         var email = form.elements.email.value.trim();
         var about = form.elements.about.value.trim();
-        var interests = Array.from(form.querySelectorAll('input[name="interest"]:checked')).map(function(c){return c.value;}).join(", ") || "None selected";
         var subject = encodeURIComponent("Design Partner Request: " + name);
-        var body = encodeURIComponent(
-          "Name: " + name + "\n" +
-          "Email: " + email + "\n" +
-          "About: " + about + "\n" +
-          "Products of interest: " + interests
-        );
+        var body = encodeURIComponent("Name: " + name + "\nEmail: " + email + "\nAbout: " + about);
         window.location.href = "mailto:contact@hamishbriggs.com?subject=" + subject + "&body=" + body;
-        form.style.display = "none";
-        success.style.display = "block";
+        form.style.display = "none"; success.style.display = "block";
       }
     });
   })();
   </script>
 
-  <div class="page-blackout" id="page-blackout"></div>
-  <script>
-    /* Fade from black on load + fade-to-black on nav links */
-    (function () {
-      var bo = document.getElementById("page-blackout");
-      if (bo) bo.classList.add("fade-from-black");
-      document.querySelectorAll(".header-sections .section-link, .logo").forEach(function (link) {
-        var href = link.getAttribute("href") || "";
-        if (href.indexOf("index.html") !== -1 || href.endsWith(".html")) {
-          link.addEventListener("click", function (e) {
-            e.preventDefault();
-            if (bo) bo.classList.add("fade-to-black");
-            setTimeout(function () { window.location.href = href; }, 450);
-          });
-        }
-      });
-    })();
-  </script>
-
-
   <!-- Cloudflare Web Analytics -->
-  <!-- To activate: go to Cloudflare dashboard > Web Analytics, add your site, and replace YOUR_CF_TOKEN -->
   <script defer src="https://static.cloudflareinsights.com/beacon.min.js" data-cf-beacon='{"token": "a2ed81438ae342d9a026cf6c7b3a5358"}'></script>
 </body>
 </html>

@@ -3,135 +3,336 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Yggdrasil · Hamish Briggs</title>
-  <meta name="description" content="The World Tree: a modular Story Operating System for the next era of creativity." />
+  <title>Yggdrasil · The World Tree</title>
+  <meta name="description" content="We put AI at the tips of our work, when it belongs at the root. Yggdrasil keeps the logic at the root and the creativity human. One root, many worlds." />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600&family=Inter:wght@300;400;500&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="styles.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600;700&family=Inter:wght@300;400;500&display=swap" rel="stylesheet" />
   <link rel="icon" href="favicon.ico" type="image/x-icon" />
   <link rel="apple-touch-icon" href="apple-touch-icon.png" />
   <meta property="og:type" content="website" />
-  <meta property="og:title" content="Yggdrasil · Hamish Briggs" />
-  <meta property="og:description" content="More than the sum of its parts. A creative operating system where every dimension of your project lives together." />
+  <meta property="og:title" content="Yggdrasil · The World Tree" />
+  <meta property="og:description" content="AI at the root, not the tips. One root, many worlds, and the creativity stays human." />
   <meta property="og:image" content="https://hamishbriggs.com/images/hero.jpg" />
   <meta name="twitter:card" content="summary_large_image" />
-  <meta name="twitter:title" content="Yggdrasil · Hamish Briggs" />
-  <meta name="twitter:description" content="More than the sum of its parts. A creative operating system where every dimension of your project lives together." />
-  <meta name="twitter:image" content="https://hamishbriggs.com/images/hero.jpg" />
+  <meta name="twitter:title" content="Yggdrasil · The World Tree" />
+  <meta name="twitter:description" content="AI at the root, not the tips. One root, many worlds, and the creativity stays human." />
+
+  <style>
+    /* ── Yggdrasil brand tokens (from the product / deck brand system) ── */
+    :root {
+      --ygg-bg-page: #f5f5f0;
+      --ygg-surface: #ffffff;
+      --ygg-surface-muted: #fafaf7;
+      --ygg-sunken: #efefe8;
+      --ygg-border: #e1e1d8;
+      --ygg-border-strong: #c8c8bd;
+      --ygg-green: #4a7c3a;
+      --ygg-green-dark: #365829;
+      --ygg-green-tint: #e8f1e1;
+      --ygg-gold: #e9a93c;
+      --ygg-gold-deep: #c2841c;
+      --ygg-gold-tint: #fbefd6;
+      --ygg-text: #1f1f1c;
+      --ygg-text-muted: #5a5a52;
+      --ygg-text-faint: #8a8a82;
+      --font-heading: 'Cormorant Garamond', Georgia, 'Iowan Old Style', Palatino, serif;
+      --font-body: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    }
+
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      font-family: var(--font-body);
+      background: var(--ygg-bg-page);
+      color: var(--ygg-text);
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+      line-height: 1.6;
+    }
+    a { color: inherit; text-decoration: none; }
+    ::selection { background: var(--ygg-green-tint); color: var(--ygg-text); }
+
+    .wrap { max-width: 62rem; margin: 0 auto; padding: 0 1.5rem; }
+    .wrap-narrow { max-width: 42rem; margin: 0 auto; padding: 0 1.5rem; }
+
+    /* ── Top bar ── */
+    .topbar {
+      position: sticky; top: 0; z-index: 30;
+      border-bottom: 1px solid var(--ygg-border);
+      background: color-mix(in oklab, var(--ygg-bg-page) 88%, transparent);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+    }
+    .topbar-inner {
+      max-width: 62rem; margin: 0 auto; height: 52px;
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 0 1.5rem;
+    }
+    .brand { display: flex; align-items: center; gap: 0.55rem; }
+    .brand-mark { width: 22px; height: 22px; display: block; color: var(--ygg-gold-deep); }
+    .brand-name {
+      font-family: var(--font-heading); font-weight: 600; font-size: 1.15rem;
+      color: var(--ygg-text); letter-spacing: 0.01em;
+    }
+    .brand-sub {
+      font-size: 0.62rem; letter-spacing: 0.24em; text-transform: uppercase;
+      color: var(--ygg-text-faint); display: none;
+    }
+    @media (min-width: 640px) { .brand-sub { display: inline; } }
+    .topbar-back {
+      font-size: 0.72rem; letter-spacing: 0.08em; color: var(--ygg-text-muted);
+      transition: color 0.2s;
+    }
+    .topbar-back:hover { color: var(--ygg-green-dark); }
+
+    /* ── Section rhythm ── */
+    section { padding: 5rem 0; }
+    @media (min-width: 768px) { section { padding: 6.5rem 0; } }
+    .eyebrow {
+      font-size: 0.7rem; letter-spacing: 0.24em; text-transform: uppercase;
+      color: var(--ygg-gold-deep); margin-bottom: 1.25rem;
+    }
+
+    /* ── Divider ── */
+    .divider { display: flex; align-items: center; justify-content: center; padding: 0.5rem 0; }
+    .divider .line { height: 1px; width: 64px; background: var(--ygg-border-strong); }
+    .divider .dot { margin: 0 0.5rem; width: 5px; height: 5px; border-radius: 999px; background: var(--ygg-gold-deep); opacity: 0.6; }
+
+    /* ── Hero ── */
+    .hero { padding-top: 4.5rem; padding-bottom: 3.5rem; text-align: center; }
+    .hero-mark { width: 76px; height: 76px; margin: 0 auto 1.75rem; display: block; color: var(--ygg-gold-deep); }
+    .hero h1 {
+      font-family: var(--font-heading); font-weight: 600;
+      font-size: clamp(2.8rem, 8vw, 5.5rem); line-height: 0.98;
+      letter-spacing: -0.015em; color: var(--ygg-text);
+    }
+    .hero .worldtree {
+      margin-top: 0.75rem; font-family: var(--font-heading);
+      font-size: clamp(1rem, 2.4vw, 1.35rem); letter-spacing: 0.28em;
+      text-transform: uppercase; color: var(--ygg-green-dark);
+    }
+    .hero-sub {
+      max-width: 36rem; margin: 1.75rem auto 0;
+      font-size: 1.08rem; line-height: 1.7; color: var(--ygg-text-muted);
+    }
+    .hero-sub strong { color: var(--ygg-text); font-weight: 600; }
+    .hero-tagline {
+      margin-top: 1.5rem; font-family: var(--font-heading); font-style: italic;
+      font-size: 1.5rem; color: var(--ygg-gold-deep);
+    }
+
+    /* ── Buttons ── */
+    .btn-primary {
+      display: inline-block; border-radius: 999px;
+      background: var(--ygg-green-dark); color: #fff;
+      padding: 0.7rem 1.75rem; font-size: 0.82rem; font-weight: 500;
+      letter-spacing: 0.06em; transition: opacity 0.2s, transform 0.2s;
+    }
+    .btn-primary:hover { opacity: 0.92; transform: translateY(-1px); }
+    .btn-line {
+      display: inline-block; border-radius: 999px;
+      border: 1px solid var(--ygg-border-strong); color: var(--ygg-text);
+      padding: 0.7rem 1.6rem; font-size: 0.82rem; letter-spacing: 0.06em;
+      transition: border-color 0.2s, color 0.2s;
+    }
+    .btn-line:hover { border-color: var(--ygg-green); color: var(--ygg-green-dark); }
+
+    /* ── Definition card ── */
+    .defn {
+      display: flex; flex-direction: column; align-items: center; gap: 1.5rem;
+      background: var(--ygg-surface); border: 1px solid var(--ygg-border-strong);
+      border-radius: 12px; padding: 2rem; max-width: 46rem; margin: 0 auto;
+      text-align: center;
+    }
+    @media (min-width: 640px) { .defn { flex-direction: row; text-align: left; gap: 2rem; padding: 2.25rem; } }
+    .defn-mark { width: 68px; height: 68px; flex-shrink: 0; color: var(--ygg-gold-deep); }
+    .defn-word { font-family: var(--font-heading); font-size: 1.5rem; color: var(--ygg-text); }
+    .defn-ipa { font-size: 0.95rem; color: var(--ygg-text-muted); margin-left: 0.35rem; }
+    .defn-pos { font-style: italic; font-size: 0.9rem; color: var(--ygg-text-faint); margin-left: 0.15rem; }
+    .defn-body { margin-top: 0.5rem; font-size: 1.02rem; line-height: 1.65; color: var(--ygg-text); }
+
+    /* ── Manifesto (staged reveal, weighted like the deck) ── */
+    .manifesto { text-align: center; }
+    .manifesto .m-intro {
+      font-family: var(--font-heading); font-style: italic;
+      font-size: clamp(1.05rem, 2.2vw, 1.3rem); color: var(--ygg-text-faint);
+      margin-bottom: 2.5rem;
+    }
+    .manifesto .m-line {
+      font-size: clamp(1.15rem, 2.6vw, 1.55rem); line-height: 1.45;
+      color: var(--ygg-text-muted); max-width: 40rem; margin: 0 auto;
+    }
+    .manifesto .m-line + .m-line { margin-top: 2.5rem; }
+    .manifesto .m-punch {
+      margin-top: 3.5rem; font-family: var(--font-heading); font-weight: 700;
+      font-size: clamp(2.6rem, 7vw, 4.75rem); line-height: 1; letter-spacing: -0.015em;
+      color: var(--ygg-text);
+    }
+    .manifesto .m-punch .accent { color: var(--ygg-gold-deep); }
+    .manifesto .m-small {
+      margin-top: 3.5rem; font-size: clamp(1rem, 2.2vw, 1.25rem); color: var(--ygg-text-muted);
+    }
+    .manifesto .m-resolve {
+      margin-top: 0.85rem; font-family: var(--font-heading); font-style: italic; font-weight: 600;
+      font-size: clamp(1.7rem, 4.2vw, 2.6rem); line-height: 1.2; letter-spacing: -0.01em;
+      color: var(--ygg-text); max-width: 36rem; margin-left: auto; margin-right: auto;
+    }
+    .manifesto .m-resolve .accent { color: var(--ygg-gold-deep); }
+
+    /* ── Story blocks ── */
+    .block { max-width: 42rem; margin: 0 auto; }
+    .block + .block { margin-top: 3.25rem; }
+    .block h2 {
+      font-family: var(--font-heading); font-weight: 600;
+      font-size: clamp(1.9rem, 4vw, 2.6rem); line-height: 1.12;
+      letter-spacing: -0.01em; color: var(--ygg-text); margin-bottom: 1rem;
+    }
+    .block .lede {
+      font-family: var(--font-heading); font-size: 1.3rem; line-height: 1.4;
+      color: var(--ygg-green-dark); margin-bottom: 1rem;
+    }
+    .block p { font-size: 1.05rem; line-height: 1.75; color: var(--ygg-text-muted); }
+    .block p + p { margin-top: 1rem; }
+    .block p strong { color: var(--ygg-text); font-weight: 600; }
+    .block em { font-style: italic; color: var(--ygg-green-dark); }
+    .pullquote {
+      font-family: var(--font-heading); font-style: italic;
+      font-size: clamp(1.5rem, 3.4vw, 2rem); line-height: 1.3;
+      color: var(--ygg-gold-deep); text-align: center;
+      max-width: 40rem; margin: 2rem auto 0;
+    }
+
+    /* ── CTA ── */
+    .cta { background: var(--ygg-surface); border-top: 1px solid var(--ygg-border); border-bottom: 1px solid var(--ygg-border); text-align: center; }
+    .cta h2 { font-family: var(--font-heading); font-weight: 600; font-size: clamp(2rem, 5vw, 3rem); color: var(--ygg-text); margin-bottom: 0.75rem; }
+    .cta p { font-size: 1.05rem; color: var(--ygg-text-muted); max-width: 34rem; margin: 0 auto 2rem; }
+    .cta-actions { display: flex; flex-wrap: wrap; gap: 0.85rem; justify-content: center; }
+    .cta-note { margin-top: 2rem; font-size: 0.82rem; color: var(--ygg-text-faint); }
+
+    /* ── Footer ── */
+    footer { padding: 2.5rem 0; text-align: center; }
+    .foot-line { font-size: 0.78rem; color: var(--ygg-text-faint); letter-spacing: 0.04em; }
+    .foot-links { margin-top: 0.75rem; display: flex; gap: 1.25rem; justify-content: center; flex-wrap: wrap; }
+    .foot-links a { font-size: 0.8rem; color: var(--ygg-text-muted); transition: color 0.2s; }
+    .foot-links a:hover { color: var(--ygg-green-dark); }
+  </style>
 </head>
-<body data-page="yggdrasil.html">
+<body>
 
-  <div class="bg-layer">
-    <img class="bg-static" src="images/hero.jpg" alt="" />
-    <div class="bg-darken"></div>
-    <div class="bg-vignette"></div>
-  </div>
-  <div class="bg-grain" aria-hidden="true"></div>
-
-  <!-- Portrait → Blueprint transition background -->
-  <div class="transition-bg" id="transition-bg">
-    <video id="transition-video"
-           src="images/pm-transition.mp4"
-           muted playsinline preload="auto"
-           disablepictureinpicture></video>
-    <video id="transition-video-rev"
-           src="images/pm-transition-rev.mp4"
-           muted playsinline preload="auto"
-           disablepictureinpicture
-           style="display:none"></video>
-    <img id="transition-still" src="images/pm-bg.jpg" alt="" />
-    <div class="transition-bg-overlay"></div>
-    <div class="transition-bg-vignette"></div>
-  </div>
-
-  <header class="header">
-    <div class="header-inner">
-      <div class="header-left">
-        <a href="index.html" class="logo">Hamish Briggs</a>
-        <nav class="header-sections">
-          <a href="index.html#products" class="section-link">Products</a>
-          <span class="section-divider">|</span>
-          <a href="index.html#about" class="section-link">About</a>
-          <span class="section-divider">|</span>
-          <a href="index.html#contact" class="section-link">Contact</a>
-        </nav>
-      </div>
-      <nav class="header-nav">
-        <a href="design-partner.html" class="nav-pill">Design Partners</a>
-        <a href="https://storymap.hamishbriggs.com" class="nav-pill" target="_blank" rel="noopener">StoryMap</a>
-        <a href="https://index.hamishbriggs.com" class="nav-pill" target="_blank" rel="noopener">Index</a>
-      </nav>
-      <button class="burger-btn" aria-label="Menu" onclick="document.getElementById('mobile-nav').classList.add('open')">
-        <svg viewBox="0 0 24 24" fill="none" stroke-width="1.8"><path d="M4 7h16M4 12h16M4 17h16"/></svg>
-      </button>
+  <!-- ── Top bar ── -->
+  <header class="topbar">
+    <div class="topbar-inner">
+      <a href="index.html" class="brand">
+        <svg class="brand-mark" viewBox="0 0 256 256" fill="none" aria-label="Yggdrasil">
+          <path d="M128 112C155.614 112 178 89.6142 178 62C178 34.3858 155.614 12 128 12C100.386 12 78 34.3858 78 62C78 89.6142 100.386 112 128 112Z" stroke="currentColor" stroke-width="10"/>
+          <path d="M83 143C107.853 143 128 122.853 128 98C128 73.1472 107.853 53 83 53C58.1472 53 38 73.1472 38 98C38 122.853 58.1472 143 83 143Z" stroke="currentColor" stroke-width="10"/>
+          <path d="M173 143C197.853 143 218 122.853 218 98C218 73.1472 197.853 53 173 53C148.147 53 128 73.1472 128 98C128 122.853 148.147 143 173 143Z" stroke="currentColor" stroke-width="10"/>
+          <path d="M128 235V146.5M128 146.5L86 124.5M128 146.5L170 124.5" stroke="currentColor" stroke-width="10" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+        <span class="brand-name">Yggdrasil</span>
+        <span class="brand-sub">· The World Tree</span>
+      </a>
+      <a href="index.html" class="topbar-back">← hamishbriggs.com</a>
     </div>
   </header>
 
-  <!-- Mobile navigation overlay -->
-  <div class="mobile-nav-overlay" id="mobile-nav" onclick="if(event.target===this)this.classList.remove('open')">
-    <button class="mobile-nav-close" aria-label="Close" onclick="this.parentElement.classList.remove('open')">
-      <svg viewBox="0 0 24 24" fill="none" stroke-width="1.8"><path d="M18 6L6 18M6 6l12 12"/></svg>
-    </button>
-    <a href="index.html" class="mobile-nav-link">Home</a>
-    <a href="index.html#products" class="mobile-nav-link">Products</a>
-    <a href="index.html#about" class="mobile-nav-link">About</a>
-    <a href="index.html#contact" class="mobile-nav-link">Contact</a>
-    <div class="mobile-nav-divider"></div>
-    <a href="design-partner.html" class="mobile-nav-link">Design Partners</a>
-    <a href="https://storymap.hamishbriggs.com" class="mobile-nav-link" target="_blank" rel="noopener">StoryMap</a>
-    <a href="https://index.hamishbriggs.com" class="mobile-nav-link" target="_blank" rel="noopener">Index</a>
-  </div>
+  <!-- ── Hero ── -->
+  <section class="hero">
+    <div class="wrap">
+      <svg class="hero-mark" viewBox="0 0 256 256" fill="none" aria-label="Yggdrasil">
+        <path d="M128 112C155.614 112 178 89.6142 178 62C178 34.3858 155.614 12 128 12C100.386 12 78 34.3858 78 62C78 89.6142 100.386 112 128 112Z" stroke="currentColor" stroke-width="8"/>
+        <path d="M83 143C107.853 143 128 122.853 128 98C128 73.1472 107.853 53 83 53C58.1472 53 38 73.1472 38 98C38 122.853 58.1472 143 83 143Z" stroke="currentColor" stroke-width="8"/>
+        <path d="M173 143C197.853 143 218 122.853 218 98C218 73.1472 197.853 53 173 53C148.147 53 128 73.1472 128 98C128 122.853 148.147 143 173 143Z" stroke="currentColor" stroke-width="8"/>
+        <path d="M128 235V146.5M128 146.5L86 124.5M128 146.5L170 124.5" stroke="currentColor" stroke-width="8" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+      <h1>One root, many worlds.</h1>
+      <div class="worldtree">The World Tree</div>
+      <p class="hero-sub">Yggdrasil puts AI where it belongs: at the <strong>root</strong> of your work, not the tips. So the vision stays coherent as it grows, and the creativity stays yours.</p>
+      <p class="hero-tagline">Speak once. Be heard everywhere.</p>
+    </div>
+  </section>
 
-  <main class="subpage">
-    <div class="subpage-inner">
-      <a href="index.html#products" class="subpage-back">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
-        Products
-      </a>
+  <div class="divider"><span class="line"></span><span class="dot"></span><span class="line"></span></div>
 
-      <p class="subpage-catchphrase">World Tree</p>
-      <h1 class="subpage-title">Yggdrasil<img src="images/icons-nav/icon-yggdrasil.png" alt="" class="title-icon" /></h1>
-
-      <div class="subpage-cols">
-        <div class="subpage-col-primary">
-          <p class="subpage-tagline">More than the sum of its parts.</p>
-          <p class="subpage-recap"><span class="recap-name">Index</span> provides the foundation. <span class="recap-name">StoryMap</span> gives structure. <span class="recap-name">ProductionMap</span> builds momentum. <span class="recap-name">BrandMap</span> creates reach. All shaped by insight from <span class="recap-name">DomainDataMine</span>. <span class="recap-name">Yggdrasil</span> distills the best of all of them into one place: a creative operating system where every dimension of your project lives together and the creator stays in command.</p>
-          <ul class="subpage-bullets">
-            <li><strong>Everything in one place.</strong> Story, production, marketing, research, and project management in a single system built to work together.</li>
-            <li><strong>Single project view.</strong> One coherent picture from first idea through public release. No switching tools, no lost context.</li>
-            <li><strong>Built on real usage.</strong> Every module generates data about how creators actually work. Yggdrasil is refined by real workflows, not guesswork.</li>
-            <li><strong>Creative control, system infrastructure.</strong> You make every creative decision. Yggdrasil handles everything around it.</li>
-          </ul>
-          <div class="subpage-left-footer">
-            <div class="subpage-status">Planned</div>
-          </div>
-        </div>
-        <div class="subpage-col-secondary">
-          <p class="secondary-text">Ideas fail when they grow so complex that the relationships fracture, the momentum stalls, and the vision drifts.</p>
-          <p class="secondary-text"><strong>Yggdrasil exists to prevent that.</strong> It is the trunk from which everything branches, and the reason the branches hold.</p>
-          <p class="secondary-text secondary-note">In Norse mythology, Yggdrasil is the World Tree — the living structure within which every saga unfolds.</p>
+  <!-- ── Definition ── -->
+  <section>
+    <div class="wrap">
+      <div class="defn">
+        <svg class="defn-mark" viewBox="0 0 256 256" fill="none" aria-label="Yggdrasil">
+          <path d="M128 112C155.614 112 178 89.6142 178 62C178 34.3858 155.614 12 128 12C100.386 12 78 34.3858 78 62C78 89.6142 100.386 112 128 112Z" stroke="currentColor" stroke-width="8"/>
+          <path d="M83 143C107.853 143 128 122.853 128 98C128 73.1472 107.853 53 83 53C58.1472 53 38 73.1472 38 98C38 122.853 58.1472 143 83 143Z" stroke="currentColor" stroke-width="8"/>
+          <path d="M173 143C197.853 143 218 122.853 218 98C218 73.1472 197.853 53 173 53C148.147 53 128 73.1472 128 98C128 122.853 148.147 143 173 143Z" stroke="currentColor" stroke-width="8"/>
+          <path d="M128 235V146.5M128 146.5L86 124.5M128 146.5L170 124.5" stroke="currentColor" stroke-width="8" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+        <div>
+          <div class="defn-word">Yggdrasil <span class="defn-ipa">/ˈɪɡdrəsɪl/</span> <span class="defn-pos">n.</span></div>
+          <p class="defn-body">The world tree of Norse mythology: one root that binds many worlds into a single living system.</p>
         </div>
       </div>
     </div>
-  </main>
+  </section>
 
-  <!-- Product nav bar -->
-  <nav class="product-nav">
-    <a href="index-app.html" class="product-nav-dot" title="Index"><img src="images/icons-nav/icon-index.png" alt="Index" class="product-nav-icon" /></a>
-    <a href="storymap.html" class="product-nav-dot" title="StoryMap"><img src="images/icons-nav/icon-storymap.png" alt="StoryMap" class="product-nav-icon" /></a>
-    <a href="productionmap.html" class="product-nav-dot" title="ProductionMap"><img src="images/icons-nav/icon-productionmap.png" alt="ProductionMap" class="product-nav-icon" /></a>
-    <a href="brandmap.html" class="product-nav-dot" title="BrandMap"><img src="images/icons-nav/icon-brandmap.png" alt="BrandMap" class="product-nav-icon" /></a>
-    <a href="domaindatamine.html" class="product-nav-dot" title="DomainDataMine"><img src="images/icons-nav/icon-domaindatamine.png" alt="DomainDataMine" class="product-nav-icon" /></a>
-    <a href="yggdrasil.html" class="product-nav-dot" title="Yggdrasil"><img src="images/icons-nav/icon-yggdrasil.png" alt="Yggdrasil" class="product-nav-icon" /></a>
-  </nav>
+  <!-- ── Manifesto (staged reveal) ── -->
+  <section class="manifesto">
+    <div class="wrap">
+      <p class="m-intro">The way I see it:</p>
+      <p class="m-line">AI is a computer. Computers are good at math and logic.</p>
+      <p class="m-line">Creativity is human. Humans are good at imagination.</p>
+      <p class="m-line">Today we use AI to be creative at the tips of the branches, and ask humans to be logical at the root.</p>
+      <p class="m-punch">This is <span class="accent">backwards.</span></p>
+      <p class="m-small">We need to</p>
+      <p class="m-resolve">give AI charge of the <span class="accent">syntax</span><br />so humans can own the <span class="accent">semantics</span>.</p>
+    </div>
+  </section>
 
-  <div class="page-blackout" id="page-blackout"></div>
-  <script src="transition.js"></script>
-  <script src="subpage-nav.js"></script>
+  <div class="divider"><span class="line"></span><span class="dot"></span><span class="line"></span></div>
+
+  <!-- ── The idea (kept high-level) ── -->
+  <section>
+    <div class="wrap">
+      <div class="block">
+        <p class="eyebrow">The problem</p>
+        <h2>Growth erodes coherence.</h2>
+        <p class="lede">The bigger a vision grows, the faster it loses the plot.</p>
+        <p>Every project is a nest of systems: a sentence serves a page, a page serves a strategy, a strategy serves the vision at the top. As a vision succeeds it splinters into branches, and every branch added is one more thing to hold in alignment. Quietly, out at the edges, the vision blurs. And lately, AI working from thin context at the tips only blurs it faster.</p>
+      </div>
+
+      <div class="block">
+        <p class="eyebrow">The shift</p>
+        <h2>Put AI at the root, not the tips.</h2>
+        <p>AI isn't the enemy; where we put it is. At the tips of the branches it guesses, and delivers something brilliant but often unmoored. Move it to the core (the <em>root</em>, where the vision, voice, and decisions are kept true), and it stops guessing. The human stays the author. The machine keeps everything downstream honest.</p>
+        <p class="pullquote">Curative AI upstream sharpens generative AI downstream.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── CTA (funnel to Hamish) ── -->
+  <section class="cta">
+    <div class="wrap-narrow">
+      <h2>Keep creativity human.</h2>
+      <p>Yggdrasil is in advanced testing, ahead of a closed beta. If you're curious to learn more, or just want to talk about how we harness AI without trampling creativity, I'd love to hear from you.</p>
+      <div class="cta-actions">
+        <a href="mailto:contact@hamishbriggs.com" class="btn-primary">Get in touch</a>
+        <a href="index.html" class="btn-line">About Hamish</a>
+      </div>
+      <p class="cta-note">One root. Many worlds.</p>
+    </div>
+  </section>
+
+  <!-- ── Footer ── -->
+  <footer>
+    <div class="wrap">
+      <p class="foot-line">Yggdrasil · The World Tree · 2026</p>
+      <div class="foot-links">
+        <a href="index.html">hamishbriggs.com</a>
+        <a href="mailto:contact@hamishbriggs.com">contact@hamishbriggs.com</a>
+        <a href="https://instagram.com/hamishbriggs" target="_blank" rel="noopener">Instagram</a>
+      </div>
+    </div>
+  </footer>
 
   <!-- Cloudflare Web Analytics -->
-  <!-- To activate: go to Cloudflare dashboard > Web Analytics, add your site, and replace YOUR_CF_TOKEN -->
   <script defer src="https://static.cloudflareinsights.com/beacon.min.js" data-cf-beacon='{"token": "a2ed81438ae342d9a026cf6c7b3a5358"}'></script>
 </body>
 </html>
