@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Get the Beta · Yggdrasil</title>
+  <!-- Unlisted: not linked from the site, and search engines are asked not to list it (also sent as a
+       header in _headers). The apps themselves need an invite code to create an account. -->
+  <meta name="robots" content="noindex, nofollow" />
+  <meta name="description" content="Download the Yggdrasil beta for Mac and iPhone." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600;700&family=Inter:wght@300;400;500&display=swap" rel="stylesheet" />
+  <link rel="icon" href="favicon.ico" type="image/x-icon" />
+  <link rel="apple-touch-icon" href="apple-touch-icon.png" />
+
+  <style>
+    :root {
+      --ygg-bg-page: #f5f5f0;
+      --ygg-surface: #ffffff;
+      --ygg-sunken: #efefe8;
+      --ygg-border: #e1e1d8;
+      --ygg-border-strong: #c8c8bd;
+      --ygg-green: #4a7c3a;
+      --ygg-green-dark: #365829;
+      --ygg-green-tint: #e8f1e1;
+      --ygg-gold-deep: #c2841c;
+      --ygg-text: #1f1f1c;
+      --ygg-text-muted: #5a5a52;
+      --ygg-text-faint: #8a8a82;
+      --font-heading: 'Cormorant Garamond', Georgia, 'Iowan Old Style', Palatino, serif;
+      --font-body: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    }
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: var(--font-body); background: var(--ygg-bg-page);
+      color: var(--ygg-text); line-height: 1.6;
+      -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale;
+    }
+    a { color: inherit; text-decoration: none; }
+    ::selection { background: var(--ygg-green-tint); }
+    [hidden] { display: none !important; }
+
+    .topbar { position: sticky; top: 0; z-index: 30; border-bottom: 1px solid var(--ygg-border); background: color-mix(in oklab, var(--ygg-bg-page) 90%, transparent); backdrop-filter: blur(10px); }
+    .topbar-inner { max-width: 52rem; margin: 0 auto; height: 52px; display: flex; align-items: center; justify-content: space-between; padding: 0 1.5rem; }
+    .brand { display: flex; align-items: center; gap: 0.55rem; }
+    .brand-mark { width: 22px; height: 22px; display: block; color: var(--ygg-gold-deep); }
+    .brand-name { font-family: var(--font-heading); font-weight: 600; font-size: 1.1rem; }
+
+    main { max-width: 52rem; margin: 0 auto; padding: 3.5rem 1.5rem 4rem; }
+    .eyebrow { font-size: 0.7rem; letter-spacing: 0.24em; text-transform: uppercase; color: var(--ygg-gold-deep); margin-bottom: 1rem; }
+    h1 { font-family: var(--font-heading); font-weight: 600; font-size: clamp(2.4rem, 6vw, 3.4rem); line-height: 1.05; letter-spacing: -0.01em; margin-bottom: 1.25rem; }
+    h2 { font-family: var(--font-heading); font-weight: 600; font-size: 1.7rem; line-height: 1.15; }
+    h3 { font-family: var(--font-heading); font-weight: 600; font-size: 1.35rem; margin-bottom: 0.5rem; }
+    .intro { font-size: 1.08rem; line-height: 1.7; color: var(--ygg-text-muted); max-width: 38rem; }
+    .intro strong { color: var(--ygg-text); font-weight: 600; }
+    .intro + .intro { margin-top: 0.9rem; }
+
+    .rule { border: none; border-top: 1px solid var(--ygg-border); margin: 2.5rem 0; }
+
+    .cards { display: grid; gap: 1.25rem; grid-template-columns: repeat(auto-fit, minmax(17rem, 1fr)); }
+    .card { background: var(--ygg-surface); border: 1px solid var(--ygg-border); border-radius: 14px; padding: 1.6rem; display: flex; flex-direction: column; gap: 0.9rem; }
+    .card-head { display: flex; align-items: baseline; justify-content: space-between; gap: 1rem; }
+    .platform { font-size: 0.72rem; letter-spacing: 0.14em; text-transform: uppercase; color: var(--ygg-text-faint); }
+    .btn {
+      align-self: flex-start; display: inline-block; border-radius: 999px; background: var(--ygg-green-dark); color: #fff;
+      padding: 0.75rem 1.8rem; font-size: 0.85rem; font-weight: 500; letter-spacing: 0.06em;
+      transition: opacity 0.2s, transform 0.2s;
+    }
+    .btn:hover { opacity: 0.92; transform: translateY(-1px); }
+    .btn:focus-visible { outline: 3px solid var(--ygg-green-tint); outline-offset: 2px; }
+    .soon { align-self: flex-start; border-radius: 999px; background: var(--ygg-sunken); color: var(--ygg-text-faint); padding: 0.55rem 1.2rem; font-size: 0.82rem; letter-spacing: 0.04em; }
+    .steps { list-style: none; counter-reset: step; display: flex; flex-direction: column; gap: 0.45rem; font-size: 0.95rem; color: var(--ygg-text-muted); }
+    .steps li { counter-increment: step; display: flex; gap: 0.6rem; }
+    .steps li::before { content: counter(step); flex: none; width: 1.4rem; height: 1.4rem; border-radius: 50%; background: var(--ygg-green-tint); color: var(--ygg-green-dark); font-size: 0.75rem; font-weight: 500; display: inline-flex; align-items: center; justify-content: center; margin-top: 0.15rem; }
+    .meta { font-size: 0.82rem; color: var(--ygg-text-faint); }
+
+    .notes { display: grid; gap: 1.25rem; grid-template-columns: repeat(auto-fit, minmax(15rem, 1fr)); margin-top: 1.25rem; }
+    .note p { font-size: 0.95rem; color: var(--ygg-text-muted); }
+    .footnote { font-size: 0.85rem; color: var(--ygg-text-faint); }
+    .footnote a, .note a { color: var(--ygg-green-dark); text-decoration: underline; }
+  </style>
+</head>
+<body>
+
+  <header class="topbar">
+    <div class="topbar-inner">
+      <a href="index.html" class="brand">
+        <svg class="brand-mark" viewBox="0 0 256 256" fill="none" aria-label="Yggdrasil">
+          <path d="M128 112C155.614 112 178 89.6142 178 62C178 34.3858 155.614 12 128 12C100.386 12 78 34.3858 78 62C78 89.6142 100.386 112 128 112Z" stroke="currentColor" stroke-width="10"/>
+          <path d="M83 143C107.853 143 128 122.853 128 98C128 73.1472 107.853 53 83 53C58.1472 53 38 73.1472 38 98C38 122.853 58.1472 143 83 143Z" stroke="currentColor" stroke-width="10"/>
+          <path d="M173 143C197.853 143 218 122.853 218 98C218 73.1472 197.853 53 173 53C148.147 53 128 73.1472 128 98C128 122.853 148.147 143 173 143Z" stroke="currentColor" stroke-width="10"/>
+          <path d="M128 235V146.5M128 146.5L86 124.5M128 146.5L170 124.5" stroke="currentColor" stroke-width="10" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+        <span class="brand-name">Yggdrasil</span>
+      </a>
+    </div>
+  </header>
+
+  <main>
+    <p class="eyebrow">Closed beta</p>
+    <h1>Get the Yggdrasil beta.</h1>
+    <p class="intro">Thank you for testing Yggdrasil, your project's AI. Install it on your Mac, your iPhone, or both. <strong>Sign in with the same account on each</strong> and your world trees follow you.</p>
+    <p class="intro">You'll need the <strong>invite code</strong> we sent you when you create your account.</p>
+
+    <hr class="rule" />
+
+    <section class="cards" aria-label="Downloads">
+      <article class="card" id="mac">
+        <div class="card-head"><h2>Mac</h2><span class="platform">macOS 12 or later</span></div>
+        <a class="btn" id="mac-download" href="#" hidden>Download for Mac</a>
+        <span class="soon" id="mac-soon">On its way</span>
+        <ol class="steps">
+          <li>Open the download.</li>
+          <li>Drag Yggdrasil into Applications.</li>
+          <li>Open it from Applications and sign in.</li>
+        </ol>
+        <p class="meta">Apple silicon and Intel. It updates itself when a new version is out.</p>
+      </article>
+
+      <article class="card" id="iphone">
+        <div class="card-head"><h2>iPhone</h2><span class="platform">through TestFlight</span></div>
+        <a class="btn" id="iphone-join" href="#" hidden>Join on TestFlight</a>
+        <span class="soon" id="iphone-soon">On its way</span>
+        <ol class="steps">
+          <li>On your iPhone, tap Join on TestFlight.</li>
+          <li>Install Apple's TestFlight app if it asks.</li>
+          <li>Tap Install, then open Yggdrasil and sign in.</li>
+        </ol>
+        <p class="meta">New versions arrive through TestFlight.</p>
+      </article>
+    </section>
+
+    <hr class="rule" />
+
+    <section class="notes" aria-label="About the beta">
+      <div class="note">
+        <h3>Tell us what you think</h3>
+        <p>Use the Feedback button in either app, or write to <a href="mailto:yggdrasil@hamishbriggs.com">yggdrasil@hamishbriggs.com</a>. What holds, what drifts, what confused you.</p>
+      </div>
+      <div class="note">
+        <h3>It's a beta</h3>
+        <p>Some things are unfinished and greyed out as Coming soon. The Mac app keeps a copy of your work on your computer.</p>
+      </div>
+    </section>
+
+    <hr class="rule" />
+    <p class="footnote">Please don't share this page. <a href="https://yggdrasil-api.fly.dev/privacy">Privacy Policy</a> · <a href="https://yggdrasil-api.fly.dev/terms">Terms of Service</a></p>
+  </main>
+
+  <script>
+  (function () {
+    /* ── The two links ─────────────────────────────────────────────────────────────────────────
+       MAC_URL: the latest Mac build. The release script (scripts/release-mac.sh in the yggdrasil
+       repo) puts each new build at this same address, so the link never changes. The button shows
+       only once a build is actually there; until then the card says "On its way".
+       TESTFLIGHT_URL: paste the TestFlight public link here once Apple approves the first build
+       (App Store Connect ▸ TestFlight ▸ your external group ▸ Public Link). Empty = "On its way". */
+    var MAC_URL = "https://ciedquivetkgrdallbgw.supabase.co/storage/v1/object/public/releases/Yggdrasil.dmg";
+    var TESTFLIGHT_URL = "";
+
+    function show(btnId, soonId, url) {
+      var btn = document.getElementById(btnId);
+      var soon = document.getElementById(soonId);
+      btn.href = url; btn.hidden = false; soon.hidden = true;
+    }
+
+    if (/^https:\/\/testflight\.apple\.com\//.test(TESTFLIGHT_URL)) show("iphone-join", "iphone-soon", TESTFLIGHT_URL);
+
+    // Ask whether the Mac build is there yet: a clear "not found" keeps "On its way"; if the check
+    // itself can't be made, show the button anyway rather than hide a working download.
+    fetch(MAC_URL, { method: "HEAD", cache: "no-store" })
+      .then(function (res) { if (res.ok) show("mac-download", "mac-soon", MAC_URL); })
+      .catch(function () { show("mac-download", "mac-soon", MAC_URL); });
+  })();
+  </script>
+
+  <!-- Cloudflare Web Analytics -->
+  <script defer src="https://static.cloudflareinsights.com/beacon.min.js" data-cf-beacon='{"token": "a2ed81438ae342d9a026cf6c7b3a5358"}'></script>
+</body>
+</html>

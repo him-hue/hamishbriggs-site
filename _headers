@@ -1,0 +1,6 @@
+# Cloudflare Pages response headers.
+# The beta download page is unlisted: ask search engines not to list or follow it.
+/beta
+  X-Robots-Tag: noindex, nofollow
+/beta.html
+  X-Robots-Tag: noindex, nofollow
